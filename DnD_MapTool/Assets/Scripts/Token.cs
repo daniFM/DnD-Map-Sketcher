@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,17 +8,19 @@ public class Token : MonoBehaviour
     public Player controlledBy;
     public bool selected;
     public LayerMask tokenLayer;
-    public LayerMask tileLayer;
+    public LayerMask movementLayers;
     public Material highlightedMaterial;
 
     private bool active;
     private new Renderer renderer;
     private Material mainMaterial;
+    private Rigidbody rb;
 
     void Start()
     {
         renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;
+        rb = GetComponent<Rigidbody>();
     }
 
     void OnEnable()
@@ -37,11 +40,9 @@ public class Token : MonoBehaviour
         {
             if(Input.GetMouseButtonDown(0) && controlledBy == GameController.instance.player)
             {
-                LayerMask finalLayer = tokenLayer;
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if(Physics.Raycast(ray, out hit, Mathf.Infinity, finalLayer))
+                if(Physics.Raycast(ray, out hit, Mathf.Infinity, tokenLayer))
                 {
                     selected = true;
                     renderer.material = highlightedMaterial;
@@ -51,6 +52,30 @@ public class Token : MonoBehaviour
                     if(selected)
                         renderer.material = mainMaterial;
                     selected = false;
+                }
+                rb.isKinematic = true;
+            }
+
+            if(selected)
+            {
+                if(Input.GetMouseButton(0))
+                {
+                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    RaycastHit hit;
+                    if(Physics.Raycast(ray, out hit, Mathf.Infinity, movementLayers))
+                    {
+                        transform.position = hit.point + Vector3.up * 0.4f;
+                    }
+                }
+                else if(Input.GetMouseButtonUp(0))
+                {
+                    transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
+                    if(!TileController.instance.snapToCenter)
+                        transform.Translate(0.5f, 0, 0.5f);
+
+                    rb.velocity = Vector3.zero;
+                    rb.angularVelocity = Vector3.zero;
+                    rb.isKinematic = false;
                 }
             }
         }

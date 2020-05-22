@@ -2365,6 +2365,7 @@ GameObject:
   - component: {fileID: 1632520557}
   - component: {fileID: 1632520558}
   - component: {fileID: 1632520556}
+  - component: {fileID: 1632520559}
   m_Layer: 8
   m_Name: TileController
   m_TagString: Untagged
@@ -2387,8 +2388,6 @@ MonoBehaviour:
   gridTextureTiling: 0.47
   gridToUnity: 1
   snapToCenter: 0
-  sensitivityX: 0.3
-  sensitivityY: 0.5
   layerMask:
     serializedVersion: 2
     m_Bits: 256
@@ -2428,7 +2427,7 @@ MeshCollider:
   m_GameObject: {fileID: 1632520555}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 4
   m_Convex: 0
   m_CookingOptions: 30
@@ -2442,10 +2441,24 @@ BoxCollider:
   m_GameObject: {fileID: 1632520555}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 50, y: 0.2, z: 50}
+  m_Size: {x: 12, y: 0.2, z: 12}
   m_Center: {x: 0, y: -0.1, z: 0}
+--- !u!114 &1632520559
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1632520555}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ac3ca1f87ddb3d46b885d1204c75d8f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivityX: 0.3
+  sensitivityY: 0.5
 --- !u!4 &1632520560
 Transform:
   m_ObjectHideFlags: 0
@@ -3171,9 +3184,9 @@ MonoBehaviour:
   tokenLayer:
     serializedVersion: 2
     m_Bits: 2048
-  tileLayer:
+  movementLayers:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 768
   highlightedMaterial: {fileID: 2100000, guid: 2128e253b85e004468c09907e628a98c, type: 2}
 --- !u!65 &2324975504688155031
 BoxCollider:
