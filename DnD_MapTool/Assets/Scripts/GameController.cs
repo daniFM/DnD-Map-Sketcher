@@ -32,7 +32,7 @@ public class GameController : MonoBehaviour
         this.tool = tool;
     }
 
-    public void SwitchTool()
+    public ToolType SwitchTool()
     {
         switch(tool)
         {
@@ -49,5 +49,6 @@ public class GameController : MonoBehaviour
         }
         //tool.Next();
         OnToolChanged?.Invoke();
+        return tool;
     }
 }
