@@ -24,6 +24,7 @@ public class TileController : MonoBehaviour
     public int brushSize;
     public TileGroup[] tileMeshes;
 
+    private bool active = true;
     private new Renderer renderer;
     private LayerMask tileLayer;
     private Vector3 accumulator;
@@ -48,6 +49,17 @@ public class TileController : MonoBehaviour
         tileLayer = LayerMask.GetMask("Tile");
     }
 
+    void OnEnable()
+    {
+        GameController.OnToolChanged += ToolChanged;
+        ToolChanged();
+    }
+
+    void OnDisable()
+    {
+        GameController.OnToolChanged += ToolChanged;
+    }
+
     private void OnValidate()
     {
         if(renderer != null)
@@ -62,7 +74,7 @@ public class TileController : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
 
-        // Grid movement
+        // Grid movement - MOVE TO OTHER SCRIPT
         if(Input.GetMouseButton(1))
         {
             accumulator += new Vector3(mouseX * sensitivityX, 0, mouseY * sensitivityY);
@@ -83,60 +95,63 @@ public class TileController : MonoBehaviour
             transform.Translate(0, -1, 0);
         }
 
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+        if(active)
         {
-            //Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 60);
-            //Debug.Log("Did Hit");
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
 
-            // Determine final position
-            Vector3 position = (hit.point + floorCorrection).Floor();
-            if(!snapToCenter)
+            if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
             {
-                if(brushSize % 2 == 0)
-                    brush.transform.position = position + floorCorrection;
-                else
-                    brush.transform.position = position + floorCorrection + halfTile;
-                position += halfTile;
-            }
-            else
-            {
-                if(brushSize % 2 == 0)
-                    brush.transform.position = position + floorCorrection + halfTile;
-                else
-                    brush.transform.position = position + floorCorrection;
-                position += halfTile;
-            }
+                //Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 60);
+                //Debug.Log("Did Hit");
 
-            // Tile placing and erasing
-            if(Input.GetMouseButtonDown(0) || (Input.GetMouseButton(0) && mouseX != 0))
-            {
-                for(int i = 0; i < brushSize; ++i)
+                // Determine final position
+                Vector3 position = (hit.point + floorCorrection).Floor();
+                if(!snapToCenter)
                 {
-                    for(int j = 0; j < brushSize; ++j)
+                    if(brushSize % 2 == 0)
+                        brush.transform.position = position + floorCorrection;
+                    else
+                        brush.transform.position = position + floorCorrection + halfTile;
+                    position += halfTile;
+                }
+                else
+                {
+                    if(brushSize % 2 == 0)
+                        brush.transform.position = position + floorCorrection + halfTile;
+                    else
+                        brush.transform.position = position + floorCorrection;
+                    position += halfTile;
+                }
+
+                // Tile placing and erasing
+                if(Input.GetMouseButtonDown(0) || (Input.GetMouseButton(0) && mouseX != 0))
+                {
+                    for(int i = 0; i < brushSize; ++i)
                     {
-                        int offset = (int)Mathf.Ceil((float)brushSize / 2) - 1;
-                        Vector3 tposition = position - new Vector3(i - offset, 0, j - offset);
-
-                        Collider[] hitColliders = Physics.OverlapSphere(tposition, 0.1f, tileLayer);
-                        //if(!Physics.CheckSphere(tposition, 0.1f, tileLayer))
-
-                        // Paint/replace/erase logic
-                        TileType otherType = TileType.none;
-
-                        if(hitColliders.Length > 0)
+                        for(int j = 0; j < brushSize; ++j)
                         {
-                            otherType = hitColliders[0].GetComponent<Tile>().type;
-                            if(brushType == TileType.eraser || brushType != otherType)
-                                Destroy(hitColliders[0].gameObject);
-                        }
+                            int offset = (int)Mathf.Ceil((float)brushSize / 2) - 1;
+                            Vector3 tposition = position - new Vector3(i - offset, 0, j - offset);
 
-                        if((otherType == TileType.none || brushType != otherType) && brushType != TileType.eraser)
-                        {
-                            Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
-                            tile.SetTile(brushType);
+                            Collider[] hitColliders = Physics.OverlapSphere(tposition, 0.1f, tileLayer);
+                            //if(!Physics.CheckSphere(tposition, 0.1f, tileLayer))
+
+                            // Paint/replace/erase logic
+                            TileType otherType = TileType.none;
+
+                            if(hitColliders.Length > 0)
+                            {
+                                otherType = hitColliders[0].GetComponent<Tile>().type;
+                                if(brushType == TileType.eraser || brushType != otherType)
+                                    Destroy(hitColliders[0].gameObject);
+                            }
+
+                            if((otherType == TileType.none || brushType != otherType) && brushType != TileType.eraser)
+                            {
+                                Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
+                                tile.SetTile(brushType);
+                            }
                         }
                     }
                 }
@@ -173,5 +188,19 @@ public class TileController : MonoBehaviour
     {
         this.brushSize = (int)brushSize;
         brush.transform.localScale = new Vector3(brushSize + 0.4f, brushSize + 0.4f, 1);
+    }
+
+    private void ToolChanged()
+    {
+        if(GameController.instance.tool == ToolType.brush)
+        {
+            active = true;
+            brush.SetActive(true);
+        }
+        else
+        {
+            active = false;
+            brush.SetActive(false);
+        }
     }
 }
