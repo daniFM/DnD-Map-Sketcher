@@ -39,16 +39,12 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     public void FindRooms()
     {
         isConnecting = true;
-        //lobbyPanel.SetActive(true);
-        //waitingStatusPanel.SetActive(true);
-        //waitingStatusText.text = "Searching for rooms...";
         mainMenu.SetStatus("Searching for rooms...");
-
-        PhotonNetwork.JoinLobby();
 
         if(PhotonNetwork.IsConnected) // In case we were connected from earlier
         {
-            PhotonNetwork.JoinRandomRoom();
+            //PhotonNetwork.JoinRandomRoom();
+            PhotonNetwork.JoinLobby();
         }
         else
         {
@@ -57,15 +53,29 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         }
     }
 
+    public void ConnectToRoom(string name)
+    {
+        mainMenu.SetStatus("Joining " + name);
+        PhotonNetwork.JoinRoom(name);
+    }
+
+    public void CreateRoom(string name)
+    {
+        Debug.Log("Creating new room");
+        PhotonNetwork.CreateRoom(name, new RoomOptions
+            {
+                MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom
+            });
+    }
+
     public override void OnConnectedToMaster()
     {
-        //base.OnConnectedToMaster();
-
         Debug.Log("Connected to Master");
 
         if(isConnecting)
         {
-            PhotonNetwork.JoinRandomRoom();
+            //PhotonNetwork.JoinRandomRoom();
+            PhotonNetwork.JoinLobby();
         }
     }
 
@@ -79,11 +89,14 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         Debug.LogError($"Disconnected due to: {cause}");
     }
 
+    // Called on entering the Lobby
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
+        Debug.Log("Successfully connected to lobby");
         mainMenu.ClearRooms();
         foreach(RoomInfo room in roomList)
         {
+            Debug.Log("Found room: " + room.Name);
             mainMenu.AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
         }
     }
@@ -92,9 +105,9 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     {
         //base.OnJoinRandomFailed(returnCode, message);
 
-        Debug.Log("No clients are waiting, creating new room");
+        Debug.Log("No clients are waiting");
 
-        PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom });
+        //PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom });
     }
 
     public override void OnJoinedRoom()
@@ -103,26 +116,30 @@ public class NetworkManager: MonoBehaviourPunCallbacks
 
         Debug.Log("Client successfully joined a room");
 
-        int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        if(playerCount != NetworkManager.instance.MaxPlayersPerRoom)
-        {
-            //waitingStatusText.text = "Waiting for more players";
-            mainMenu.SetStatus("Waiting for more players");
-            Debug.Log("Client waiting for more players");
-        }
-        else
-        {
-            //waitingStatusText.text = "All players are ready";
-            mainMenu.SetStatus("All players are ready");
-            Debug.Log("Room is ready");
-        }
+        //int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
+        //if(playerCount != maxPlayersPerRoom)
+        //{
+        //    //waitingStatusText.text = "Waiting for more players";
+        //    mainMenu.SetStatus("Waiting for more players");
+        //    Debug.Log("Client waiting for more players");
+        //}
+        //else
+        //{
+        //    //waitingStatusText.text = "All players are ready";
+        //    mainMenu.SetStatus("All players are ready");
+        //    Debug.Log("Room is ready");
+        //}
+
+        //TEST
+        PhotonNetwork.LeaveRoom(false);
+        //Invoke("FindRooms", 3);
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
         //base.OnPlayerEnteredRoom(newPlayer);
 
-        if(PhotonNetwork.CurrentRoom.PlayerCount == NetworkManager.instance.MaxPlayersPerRoom)
+        if(PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
             Debug.Log("Room is full");
