@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public enum TileType { none, groundLow, groundMid, groundHigh, wall, eraser }
 public enum TilePlacing { center, side, corner }
@@ -30,6 +31,7 @@ public class TileController : MonoBehaviour
     //private Vector3 accumulator;
     private Vector3 halfTile = new Vector3(0.5f, 0, 0.5f);
     private Vector3 floorCorrection = new Vector3(0, 0.001f, 0);
+    private object[][] tileInitData;
 
     public static TileController instance = null;
 
@@ -47,6 +49,13 @@ public class TileController : MonoBehaviour
     {
         renderer = GetComponent<Renderer>();
         tileLayer = LayerMask.GetMask("Tile");
+
+        tileInitData = new object[System.Enum.GetNames(typeof(TileType)).Length][];
+        for(int i = 0; i < tileInitData.Length; ++i)
+        {
+            tileInitData[i] = new object[1];
+            tileInitData[i][0] = i;
+        }
     }
 
     void OnEnable()
@@ -70,32 +79,7 @@ public class TileController : MonoBehaviour
 
     void Update()
     {
-        //float mouseX = Input.GetAxis("Mouse X");
-        //float mouseY = Input.GetAxis("Mouse Y");
-        //float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
-
-        //// Grid movement - MOVE TO OTHER SCRIPT
-        //if(Input.GetMouseButton(1))
-        //{
-        //    accumulator += new Vector3(mouseX * sensitivityX, 0, mouseY * sensitivityY);
-
-        //    if(accumulator.magnitude > 1)
-        //    {
-        //        transform.position -= (Quaternion.AngleAxis(45, Vector3.up) * accumulator).Round();
-        //        accumulator = Vector3.zero;
-        //    }
-        //}
-
-        //if(mouseWheel > 0)
-        //{
-        //    transform.Translate(0, 1, 0);
-        //}
-        //else if(mouseWheel < 0)
-        //{
-        //    transform.Translate(0, -1, 0);
-        //}
-
-        if(active)
+        if(active && GameManager.instance.isDM)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -151,13 +135,14 @@ public class TileController : MonoBehaviour
                             {
                                 otherType = hitColliders[0].GetComponent<Tile>().type;
                                 if(brushType == TileType.eraser || brushType != otherType)
-                                    Destroy(hitColliders[0].gameObject);
+                                    PhotonNetwork.Destroy(hitColliders[0].gameObject);
                             }
 
                             if((otherType == TileType.none || brushType != otherType) && brushType != TileType.eraser)
                             {
-                                Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
-                                tile.SetTile(brushType);
+                                //Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
+                                //tile.SetTile(brushType);
+                                PhotonNetwork.Instantiate(tilePrefab.name, tposition, Quaternion.identity/*, this.transform*/, 0, tileInitData[(int)brushType]);
                             }
                         }
                     }
@@ -199,7 +184,7 @@ public class TileController : MonoBehaviour
 
     private void ToolChanged()
     {
-        if(GameController.instance.tool == ToolType.brush)
+        if(GameController.instance.Tool == ToolType.brush)
         {
             active = true;
             brush.SetActive(true);

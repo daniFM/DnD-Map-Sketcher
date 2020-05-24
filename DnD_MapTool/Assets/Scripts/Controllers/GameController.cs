@@ -8,9 +8,15 @@ public enum ToolType { selection, brush }
 public class GameController : MonoBehaviour
 {
     public Player player;
-    public ToolType tool;
+    [SerializeField] private ToolType tool;
+    public ToolType Tool { get { return tool; } }
 
+    [SerializeField] private GameObject playerPrefab;
+    [SerializeField] private GameObject MasterPrefab;
+
+    [HideInInspector] public NetworkInfo netInfo;
     public static Action OnToolChanged;
+    public static Action OnTilesUpdated;
     public static GameController instance;
 
     void Awake()
@@ -21,15 +27,25 @@ public class GameController : MonoBehaviour
             Destroy(gameObject);
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        
+        netInfo = GetComponent<NetworkInfo>();
+
+        if(GameManager.instance.isDM)
+        {
+            player = Instantiate(MasterPrefab, this.transform).GetComponent<Player>();
+        }
+        else
+        {
+            player = Instantiate(playerPrefab, this.transform).GetComponent<Player>();
+            SetTool(ToolType.selection);
+        }
     }
 
     public void SetTool(ToolType tool)
     {
         this.tool = tool;
+        OnToolChanged?.Invoke();
     }
 
     public ToolType SwitchTool()

@@ -1,19 +1,25 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Tile : MonoBehaviour
+//public class TileInitData
+//{
+//    public int Type { get; private set; }
+
+//    public TileInitData(int type)
+//    {
+//        this.Type = type;
+//    }
+//}
+
+public class Tile : MonoBehaviour, IPunInstantiateMagicCallback
 {
     public TileType type;
 
-#pragma warning disable 0649
-    [SerializeField]
-    private MeshFilter mFilter;
-    [SerializeField]
-    private new Renderer renderer;
-    [SerializeField]
-    private new BoxCollider collider;
-#pragma warning restore 0649
+    [SerializeField] private MeshFilter mFilter;
+    [SerializeField] private new Renderer renderer;
+    [SerializeField] private new BoxCollider collider;
 
     private TilePlacing placing;
     private float[] rotations = { 0, 90, 180, 270 };
@@ -32,5 +38,12 @@ public class Tile : MonoBehaviour
         Vector3 size = renderer.bounds.size;
         collider.center = new Vector3(0, size.y/2, 0);
         collider.size = size;
+    }
+
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        //info.sender.TagObject = this.GameObject;
+        //Debug.Log("OnPhotonInstantiate");
+        SetTile((TileType)info.photonView.InstantiationData[0]);
     }
 }

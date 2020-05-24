@@ -83,7 +83,7 @@ public class Token : MonoBehaviour
 
     private void ToolChanged()
     {
-        if(GameController.instance.tool == ToolType.selection)
+        if(GameController.instance.Tool == ToolType.selection)
         {
             active = true;
         }

@@ -19,9 +19,30 @@ public class ToolMenu : MonoBehaviour
         UpdateSize(1);
     }
 
+    void OnEnable()
+    {
+        GameController.OnToolChanged += UpdateTool;
+        UpdateTool();
+    }
+
+    void OnDisable()
+    {
+        GameController.OnToolChanged += UpdateTool;
+    }
+
     public void SwitchTool()
     {
         ToolType newTool = GameController.instance.SwitchTool();
+    }
+
+    public void UpdateSize(float newSize)
+    {
+        sizeText.text = sizeStr + newSize;
+    }
+
+    private void UpdateTool()
+    {
+        ToolType newTool = GameController.instance.Tool;
 
         switch(newTool)
         {
@@ -40,10 +61,5 @@ public class ToolMenu : MonoBehaviour
                     break;
                 }
         }
-    }
-
-    public void UpdateSize(float newSize)
-    {
-        sizeText.text = sizeStr + newSize;
     }
 }
