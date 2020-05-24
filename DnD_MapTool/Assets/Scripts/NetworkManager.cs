@@ -53,19 +53,23 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         }
     }
 
-    public void ConnectToRoom(string name)
+    public void JoinRoom(string name, bool isDM)
     {
         mainMenu.SetStatus("Joining " + name);
         PhotonNetwork.JoinRoom(name);
+
+        GameManager.instance.isDM = isDM;
     }
 
-    public void CreateRoom(string name)
+    public void CreateRoom(string name, bool isDM)
     {
         Debug.Log("Creating new room");
         PhotonNetwork.CreateRoom(name, new RoomOptions
             {
                 MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom
             });
+
+        GameManager.instance.isDM = isDM;
     }
 
     public override void OnConnectedToMaster()
@@ -93,12 +97,20 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("Successfully connected to lobby");
+        mainMenu.SetStatus("Found " + roomList.Count + " rooms. Searching for more...");
         mainMenu.ClearRooms();
         foreach(RoomInfo room in roomList)
         {
             Debug.Log("Found room: " + room.Name);
             mainMenu.AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
         }
+    }
+
+    public override void OnJoinRoomFailed(short returnCode, string message)
+    {
+        GameManager.instance.isDM = false;
+        Debug.LogError("Room connection failed: " + message);
+        mainMenu.SetStatus("Failed to join room");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
@@ -115,6 +127,11 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         //base.OnJoinedRoom();
 
         Debug.Log("Client successfully joined a room");
+        //mainMenu.SetStatus("Loading room");
+
+        isConnecting = false;
+        PhotonNetwork.LoadLevel("AutoTiles_mode");
+        
 
         //int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
         //if(playerCount != maxPlayersPerRoom)
@@ -131,7 +148,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         //}
 
         //TEST
-        PhotonNetwork.LeaveRoom(false);
+        //PhotonNetwork.LeaveRoom(); // Room always closes when all players leave
         //Invoke("FindRooms", 3);
     }
 
@@ -142,12 +159,12 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         if(PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
-            Debug.Log("Room is full");
+            Debug.Log("Room is full, closing room");
 
             //waitingStatusText.text = "Player found";
-            mainMenu.SetStatus("Player found");
+            //mainMenu.SetStatus("Player found");
 
-            PhotonNetwork.LoadLevel("Scene_main");
+            //PhotonNetwork.LoadLevel("Scene_main");
         }
     }
 }

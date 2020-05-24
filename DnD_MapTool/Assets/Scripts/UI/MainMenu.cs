@@ -19,6 +19,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Text waitingStatusText;
     [SerializeField] private InputField roomNameField;
     [SerializeField] private Button createRoomButton;
+    [SerializeField] private Toggle isDMCreate;
 
     private List<GameObject> rooms;
 
@@ -67,9 +68,13 @@ public class MainMenu : MonoBehaviour
 
     public void ClearRooms()
     {
-        foreach(GameObject room in rooms)
+        //foreach(GameObject room in rooms)
+        //{
+        //    Destroy(room);
+        //}
+        for(int i = 0; i < roomsContainer.childCount; ++i)
         {
-            Destroy(room);
+            Destroy(roomsContainer.GetChild(i).gameObject);
         }
         rooms.Clear();
     }
@@ -88,7 +93,12 @@ public class MainMenu : MonoBehaviour
 
     public void CreateRoom()
     {
-        NetworkManager.instance.CreateRoom(roomNameField.text);
+        NetworkManager.instance.CreateRoom(roomNameField.text, isDMCreate.isOn);
+    }
+
+    public void ActivateJoinRoom()
+    {
+
     }
 
     #endregion
