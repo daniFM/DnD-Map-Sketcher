@@ -135,7 +135,10 @@ public class TileController : MonoBehaviour
                             {
                                 otherType = hitColliders[0].GetComponent<Tile>().type;
                                 if(brushType == TileType.eraser || brushType != otherType)
-                                    PhotonNetwork.Destroy(hitColliders[0].gameObject);
+                                {
+                                    //PhotonNetwork.Destroy(hitColliders[0].gameObject);
+                                    hitColliders[0].GetComponent<Tile>().DestroyByAnybody();
+                                }
                             }
 
                             if((otherType == TileType.none || brushType != otherType) && brushType != TileType.eraser)

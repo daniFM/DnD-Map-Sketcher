@@ -13,7 +13,7 @@ using Photon.Pun;
 //    }
 //}
 
-public class Tile : MonoBehaviour, IPunInstantiateMagicCallback
+public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
 {
     public TileType type;
 
@@ -45,5 +45,12 @@ public class Tile : MonoBehaviour, IPunInstantiateMagicCallback
         //info.sender.TagObject = this.GameObject;
         //Debug.Log("OnPhotonInstantiate");
         SetTile((TileType)info.photonView.InstantiationData[0]);
+    }
+
+    public void DestroyByAnybody()
+    {
+        if(!photonView.IsMine)
+            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+        PhotonNetwork.Destroy(gameObject);
     }
 }

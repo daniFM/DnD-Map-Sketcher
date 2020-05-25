@@ -38,12 +38,13 @@ public class GameController : MonoBehaviour
         else
         {
             player = Instantiate(playerPrefab, this.transform).GetComponent<Player>();
-            SetTool(ToolType.selection);
+            StartCoroutine(SetTool(ToolType.selection));
         }
     }
 
-    public void SetTool(ToolType tool)
+    public IEnumerator SetTool(ToolType tool)
     {
+        yield return new WaitForSeconds(5);
         this.tool = tool;
         OnToolChanged?.Invoke();
     }

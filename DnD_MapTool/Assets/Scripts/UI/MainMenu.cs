@@ -23,6 +23,18 @@ public class MainMenu : MonoBehaviour
 
     private List<GameObject> rooms;
 
+    private void OnEnable()
+    {
+        NetworkManager.OnStatusChanged += SetStatus;
+        NetworkManager.OnRoomsUpdated += UpdateRooms;
+    }
+
+    private void OnDisable()
+    {
+        NetworkManager.OnStatusChanged -= SetStatus;
+        NetworkManager.OnRoomsUpdated -= UpdateRooms;
+    }
+
     #region Player Logging
 
     private void Start()
@@ -84,6 +96,16 @@ public class MainMenu : MonoBehaviour
         RoomPreview room = Instantiate(roomButtonPrefab, roomsContainer).GetComponent<RoomPreview>();
         room.SetRoom(name, playerCount, maxPlayers, isOpen);
         rooms.Add(room.gameObject);
+    }
+
+    public void UpdateRooms(List<Photon.Realtime.RoomInfo> roomList)
+    {
+        ClearRooms();
+        foreach(Photon.Realtime.RoomInfo room in roomList)
+        {
+            Debug.Log("Found room: " + room.Name);
+            AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
+        }
     }
 
     public void CheckRoomNameValid(string name)

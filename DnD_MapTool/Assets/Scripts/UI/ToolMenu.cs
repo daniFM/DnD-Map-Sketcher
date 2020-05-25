@@ -7,6 +7,7 @@ public class ToolMenu : MonoBehaviour
 {
     public GameObject brushes;
     public GameObject slider;
+    public Button button;
     public Text toolText;
     public Text sizeText;
 
@@ -17,12 +18,12 @@ public class ToolMenu : MonoBehaviour
     void Start()
     {
         UpdateSize(1);
+        button.interactable = GameManager.instance.isDM;
     }
 
     void OnEnable()
     {
         GameController.OnToolChanged += UpdateTool;
-        UpdateTool();
     }
 
     void OnDisable()

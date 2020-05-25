@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
@@ -11,7 +12,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     [SerializeField] private bool isConnecting = false;
     public bool IsConnecting { get { return isConnecting; } }
 
-    private MainMenu mainMenu;
+    public static Action<string> OnStatusChanged;
+    public static Action<List<RoomInfo>> OnRoomsUpdated;
 
     public static NetworkManager instance = null;
 
@@ -26,11 +28,6 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         PhotonNetwork.AutomaticallySyncScene = true;
     }
 
-    void Start()
-    {
-        mainMenu = FindObjectOfType<MainMenu>();
-    }
-
     public void SetPlayerName(string name)
     {
         PhotonNetwork.NickName = name;
@@ -39,7 +36,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     public void FindRooms()
     {
         isConnecting = true;
-        mainMenu.SetStatus("Searching for rooms...");
+        OnStatusChanged?.Invoke("Searching for rooms...");
 
         if(PhotonNetwork.IsConnected) // In case we were connected from earlier
         {
@@ -55,7 +52,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks
 
     public void JoinRoom(string name, bool isDM)
     {
-        mainMenu.SetStatus("Joining " + name);
+        OnStatusChanged?.Invoke("Joining " + name);
         PhotonNetwork.JoinRoom(name);
         GameManager.instance.isDM = isDM;
     }
@@ -73,7 +70,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks
 
     public void ExitRoom()
     {
-        //PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LeaveRoom();
         PhotonNetwork.LoadLevel("MainMenu");
     }
 
@@ -102,26 +99,25 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("Successfully connected to lobby");
-        mainMenu.SetStatus("Found " + roomList.Count + " rooms. Searching for more...");
-        mainMenu.ClearRooms();
-        foreach(RoomInfo room in roomList)
-        {
-            Debug.Log("Found room: " + room.Name);
-            mainMenu.AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
-        }
+        OnStatusChanged?.Invoke("Found " + roomList.Count + " rooms. Searching for more...");
+        OnRoomsUpdated?.Invoke(roomList);
+        //mainMenu.ClearRooms();
+        //foreach(RoomInfo room in roomList)
+        //{
+        //    Debug.Log("Found room: " + room.Name);
+        //    mainMenu.AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
+        //}
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
     {
         GameManager.instance.isDM = false;
         Debug.LogError("Room connection failed: " + message);
-        mainMenu.SetStatus("Failed to join room");
+        OnStatusChanged?.Invoke("Failed to join room");
     }
 
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
-        //base.OnJoinRandomFailed(returnCode, message);
-
         Debug.Log("No clients are waiting");
 
         //PhotonNetwork.CreateRoom(null, new RoomOptions { MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom });
@@ -129,10 +125,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks
 
     public override void OnJoinedRoom()
     {
-        //base.OnJoinedRoom();
-
         Debug.Log("Client successfully joined a room");
-        //mainMenu.SetStatus("Loading room");
+        //OnStatusChanged?.Invoke("Loading room");
 
         isConnecting = false;
 
@@ -143,40 +137,14 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         //    Debug.Log("Failed to set master");
 
         PhotonNetwork.LoadLevel("AutoTiles_mode");
-        
-
-        //int playerCount = PhotonNetwork.CurrentRoom.PlayerCount;
-        //if(playerCount != maxPlayersPerRoom)
-        //{
-        //    //waitingStatusText.text = "Waiting for more players";
-        //    mainMenu.SetStatus("Waiting for more players");
-        //    Debug.Log("Client waiting for more players");
-        //}
-        //else
-        //{
-        //    //waitingStatusText.text = "All players are ready";
-        //    mainMenu.SetStatus("All players are ready");
-        //    Debug.Log("Room is ready");
-        //}
-
-        //TEST
-        //PhotonNetwork.LeaveRoom(); // Room always closes when all players leave
-        //Invoke("FindRooms", 3);
     }
 
     public override void OnPlayerEnteredRoom(Photon.Realtime.Player newPlayer)
     {
-        //base.OnPlayerEnteredRoom(newPlayer);
-
         if(PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom)
         {
             PhotonNetwork.CurrentRoom.IsOpen = false;
             Debug.Log("Room is full, closing room");
-
-            //waitingStatusText.text = "Player found";
-            //mainMenu.SetStatus("Player found");
-
-            //PhotonNetwork.LoadLevel("Scene_main");
         }
     }
 
