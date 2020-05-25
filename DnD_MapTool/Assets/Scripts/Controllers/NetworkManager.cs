@@ -57,7 +57,6 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     {
         mainMenu.SetStatus("Joining " + name);
         PhotonNetwork.JoinRoom(name);
-
         GameManager.instance.isDM = isDM;
     }
 
@@ -70,6 +69,12 @@ public class NetworkManager: MonoBehaviourPunCallbacks
             });
 
         GameManager.instance.isDM = isDM;
+    }
+
+    public void ExitRoom()
+    {
+        //PhotonNetwork.LeaveRoom();
+        PhotonNetwork.LoadLevel("MainMenu");
     }
 
     public override void OnConnectedToMaster()
@@ -130,6 +135,13 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         //mainMenu.SetStatus("Loading room");
 
         isConnecting = false;
+
+        //bool setmaster = false;
+        //if(GameManager.instance.isDM)
+        //    setmaster = PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
+        //if(!setmaster)
+        //    Debug.Log("Failed to set master");
+
         PhotonNetwork.LoadLevel("AutoTiles_mode");
         
 
@@ -167,4 +179,11 @@ public class NetworkManager: MonoBehaviourPunCallbacks
             //PhotonNetwork.LoadLevel("Scene_main");
         }
     }
+
+    //public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
+    //{
+    //    Debug.Log("Master changed");
+    //    if(PhotonNetwork.LocalPlayer.IsMasterClient)
+    //        Debug.Log("I'm the master");
+    //}
 }

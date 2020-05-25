@@ -14,7 +14,8 @@ public class PrefabPool: MonoBehaviour
         {
             foreach(GameObject prefab in this.Prefabs)
             {
-                pool.ResourceCache.Add(prefab.name, prefab);
+                if(!pool.ResourceCache.ContainsKey(prefab.name))
+                    pool.ResourceCache.Add(prefab.name, prefab);
             }
         }
     }
