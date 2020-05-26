@@ -34,17 +34,17 @@ public class GameController : MonoBehaviour
         if(GameManager.instance.isDM)
         {
             player = Instantiate(MasterPrefab, this.transform).GetComponent<Player>();
+            SetTool(ToolType.brush);
         }
         else
         {
             player = Instantiate(playerPrefab, this.transform).GetComponent<Player>();
-            StartCoroutine(SetTool(ToolType.selection));
+            SetTool(ToolType.selection);
         }
     }
 
-    public IEnumerator SetTool(ToolType tool)
+    public void SetTool(ToolType tool)
     {
-        yield return new WaitForSeconds(5);
         this.tool = tool;
         OnToolChanged?.Invoke();
     }

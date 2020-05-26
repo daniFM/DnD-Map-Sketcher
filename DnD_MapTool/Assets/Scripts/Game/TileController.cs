@@ -61,12 +61,11 @@ public class TileController : MonoBehaviour
     void OnEnable()
     {
         GameController.OnToolChanged += ToolChanged;
-        ToolChanged();
     }
 
     void OnDisable()
     {
-        GameController.OnToolChanged += ToolChanged;
+        GameController.OnToolChanged -= ToolChanged;
     }
 
     private void OnValidate()

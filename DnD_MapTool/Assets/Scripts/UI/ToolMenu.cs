@@ -28,7 +28,7 @@ public class ToolMenu : MonoBehaviour
 
     void OnDisable()
     {
-        GameController.OnToolChanged += UpdateTool;
+        GameController.OnToolChanged -= UpdateTool;
     }
 
     public void SwitchTool()
