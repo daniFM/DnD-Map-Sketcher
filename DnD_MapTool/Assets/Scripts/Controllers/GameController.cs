@@ -2,17 +2,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public enum ToolType { selection, brush }
 
 public class GameController : MonoBehaviour
 {
-    public Player player;
+    //public Player player;
     [SerializeField] private ToolType tool;
     public ToolType Tool { get { return tool; } }
 
-    [SerializeField] private GameObject playerPrefab;
-    [SerializeField] private GameObject MasterPrefab;
+    //[SerializeField] private GameObject playerPrefab;
+    //[SerializeField] private GameObject masterPrefab;
+    [SerializeField] private GameObject tokenPlayerPrefab;
+    [SerializeField] private GameObject tokenNPCPrefab;
 
     [HideInInspector] public NetworkInfo netInfo;
     public static Action OnToolChanged;
@@ -33,12 +36,14 @@ public class GameController : MonoBehaviour
 
         if(GameManager.instance.isDM)
         {
-            player = Instantiate(MasterPrefab, this.transform).GetComponent<Player>();
+            //player = Instantiate(MasterPrefab, this.transform).GetComponent<Player>();
+            PhotonNetwork.Instantiate(tokenNPCPrefab.name, Vector3.zero, Quaternion.identity); // NO DEBERÍA DE HACERSE ASÍ NORMALMENTE
             SetTool(ToolType.brush);
         }
         else
         {
-            player = Instantiate(playerPrefab, this.transform).GetComponent<Player>();
+            //player = Instantiate(playerPrefab, this.transform).GetComponent<Player>();
+            PhotonNetwork.Instantiate(tokenPlayerPrefab.name, Vector3.zero, Quaternion.identity);
             SetTool(ToolType.selection);
         }
     }

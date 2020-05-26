@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
-public class Token : MonoBehaviour
+public class Token : MonoBehaviourPun
 {
-    public Player controlledBy;
+    //public Player controlledBy;
     public bool selected;
     public LayerMask tokenLayer;
     public LayerMask movementLayers;
@@ -26,31 +27,30 @@ public class Token : MonoBehaviour
     void OnEnable()
     {
         GameController.OnToolChanged += ToolChanged;
-        ToolChanged();
     }
 
     void OnDisable()
     {
-        GameController.OnToolChanged += ToolChanged;
+        GameController.OnToolChanged -= ToolChanged;
     }
 
     void Update()
     {
         if(active)
         {
-            if(Input.GetMouseButtonDown(0) && controlledBy == GameController.instance.player)
+            //if(Input.GetMouseButtonDown(0) && controlledBy == GameController.instance.player)
+            if(Input.GetMouseButtonDown(0) && (photonView.IsMine || PhotonNetwork.IsMasterClient))
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if(Physics.Raycast(ray, out hit, Mathf.Infinity, tokenLayer))
+                if(Physics.Raycast(ray, out hit, Mathf.Infinity, tokenLayer) && hit.transform == transform)
                 {
                     selected = true;
                     renderer.material = highlightedMaterial;
                 }
-                else
+                else if(selected)
                 {
-                    if(selected)
-                        renderer.material = mainMaterial;
+                    renderer.material = mainMaterial;
                     selected = false;
                 }
                 rb.isKinematic = true;
