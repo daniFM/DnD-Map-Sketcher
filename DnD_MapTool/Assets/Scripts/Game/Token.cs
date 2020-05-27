@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Photon.Realtime;
 
 public class Token : MonoBehaviourPun
 {
@@ -16,12 +17,16 @@ public class Token : MonoBehaviourPun
     private new Renderer renderer;
     private Material mainMaterial;
     private Rigidbody rb;
+    private Photon.Realtime.Player player;
 
     void Start()
     {
         renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;
         rb = GetComponent<Rigidbody>();
+        player = photonView.Owner;
+
+        ToolChanged();
     }
 
     void OnEnable()
@@ -38,13 +43,18 @@ public class Token : MonoBehaviourPun
     {
         if(active)
         {
-            //if(Input.GetMouseButtonDown(0) && controlledBy == GameController.instance.player)
-            if(Input.GetMouseButtonDown(0) && (photonView.IsMine || PhotonNetwork.IsMasterClient))
+            if(Input.GetMouseButtonDown(0) && (photonView.IsMine || GameManager.instance.isDM)) // --> IsMine is preventing correct assignation
             {
+                //Debug.Log("Checking from " + gameObject.name);
+
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
                 if(Physics.Raycast(ray, out hit, Mathf.Infinity, tokenLayer) && hit.transform == transform)
                 {
+                    //if(!photonView.IsMine)
+                    if(!photonView.IsMine && (GameManager.instance.isDM || player == photonView.Owner))
+                        photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+
                     selected = true;
                     renderer.material = highlightedMaterial;
                 }
@@ -77,6 +87,13 @@ public class Token : MonoBehaviourPun
                     rb.angularVelocity = Vector3.zero;
                     rb.isKinematic = false;
                 }
+            }
+
+            if(!rb.isKinematic && rb.IsSleeping())
+            {
+                rb.isKinematic = true;
+                //if(player != photonView.Owner)
+                //    photonView.TransferOwnership(player);
             }
         }
     }
