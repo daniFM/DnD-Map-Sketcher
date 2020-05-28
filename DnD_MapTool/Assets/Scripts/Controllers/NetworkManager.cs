@@ -25,7 +25,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks
             Destroy(gameObject);
 
         // So if the master changes scene, all players do as well;
-        PhotonNetwork.AutomaticallySyncScene = true;
+        //PhotonNetwork.AutomaticallySyncScene = true;
     }
 
     public void SetPlayerName(string name)

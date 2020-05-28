@@ -96,14 +96,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 397233da9dd8a5c4e8b0981a86bc3625, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  selected: 0
-  tokenLayer:
-    serializedVersion: 2
-    m_Bits: 2048
   movementLayers:
     serializedVersion: 2
     m_Bits: 768
   highlightedMaterial: {fileID: 2100000, guid: 2128e253b85e004468c09907e628a98c, type: 2}
+  sleepTime: 0.5
 --- !u!114 &4491598901137464366
 MonoBehaviour:
   m_ObjectHideFlags: 0

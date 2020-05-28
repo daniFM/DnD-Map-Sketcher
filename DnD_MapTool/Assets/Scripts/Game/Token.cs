@@ -7,16 +7,15 @@ using Photon.Realtime;
 
 public class Token : MonoBehaviourPun
 {
-    //public Player controlledBy;
-    public bool selected;
-    public LayerMask tokenLayer;
     public LayerMask movementLayers;
     public Material highlightedMaterial;
+    public float sleepTime = 1;
 
-    private bool active;
+    private bool selected;
     private new Renderer renderer;
     private Material mainMaterial;
     private Rigidbody rb;
+    private WaitForSeconds waitSleep;
     private Photon.Realtime.Player player;
 
     void Start()
@@ -24,89 +23,70 @@ public class Token : MonoBehaviourPun
         renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;
         rb = GetComponent<Rigidbody>();
+        waitSleep = new WaitForSeconds(sleepTime);
         player = photonView.Owner;
-
-        ToolChanged();
-    }
-
-    void OnEnable()
-    {
-        GameController.OnToolChanged += ToolChanged;
-    }
-
-    void OnDisable()
-    {
-        GameController.OnToolChanged -= ToolChanged;
     }
 
     void Update()
     {
-        if(active)
+        if(selected)
         {
-            if(Input.GetMouseButtonDown(0) && (photonView.IsMine || GameManager.instance.isDM)) // --> IsMine is preventing correct assignation
+            if(Input.GetMouseButton(0))
             {
-                //Debug.Log("Checking from " + gameObject.name);
-
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
                 RaycastHit hit;
-                if(Physics.Raycast(ray, out hit, Mathf.Infinity, tokenLayer) && hit.transform == transform)
+                if(Physics.Raycast(ray, out hit, Mathf.Infinity, movementLayers))
                 {
-                    //if(!photonView.IsMine)
-                    if(!photonView.IsMine && (GameManager.instance.isDM || player == photonView.Owner))
-                        photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
-
-                    selected = true;
-                    renderer.material = highlightedMaterial;
-                }
-                else if(selected)
-                {
-                    renderer.material = mainMaterial;
-                    selected = false;
-                }
-                rb.isKinematic = true;
-            }
-
-            if(selected)
-            {
-                if(Input.GetMouseButton(0))
-                {
-                    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                    RaycastHit hit;
-                    if(Physics.Raycast(ray, out hit, Mathf.Infinity, movementLayers))
-                    {
-                        transform.position = hit.point + Vector3.up * 0.4f;
-                    }
-                }
-                else if(Input.GetMouseButtonUp(0))
-                {
-                    transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
-                    if(!TileController.instance.snapToCenter)
-                        transform.Translate(0.5f, 0, 0.5f);
-
-                    rb.velocity = Vector3.zero;
-                    rb.angularVelocity = Vector3.zero;
-                    rb.isKinematic = false;
+                    transform.position = hit.point + Vector3.up * 0.4f;
                 }
             }
-
-            if(!rb.isKinematic && rb.IsSleeping())
+            else if(Input.GetMouseButtonUp(0))
             {
-                rb.isKinematic = true;
-                //if(player != photonView.Owner)
-                //    photonView.TransferOwnership(player);
+                selected = false;
+
+                transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
+                if(!TileController.instance.snapToCenter)
+                    transform.Translate(0.5f, 0, 0.5f);
+
+                renderer.material = mainMaterial;
+
+                rb.velocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
+                rb.isKinematic = false;
+                //Debug.Log("Kinematic false");
+
+                StartCoroutine(FakeOnSleep());
             }
         }
     }
 
-    private void ToolChanged()
+    public bool Select()
     {
-        if(GameController.instance.Tool == ToolType.selection)
+        selected = false;
+        // Aquí debería estar a kinematic siempre
+        //rb.isKinematic = true;
+        //Debug.Log("Kinematic true");
+
+        if(photonView.IsMine)
         {
-            active = true;
+            selected = true;
+            renderer.material = highlightedMaterial;
         }
-        else
+        else if(GameManager.instance.isDM || player == PhotonNetwork.LocalPlayer)
         {
-            active = false;
+            photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
+            selected = true;
+            renderer.material = highlightedMaterial;
         }
+
+        return selected;
+    }
+
+    private IEnumerator FakeOnSleep()
+    {
+        yield return waitSleep;
+
+        rb.isKinematic = true;
+        //Debug.Log("Kinematic true");
     }
 }
