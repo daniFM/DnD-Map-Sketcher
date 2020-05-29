@@ -11,9 +11,12 @@ public class Player : MonoBehaviour
     public Image colorIcon;
     [HideInInspector] public Color color;
 
-    public void Init(string name, Color color)
+    public void Init(string name, bool isDM, Color color)
     {
-        playerName.text = name;
+        playerName.text = "";
+        if(isDM)
+            playerName.text += "(DM) ";
+        playerName.text += name;
 
         if(photo.sprite.name == "T_PlayerIcon")
             photo.color = color;

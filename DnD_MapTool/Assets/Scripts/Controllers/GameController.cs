@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using Random = UnityEngine.Random;
 
 public enum ToolType { selection, brush }
 
@@ -11,6 +12,9 @@ public class GameController : MonoBehaviour
     //public Player player;
     [SerializeField] private ToolType tool;
     public ToolType Tool { get { return tool; } }
+
+    [ColorUsage(false, false)] public List<Color> playerColors;
+    [ColorUsage(false, true)] public Color highlightColor;
 
     //[SerializeField] private GameObject playerPrefab;
     //[SerializeField] private GameObject masterPrefab;
@@ -37,13 +41,15 @@ public class GameController : MonoBehaviour
         if(GameManager.instance.isDM)
         {
             //player = Instantiate(MasterPrefab, this.transform).GetComponent<Player>();
-            PhotonNetwork.Instantiate(tokenNPCPrefab.name, Vector3.zero, Quaternion.identity); // NO DEBERÍA DE HACERSE ASÍ NORMALMENTE
+            Token newToken = PhotonNetwork.Instantiate(tokenNPCPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Token>(); // NO DEBERÍA DE HACERSE ASÍ NORMALMENTE
+            newToken.Init(GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber - 1));
             SetTool(ToolType.brush);
         }
         else
         {
             //player = Instantiate(playerPrefab, this.transform).GetComponent<Player>();
-            PhotonNetwork.Instantiate(tokenPlayerPrefab.name, Vector3.zero, Quaternion.identity);
+            Token newToken = PhotonNetwork.Instantiate(tokenPlayerPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Token>();
+            newToken.Init(GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber - 1));
             SetTool(ToolType.selection);
         }
     }
@@ -72,5 +78,13 @@ public class GameController : MonoBehaviour
         //tool.Next();
         OnToolChanged?.Invoke();
         return tool;
+    }
+
+    public Color GetPlayerColor(int index)
+    {
+        if(index > playerColors.Count - 1)
+            playerColors.Add(new Color(Random.Range(0, 1), Random.Range(0, 1), Random.Range(0, 1)));
+
+        return playerColors[index];
     }
 }

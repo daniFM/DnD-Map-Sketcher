@@ -63,7 +63,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 3c1095da4327e514aa7728a7063baf54, type: 2}
+  - {fileID: 2100000, guid: a4538febe88459d43952b8326859e013, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,7 +99,6 @@ MonoBehaviour:
   movementLayers:
     serializedVersion: 2
     m_Bits: 768
-  highlightedMaterial: {fileID: 2100000, guid: 2128e253b85e004468c09907e628a98c, type: 2}
   sleepTime: 0.5
 --- !u!114 &4491598901137464366
 MonoBehaviour:

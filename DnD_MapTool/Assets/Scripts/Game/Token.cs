@@ -8,7 +8,6 @@ using Photon.Realtime;
 public class Token : MonoBehaviourPun
 {
     public LayerMask movementLayers;
-    public Material highlightedMaterial;
     public float sleepTime = 1;
 
     private bool selected;
@@ -17,14 +16,27 @@ public class Token : MonoBehaviourPun
     private Rigidbody rb;
     private WaitForSeconds waitSleep;
     private Photon.Realtime.Player player;
+    private bool initialized;
 
     void Start()
+    {
+        if(!initialized)
+        {
+            Init(GameController.instance.GetPlayerColor(photonView.Owner.ActorNumber - 1));
+        }
+    }
+
+    public void Init(Color color)
     {
         renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;
         rb = GetComponent<Rigidbody>();
         waitSleep = new WaitForSeconds(sleepTime);
         player = photonView.Owner;
+
+        mainMaterial.SetColor("_BaseColor", color);
+
+        initialized = true;
     }
 
     void Update()
@@ -48,7 +60,7 @@ public class Token : MonoBehaviourPun
                 if(!TileController.instance.snapToCenter)
                     transform.Translate(0.5f, 0, 0.5f);
 
-                renderer.material = mainMaterial;
+                mainMaterial.SetColor("_EmissionColor", Color.clear);
 
                 rb.velocity = Vector3.zero;
                 rb.angularVelocity = Vector3.zero;
@@ -70,13 +82,13 @@ public class Token : MonoBehaviourPun
         if(photonView.IsMine)
         {
             selected = true;
-            renderer.material = highlightedMaterial;
+            mainMaterial.SetColor("_EmissionColor", GameController.instance.highlightColor);
         }
         else if(GameManager.instance.isDM || player == PhotonNetwork.LocalPlayer)
         {
             photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
             selected = true;
-            renderer.material = highlightedMaterial;
+            mainMaterial.SetColor("_EmissionColor", GameController.instance.highlightColor);
         }
 
         return selected;
