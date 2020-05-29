@@ -15,6 +15,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     public static Action<string> OnStatusChanged;
     public static Action<List<RoomInfo>> OnRoomsUpdated;
     public static Action<int, string> OnPlayerJoined;
+    public static Action<int, string> OnPlayerLeft;
 
     public static NetworkManager instance = null;
 
@@ -149,6 +150,17 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         }
 
         OnPlayerJoined?.Invoke(newPlayer.ActorNumber, newPlayer.NickName);
+    }
+
+    public override void OnPlayerLeftRoom(Photon.Realtime.Player otherPlayer)
+    {
+        if(PhotonNetwork.CurrentRoom.PlayerCount == maxPlayersPerRoom - 1)
+        {
+            PhotonNetwork.CurrentRoom.IsOpen = true;
+            Debug.Log("Room now open for new players");
+        }
+
+        OnPlayerLeft?.Invoke(otherPlayer.ActorNumber, otherPlayer.NickName);
     }
 
     //public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
