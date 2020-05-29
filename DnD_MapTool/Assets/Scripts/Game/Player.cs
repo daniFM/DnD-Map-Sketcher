@@ -2,18 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-// DEPRECATED
 public class Player : MonoBehaviour
 {
-    //public string playerName;
-    public string characterName;
-    public List<Token> assignedTokens;
+    public Text playerName;
+    public Image photo;
+    public Image colorIcon;
+    [HideInInspector] public Color color;
 
-    public void Init(/*string playerName, */GameObject tokenPrefab, string characterName = "")
+    public void Init(string name, Color color)
     {
-        this.characterName = characterName;
-        assignedTokens = new List<Token>();
-        assignedTokens.Add(PhotonNetwork.Instantiate(tokenPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Token>());
+        playerName.text = name;
+
+        if(photo.sprite.name == "T_PlayerIcon")
+            photo.color = color;
+
+        colorIcon.color = color;
+
+        this.color = color;
     }
 }

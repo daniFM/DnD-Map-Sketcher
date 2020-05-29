@@ -14,6 +14,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks
 
     public static Action<string> OnStatusChanged;
     public static Action<List<RoomInfo>> OnRoomsUpdated;
+    public static Action<int, string> OnPlayerJoined;
 
     public static NetworkManager instance = null;
 
@@ -146,6 +147,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks
             PhotonNetwork.CurrentRoom.IsOpen = false;
             Debug.Log("Room is full, closing room");
         }
+
+        OnPlayerJoined?.Invoke(newPlayer.ActorNumber, newPlayer.NickName);
     }
 
     //public override void OnMasterClientSwitched(Photon.Realtime.Player newMasterClient)
