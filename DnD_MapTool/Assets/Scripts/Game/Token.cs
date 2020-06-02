@@ -26,6 +26,11 @@ public class Token : MonoBehaviourPun
         }
     }
 
+    void OnDestroy()
+    {
+        mainMaterial.SetColor("_EmissionColor", Color.clear);
+    }
+
     public void Init(Color color)
     {
         renderer = GetComponent<Renderer>();
