@@ -100,6 +100,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 768
   sleepTime: 0.5
+  destroyOnPlayerLeave: 1
 --- !u!114 &4491598901137464366
 MonoBehaviour:
   m_ObjectHideFlags: 0
