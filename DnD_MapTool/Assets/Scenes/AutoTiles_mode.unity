@@ -540,6 +540,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameManager
       objectReference: {fileID: 0}
+    - target: {fileID: 5814268259465073719, guid: 48f6f2c8da8546540af14f1f9d1d8705,
+        type: 3}
+      propertyPath: useStartScene
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 48f6f2c8da8546540af14f1f9d1d8705, type: 3}
 --- !u!1 &921391453
@@ -1332,6 +1337,41 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sensitivityX: 0.3
   sensitivityY: 0.5
+  rotationSpeed: 500
+  rotationTween:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0.1
+      inSlope: 1.8
+      outSlope: 1.8
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 0.5
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0.1
+      inSlope: -1.8
+      outSlope: -1.8
+      tangentMode: 34
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  camera: {fileID: 1166275835}
 --- !u!4 &1632520560
 Transform:
   m_ObjectHideFlags: 0
