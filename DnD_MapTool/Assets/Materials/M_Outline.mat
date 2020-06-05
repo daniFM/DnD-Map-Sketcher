@@ -74,7 +74,7 @@ Material:
     - _ColorSensitivity: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DepthSensitivity: 1
+    - _DepthSensitivity: 1.5
     - _DepthThickness: 2
     - _DstBlend: 0
     - _EnvironmentReflections: 1
