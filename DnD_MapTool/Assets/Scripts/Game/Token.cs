@@ -9,6 +9,7 @@ public class Token : MonoBehaviourPun
 {
     public LayerMask movementLayers;
     public float sleepTime = 1;
+    public bool destroyOnPlayerLeave = true;
 
     private bool selected;
     private new Renderer renderer;
@@ -24,6 +25,21 @@ public class Token : MonoBehaviourPun
         {
             Init(GameController.instance.GetPlayerColor(photonView.Owner.ActorNumber - 1));
         }
+    }
+
+    private void OnEnable()
+    {
+        NetworkManager.OnPlayerLeft += CheckLeavingPlayer;
+    }
+
+    private void OnDisable()
+    {
+        NetworkManager.OnPlayerLeft -= CheckLeavingPlayer;
+    }
+
+    void OnDestroy()
+    {
+        mainMaterial.SetColor("_EmissionColor", Color.clear);
     }
 
     public void Init(Color color)
@@ -100,5 +116,16 @@ public class Token : MonoBehaviourPun
 
         rb.isKinematic = true;
         //Debug.Log("Kinematic true");
+    }
+
+    private void CheckLeavingPlayer(int id, string name)
+    {
+        if(photonView.Owner == null)
+        {
+            if(destroyOnPlayerLeave)
+                PhotonNetwork.Destroy(gameObject);
+            else
+                photonView.TransferOwnership(PhotonNetwork.MasterClient);   //not tested
+        }
     }
 }

@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    public float sensitivityX = 0.3f;
-    public float sensitivityY = 0.5f;
+    [SerializeField] private float sensitivityX = 0.3f;
+    [SerializeField] private float sensitivityY = 0.5f;
+    [SerializeField] private float rotationSpeed = 1;
+    [SerializeField] private AnimationCurve rotationTween;
+    [SerializeField] private new Transform camera;
 
     private Vector3 accumulator;
+    private bool rotating;
 
     //void Start()
     //{
@@ -19,13 +23,15 @@ public class CameraMovement : MonoBehaviour
         float mouseY = Input.GetAxis("Mouse Y");
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
 
-        // Grid movement - MOVE TO OTHER SCRIPT
+        // Grid movement
         if(Input.GetMouseButton(1))
         {
-            accumulator += new Vector3(mouseX * sensitivityX, 0, mouseY * sensitivityY);
+            // Multiply by rotation to make it local
+            accumulator += transform.rotation * new Vector3(mouseX * sensitivityX, 0, mouseY * sensitivityY);
 
             if(accumulator.magnitude > 1)
             {
+                // AngleAxis to take camera rotation into account
                 transform.position -= (Quaternion.AngleAxis(45, Vector3.up) * accumulator).Round();
                 accumulator = Vector3.zero;
             }
@@ -39,5 +45,57 @@ public class CameraMovement : MonoBehaviour
         {
             transform.Translate(0, -1, 0);
         }
+
+        // Camera rotation
+        if(!rotating)
+        {
+            if(Input.GetKeyDown(KeyCode.E))
+            {
+                StartCoroutine(DoRotation(90));
+            }
+            if(Input.GetKeyDown(KeyCode.Q))
+            {
+                StartCoroutine(DoRotation(-90));
+            }
+        }
+    }
+
+    private IEnumerator DoRotation(float angle)
+    {
+        rotating = true;
+
+        float sign = Mathf.Sign(angle);
+        angle = Mathf.Abs(angle);
+        float t_angle = 0;
+        float acc_angle = 0;
+        Vector3 initialPos = camera.position;
+        Quaternion initialRot = camera.rotation;
+        Vector3 direction;
+        Quaternion rot;
+
+        while(acc_angle <= angle)
+        {
+            t_angle = acc_angle / angle;
+            acc_angle += Time.deltaTime * rotationSpeed * rotationTween.Evaluate(t_angle);
+
+            direction = initialPos - transform.position;
+            rot = Quaternion.AngleAxis(acc_angle * sign, Vector3.up);
+            camera.transform.position = transform.position + rot * direction;
+            camera.transform.rotation = initialRot * Quaternion.Inverse(initialRot) * rot * initialRot;
+
+            yield return null;
+        }
+        // Rotate to exact end rotation
+        direction = initialPos - transform.position;
+        rot = Quaternion.AngleAxis(angle * sign, Vector3.up);
+        camera.transform.position = transform.position + rot * direction;
+        camera.transform.rotation = initialRot * Quaternion.Inverse(initialRot) * rot * initialRot;
+
+        // Set controller rotation without moving the camera
+        camera.parent = null;
+        transform.eulerAngles = new Vector3(0, camera.rotation.eulerAngles.y - 45, 0);
+        camera.parent = transform;
+
+        rotating = false;
     }
 }

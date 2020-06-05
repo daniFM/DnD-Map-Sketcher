@@ -64,7 +64,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         Debug.Log("Creating new room");
         PhotonNetwork.CreateRoom(name, new RoomOptions
             {
-                MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom
+                MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom,
+                CleanupCacheOnLeave = false
             });
 
         GameManager.instance.isDM = isDM;
@@ -97,7 +98,6 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         Debug.LogError($"Disconnected due to: {cause}");
     }
 
-    // Called on entering the Lobby
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("Successfully connected to lobby");
