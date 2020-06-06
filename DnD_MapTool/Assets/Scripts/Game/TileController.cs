@@ -27,7 +27,8 @@ public class TileController : MonoBehaviour
 
     private bool active = true;
     private new Renderer renderer;
-    private LayerMask tileLayer;
+    private int tileLayer;
+    private int blockRaycastLayer;
     //private Vector3 accumulator;
     private Vector3 halfTile = new Vector3(0.5f, 0, 0.5f);
     private Vector3 floorCorrection = new Vector3(0, 0.001f, 0);
@@ -49,6 +50,7 @@ public class TileController : MonoBehaviour
     {
         renderer = GetComponent<Renderer>();
         tileLayer = LayerMask.GetMask("Tile");
+        blockRaycastLayer = LayerMask.NameToLayer("BlockRaycast");
 
         tileInitData = new object[System.Enum.GetNames(typeof(TileType)).Length][];
         for(int i = 0; i < tileInitData.Length; ++i)
@@ -83,7 +85,7 @@ public class TileController : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
-            if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask))
+            if(Physics.Raycast(ray, out hit, Mathf.Infinity, layerMask) && hit.collider.gameObject.layer != blockRaycastLayer)
             {
                 //Debug.DrawRay(ray.origin, ray.direction * 100, Color.red, 60);
                 //Debug.Log("Did Hit");
