@@ -6,10 +6,8 @@ using UnityEngine.UI;
 
 public class SliderInputPair : MonoBehaviour
 {
-    [SerializeField] private string key;
-    public string Key { get { return key; } }
-    [SerializeField] private float value;
-    public float Value { get { return value; } }
+    public string key;
+    [ReadOnly] public float value;
 
     private Slider slider;
     private InputField inputField;
