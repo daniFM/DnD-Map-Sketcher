@@ -99,7 +99,10 @@ MonoBehaviour:
   movementLayers:
     serializedVersion: 2
     m_Bits: 768
-  sleepTime: 0.5
+  collisionLayers:
+    serializedVersion: 2
+    m_Bits: 2816
+  sleepTime: 0.7
   destroyOnPlayerLeave: 1
 --- !u!114 &4491598901137464366
 MonoBehaviour:

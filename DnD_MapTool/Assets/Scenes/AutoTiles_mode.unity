@@ -1122,6 +1122,7 @@ MonoBehaviour:
   - {fileID: 60956872162329692, guid: 264b487efa6e9224e98b2a0893f365a1, type: 3}
   - {fileID: 6842177347684969292, guid: d36e6eb70518b5849afbb367882d66ae, type: 3}
   - {fileID: 6842177347684969292, guid: 5f0afafd21aaf78488fc2020ed9e1b7b, type: 3}
+  - {fileID: 6842177347684969292, guid: 4862c976d79b1fe4bb85904f24f41eb0, type: 3}
 --- !u!114 &2031366462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1142,9 +1143,9 @@ MonoBehaviour:
   - {r: 0, g: 0.40026736, b: 1, a: 1}
   - {r: 1, g: 0, b: 0.4195161, a: 1}
   highlightColor: {r: 0.6698113, g: 0.6698113, b: 0.6698113, a: 1}
-  tokenPlayerPrefab: {fileID: 6842177347684969292, guid: d36e6eb70518b5849afbb367882d66ae,
+  tokenPlayerPrefab: {fileID: 6842177347684969292, guid: 4862c976d79b1fe4bb85904f24f41eb0,
     type: 3}
-  tokenNPCPrefab: {fileID: 6842177347684969292, guid: 5f0afafd21aaf78488fc2020ed9e1b7b,
+  tokenNPCPrefab: {fileID: 6842177347684969292, guid: 4862c976d79b1fe4bb85904f24f41eb0,
     type: 3}
   netInfo: {fileID: 0}
 --- !u!4 &2031366463
