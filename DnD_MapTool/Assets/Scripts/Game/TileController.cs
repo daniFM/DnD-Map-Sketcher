@@ -31,7 +31,7 @@ public class TileController : MonoBehaviour
     private int blockRaycastLayer;
     //private Vector3 accumulator;
     private Vector3 halfTile = new Vector3(0.5f, 0, 0.5f);
-    private Vector3 floorCorrection = new Vector3(0, 0.001f, 0);
+    private Vector3 floorCorrection = new Vector3(0, 0.1f, 0);
     private object[][] tileInitData;
 
     public static TileController instance = null;

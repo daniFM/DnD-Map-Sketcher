@@ -52,6 +52,11 @@ public class Token : MonoBehaviourPun
 
         mainMaterial.SetColor("_BaseColor", color);
 
+        if(!photonView.IsMine)
+        {
+            SetPhysicsActive(false);
+        }
+
         initialized = true;
     }
 
@@ -72,9 +77,7 @@ public class Token : MonoBehaviourPun
             {
                 selected = false;
 
-                transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
-                if(!TileController.instance.snapToCenter)
-                    transform.Translate(0.5f, 0, 0.5f);
+                Reposition(0);
 
                 mainMaterial.SetColor("_EmissionColor", Color.clear);
 
@@ -83,16 +86,30 @@ public class Token : MonoBehaviourPun
                 rb.isKinematic = false;
                 //Debug.Log("Kinematic false");
 
-                StartCoroutine(FakeOnSleep());
+                //StartCoroutine(FakeOnSleep());
             }
         }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(photonView.IsMine && rb.IsSleeping())
+        {
+            Reposition(1.4f);
+        }
+    }
+
+    public void SetPhysicsActive(bool activate)
+    {
+        rb.isKinematic = !activate;
+        //rb.detectCollisions = activate;
     }
 
     public bool Select()
     {
         selected = false;
-        // Aquí debería estar a kinematic siempre
-        //rb.isKinematic = true;
+
+        rb.isKinematic = true;
         //Debug.Log("Kinematic true");
 
         if(photonView.IsMine)
@@ -110,13 +127,20 @@ public class Token : MonoBehaviourPun
         return selected;
     }
 
-    private IEnumerator FakeOnSleep()
+    private void Reposition(float height)
     {
-        yield return waitSleep;
-
-        rb.isKinematic = true;
-        //Debug.Log("Kinematic true");
+        transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
+        if(!TileController.instance.snapToCenter)
+            transform.Translate(0.5f, height, 0.5f);
     }
+
+    //private IEnumerator FakeOnSleep()
+    //{
+    //    yield return waitSleep;
+
+    //    rb.isKinematic = true;
+    //    //Debug.Log("Kinematic true");
+    //}
 
     private void CheckLeavingPlayer(int id, string name)
     {
