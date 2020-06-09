@@ -16,7 +16,6 @@ GameObject:
   - component: {fileID: -8101594334642445745}
   - component: {fileID: 6842177347684969293}
   - component: {fileID: 6842177347684969295}
-  - component: {fileID: 5956241380177966234}
   m_Layer: 11
   m_Name: TokenPlayer
   m_TagString: Untagged
@@ -99,7 +98,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementLayers:
     serializedVersion: 2
-    m_Bits: 2816
+    m_Bits: 768
   sleepTime: 0.5
   destroyOnPlayerLeave: 1
 --- !u!114 &4491598901137464366
@@ -168,16 +167,3 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.9, y: 0.1, z: 0.9}
   m_Center: {x: 0, y: 0.05, z: 0}
---- !u!65 &5956241380177966234
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6842177347684969292}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 1
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Size: {x: 0.8, y: 0.1, z: 0.8}
-  m_Center: {x: 0, y: 0.1, z: 0}

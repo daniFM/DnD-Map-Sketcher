@@ -8,7 +8,6 @@ using Photon.Realtime;
 public class Token : MonoBehaviourPun
 {
     public LayerMask movementLayers;
-    public LayerMask collisionLayers;
     public float sleepTime = 1;
     public bool destroyOnPlayerLeave = true;
 
@@ -16,14 +15,9 @@ public class Token : MonoBehaviourPun
     private new Renderer renderer;
     private Material mainMaterial;
     private Rigidbody rb;
-    private Collider collider;
     private WaitForSeconds waitSleep;
     private Photon.Realtime.Player player;
     private bool initialized;
-    private bool canReposition = true;
-    private bool justFell = false;
-    private WaitForSeconds waitReposition = new WaitForSeconds(0.1f);
-    private Tile groundTile;
 
     void Start()
     {
@@ -53,15 +47,12 @@ public class Token : MonoBehaviourPun
         renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;
         rb = GetComponent<Rigidbody>();
-        collider = GetComponent<Collider>();
         waitSleep = new WaitForSeconds(sleepTime);
         player = photonView.Owner;
 
         mainMaterial.SetColor("_BaseColor", color);
 
         initialized = true;
-
-        Snap();
     }
 
     void Update()
@@ -81,7 +72,9 @@ public class Token : MonoBehaviourPun
             {
                 selected = false;
 
-                Snap();
+                transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
+                if(!TileController.instance.snapToCenter)
+                    transform.Translate(0.5f, 0, 0.5f);
 
                 mainMaterial.SetColor("_EmissionColor", Color.clear);
 
@@ -93,72 +86,7 @@ public class Token : MonoBehaviourPun
                 StartCoroutine(FakeOnSleep());
             }
         }
-        else if(photonView.IsMine && canReposition)
-        {
-            Collider[] hitColliders = Physics.OverlapSphere(transform.position + new Vector3(0, 0.05f, 0), 0.2f, collisionLayers);
-            Tile t_tile = null;
-
-            if(hitColliders.Length == 1)
-            {
-                Debug.Log("Repositioning because of no contacts");
-                Reposition(false);
-                groundTile = null;
-                justFell = true;
-            }
-            else
-            {
-                for(int i = 0; i < hitColliders.Length; ++i)
-                {
-                    if(hitColliders[i] != collider)
-                    {
-                        int layer = hitColliders[i].gameObject.layer;
-
-                        if(layer == LayerMask.NameToLayer("Token")) // Needs same logic as with tiles
-                        {
-                            Debug.Log("Repositioning because of collision with other Token");
-                            Reposition(true);
-                            break;
-                        }
-                        else if(layer == LayerMask.NameToLayer("Tile"))
-                        {
-                            t_tile = hitColliders[i].GetComponent<Tile>();
-
-                            if(t_tile != groundTile && !justFell)
-                            {
-                                Debug.Log("Repositioning because of collision with a different tile");
-                                Reposition(true);
-                                groundTile = t_tile;
-                                justFell = false;
-                                break;
-                            }
-                        }
-                    }
-                }
-            }
-        }
     }
-
-    //private void OnTriggerEnter(Collider other)
-    //{
-    //    // Check if collision is contained in movement layers
-    //    if(!selected &&
-    //        movementLayers == (movementLayers | (1 << other.gameObject.layer)) &&
-    //        canReposition)
-    //    {
-    //        Reposition();
-    //    }
-    //}
-
-    //private void OnTriggerExit(Collider other)
-    //{
-    //    // Check if collision is contained in movement layers
-    //    if(!selected &&
-    //        movementLayers == (movementLayers | (1 << other.gameObject.layer)) &&
-    //        canReposition)
-    //    {
-    //        Reposition();
-    //    }
-    //}
 
     public bool Select()
     {
@@ -182,38 +110,12 @@ public class Token : MonoBehaviourPun
         return selected;
     }
 
-    private void Snap()
-    {
-        transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
-        if(!TileController.instance.snapToCenter)
-            transform.Translate(0.5f, 0, 0.5f);
-    }
-
-    private void Reposition(bool jump)
-    {
-        if(jump)
-            transform.position += Vector3.up * 1.5f;
-
-        rb.velocity = Vector3.zero;
-        rb.angularVelocity = Vector3.zero;
-        rb.isKinematic = false;
-        //Debug.Log("Kinematic false");
-
-        StartCoroutine(FakeOnSleep());
-    }
-
     private IEnumerator FakeOnSleep()
     {
-        canReposition = false;
-
         yield return waitSleep;
 
         rb.isKinematic = true;
         //Debug.Log("Kinematic true");
-
-        yield return waitReposition;
-
-        canReposition = true;
     }
 
     private void CheckLeavingPlayer(int id, string name)
