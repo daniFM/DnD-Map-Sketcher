@@ -93,9 +93,10 @@ public class Token : MonoBehaviourPun
 
     private void OnTriggerEnter(Collider other)
     {
-        if(photonView.IsMine && rb.IsSleeping())
+        if(photonView.IsMine && rb.IsSleeping() && other.gameObject.layer != gameObject.layer)
         {
-            Reposition(1.4f);
+            //Reposition(1.4f);
+            photonView.RPC("Reposition", RpcTarget.All, 1.4f);
         }
     }
 
@@ -127,6 +128,7 @@ public class Token : MonoBehaviourPun
         return selected;
     }
 
+    [PunRPC]
     private void Reposition(float height)
     {
         transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
