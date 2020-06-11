@@ -5,11 +5,12 @@ using UnityEngine.UI;
 
 public class ToolMenu : MonoBehaviour
 {
-    public GameObject brushes;
-    public GameObject slider;
-    public Button button;
-    public Text toolText;
-    public Text sizeText;
+    [SerializeField] private GameObject brushes;
+    [SerializeField] private GameObject slider;
+    [SerializeField] private Button button;
+    [SerializeField] private Button[] brushButtons;
+    [SerializeField] private Text toolText;
+    [SerializeField] private Text sizeText;
 
     private string selectionStr = "Selection";
     private string brushStr = "Brushes";
@@ -39,6 +40,14 @@ public class ToolMenu : MonoBehaviour
     public void UpdateSize(float newSize)
     {
         sizeText.text = sizeStr + newSize;
+    }
+
+    public void ReActivateBrushBruttons()
+    {
+        foreach(Button b in brushButtons)
+        {
+            b.interactable = true;
+        }
     }
 
     private void UpdateTool()
