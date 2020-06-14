@@ -3,7 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 
-public enum TileType { none, groundLow, groundMid, groundHigh, wall, eraser }
+public enum TileType
+{
+    none,
+    groundLow,
+    groundML,
+    groundMH,
+    groundHigh,
+    stair1,
+    stair2,
+    stair3,
+    stair4,
+    column,
+    wall,
+    eraser
+}
 public enum TilePlacing { center, side, corner }
 
 //[ExecuteInEditMode]
@@ -134,7 +148,10 @@ public class TileController : MonoBehaviour
 
                             if(hitColliders.Length > 0)
                             {
-                                otherType = hitColliders[0].GetComponent<Tile>().type;
+                                Tile otherTile = hitColliders[0].GetComponent<Tile>();
+                                if(otherTile == null)
+                                    otherTile = hitColliders[0].GetComponentInParent<Tile>();
+                                otherType = otherTile.type;
                                 if(brushType == TileType.eraser || brushType != otherType)
                                 {
                                     //PhotonNetwork.Destroy(hitColliders[0].gameObject);
