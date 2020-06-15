@@ -36,7 +36,7 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
         // Stairs logic
         if(type == TileType.stair1 || type == TileType.stair2 || type == TileType.stair3 || type == TileType.stair4)
         {
-            transform.Rotate(0, rotations[type-TileType.stair1], 0);
+            transform.Rotate(0, rotations[type-TileType.stair1] + TileController.instance.transform.eulerAngles.y, 0);
             type = TileType.stair1;
         }
         //else if(type == TileType.wall)
