@@ -46,7 +46,7 @@ public class CameraMovement : MonoBehaviour
         if(mouseWheel != 0 && Input.GetKey(KeyCode.LeftControl))
         {
             camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - mouseWheel * zoomSensitivity, minZoom, maxZoom);
-            Debug.Log("Camera zoom: " + camera.orthographicSize);
+            //Debug.Log("Camera zoom: " + camera.orthographicSize);
         }
         // Up-down movement
         else if(mouseWheel > 0)

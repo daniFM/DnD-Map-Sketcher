@@ -15,7 +15,6 @@ public enum TileType
     stair3,
     stair4,
     column,
-    wall,
     eraser
 }
 public enum TilePlacing { center, side, corner }
@@ -35,8 +34,10 @@ public class TileController : MonoBehaviour
 
     [Header("Painting")]
     public TileType brushType = TileType.groundHigh;
-    [Range(1, 5)]
-    public int brushSize;
+    [SerializeField][ReadOnly]
+    private int brushSize = 1;
+    [SerializeField][ReadOnly]
+    private int brushHeight = 1;
     public TileGroup[] tileMeshes;
 
     private bool active = true;
@@ -137,33 +138,33 @@ public class TileController : MonoBehaviour
                     {
                         for(int j = 0; j < brushSize; ++j)
                         {
-                            int offset = (int)Mathf.Ceil((float)brushSize / 2) - 1;
-                            Vector3 tposition = position - new Vector3(i - offset, 0, j - offset);
-
-                            Collider[] hitColliders = Physics.OverlapSphere(tposition + new Vector3(0, 0.2f, 0), 0.1f, tileLayer);
-                            //if(!Physics.CheckSphere(tposition, 0.1f, tileLayer))
-
-                            // Paint/replace/erase logic
-                            TileType otherType = TileType.none;
-
-                            if(hitColliders.Length > 0)
+                            for(int k = 0; k < brushHeight; k++)
                             {
-                                Tile otherTile = hitColliders[0].GetComponent<Tile>();
-                                if(otherTile == null)
-                                    otherTile = hitColliders[0].GetComponentInParent<Tile>();
-                                otherType = otherTile.type;
-                                if(brushType == TileType.eraser || brushType != otherType)
+                                int offset = (int)Mathf.Ceil((float)brushSize / 2) - 1;
+                                Vector3 tposition = position - new Vector3(i - offset, -k, j - offset);
+
+                                Collider[] hitColliders = Physics.OverlapSphere(tposition + new Vector3(0, 0.2f, 0), 0.1f, tileLayer);
+                                //if(!Physics.CheckSphere(tposition, 0.1f, tileLayer))
+
+                                // Paint/replace/erase logic
+                                TileType otherType = TileType.none;
+
+                                if(hitColliders.Length > 0)
                                 {
-                                    //PhotonNetwork.Destroy(hitColliders[0].gameObject);
-                                    hitColliders[0].GetComponent<Tile>().DestroyByAnybody();
+                                    otherType = hitColliders[0].GetComponent<Tile>().type;
+                                    if(brushType == TileType.eraser || brushType != otherType)
+                                    {
+                                        //PhotonNetwork.Destroy(hitColliders[0].gameObject);
+                                        hitColliders[0].GetComponent<Tile>().DestroyByAnybody();
+                                    }
                                 }
-                            }
 
-                            if((otherType == TileType.none || brushType != otherType) && brushType != TileType.eraser)
-                            {
-                                //Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
-                                //tile.SetTile(brushType);
-                                PhotonNetwork.Instantiate(tilePrefab.name, tposition, Quaternion.identity/*, this.transform*/, 0, tileInitData[(int)brushType]);
+                                if((otherType == TileType.none || brushType != otherType) && brushType != TileType.eraser)
+                                {
+                                    //Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
+                                    //tile.SetTile(brushType);
+                                    PhotonNetwork.Instantiate(tilePrefab.name, tposition, Quaternion.identity/*, this.transform*/, 0, tileInitData[(int)brushType]);
+                                }
                             }
                         }
                     }
@@ -201,6 +202,11 @@ public class TileController : MonoBehaviour
     {
         this.brushSize = (int)brushSize;
         brush.transform.localScale = new Vector3(brushSize + 0.4f, brushSize + 0.4f, 1);
+    }
+
+    public void SetBrushHeight(float brushHeight)
+    {
+        this.brushHeight = (int)brushHeight;
     }
 
     private void ToolChanged()

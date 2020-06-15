@@ -39,17 +39,17 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
             transform.Rotate(0, rotations[type-TileType.stair1], 0);
             type = TileType.stair1;
         }
-        else if(type == TileType.wall)
-        {
-            for(int i = 0; i < 3; ++i)
-            {
-                //Instantiate(subTilePrefab, new Vector3(0, i, 0), Quaternion.Euler(0, rotations[Random.Range(0, 4)], 0), transform);
-                Transform t = PhotonNetwork.Instantiate(subTilePrefab.name, transform.position, Quaternion.identity).transform;
-                t.parent = transform;
-                t.Translate(0, i, 0);
-                t.Rotate(0, rotations[Random.Range(0, 4)], 0);
-            }
-        }
+        //else if(type == TileType.wall)
+        //{
+        //    for(int i = 0; i < 3; ++i)
+        //    {
+        //        //Instantiate(subTilePrefab, new Vector3(0, i, 0), Quaternion.Euler(0, rotations[Random.Range(0, 4)], 0), transform);
+        //        Transform t = PhotonNetwork.Instantiate(subTilePrefab.name, transform.position, Quaternion.identity).transform;
+        //        t.parent = transform;
+        //        t.Translate(0, i, 0);
+        //        t.Rotate(0, rotations[Random.Range(0, 4)], 0);
+        //    }
+        //}
         // Other tiles logic
         else
         {
