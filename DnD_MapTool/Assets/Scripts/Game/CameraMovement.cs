@@ -12,14 +12,14 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float minZoom = 1;
     [SerializeField] private AnimationCurve rotationTween;
     [SerializeField] private Transform tCamera;
-    private new Camera camera;
 
+    private Camera[] cameras;
     private Vector3 accumulator;
     private bool rotating;
 
     void Start()
     {
-        camera = tCamera.GetComponent<Camera>();
+        cameras = tCamera.GetComponentsInChildren<Camera>();
     }
 
     void Update()
@@ -45,7 +45,10 @@ public class CameraMovement : MonoBehaviour
         // Zoom
         if(mouseWheel != 0 && Input.GetKey(KeyCode.LeftControl))
         {
-            camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - mouseWheel * zoomSensitivity, minZoom, maxZoom);
+            foreach(Camera camera in cameras)
+            {
+                camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - mouseWheel * zoomSensitivity, minZoom, maxZoom);
+            }
             //Debug.Log("Camera zoom: " + camera.orthographicSize);
         }
         // Up-down movement
@@ -63,11 +66,11 @@ public class CameraMovement : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.E))
             {
-                StartCoroutine(DoRotation(90));
+                StartCoroutine(DoRotation(-90));
             }
             if(Input.GetKeyDown(KeyCode.Q))
             {
-                StartCoroutine(DoRotation(-90));
+                StartCoroutine(DoRotation(90));
             }
         }
     }
