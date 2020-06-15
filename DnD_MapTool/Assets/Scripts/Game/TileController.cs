@@ -90,7 +90,7 @@ public class TileController : MonoBehaviour
         if(renderer != null)
             renderer.sharedMaterial.mainTextureScale = Vector2.one * gridTextureTiling / gridToUnity;
 
-        brush.transform.localScale = new Vector3(brushSize + 0.4f, brushSize + 0.4f, 1);
+        brush.transform.localScale = new Vector3(brushSize, brushHeight, brushSize) * 1.01f;
     }
 
     void Update()
@@ -201,12 +201,13 @@ public class TileController : MonoBehaviour
     public void SetBrushSize(float brushSize)
     {
         this.brushSize = (int)brushSize;
-        brush.transform.localScale = new Vector3(brushSize + 0.4f, brushSize + 0.4f, 1);
+        brush.transform.localScale = new Vector3(brushSize, brushHeight, brushSize) * 1.01f;
     }
 
     public void SetBrushHeight(float brushHeight)
     {
         this.brushHeight = (int)brushHeight;
+        brush.transform.localScale = new Vector3(brushSize, brushHeight, brushSize) * 1.01f;
     }
 
     private void ToolChanged()
