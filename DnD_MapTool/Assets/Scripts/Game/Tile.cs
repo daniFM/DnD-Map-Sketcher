@@ -20,6 +20,7 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
     [SerializeField] private MeshFilter mFilter;
     [SerializeField] private new Renderer renderer;
     [SerializeField] private new BoxCollider collider;
+    [SerializeField] private GameObject subTilePrefab;
 
     private TilePlacing placing;
     private float[] rotations = { 0, 90, 180, 270 };
@@ -31,7 +32,31 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
         //Check neighbors
         //...
         placing = TilePlacing.center;
-        transform.Rotate(0, rotations[Random.Range(0, 4)], 0); // Only for center tiles
+
+        // Stairs logic
+        if(type == TileType.stair1 || type == TileType.stair2 || type == TileType.stair3 || type == TileType.stair4)
+        {
+            transform.Rotate(0, rotations[type-TileType.stair1] + TileController.instance.transform.eulerAngles.y, 0);
+            type = TileType.stair1;
+        }
+        //else if(type == TileType.wall)
+        //{
+        //    for(int i = 0; i < 3; ++i)
+        //    {
+        //        //Instantiate(subTilePrefab, new Vector3(0, i, 0), Quaternion.Euler(0, rotations[Random.Range(0, 4)], 0), transform);
+        //        Transform t = PhotonNetwork.Instantiate(subTilePrefab.name, transform.position, Quaternion.identity).transform;
+        //        t.parent = transform;
+        //        t.Translate(0, i, 0);
+        //        t.Rotate(0, rotations[Random.Range(0, 4)], 0);
+        //    }
+        //}
+        // Other tiles logic
+        else
+        {
+            transform.Rotate(0, rotations[Random.Range(0, 4)], 0); // Only for center tiles
+        }
+
+        
 
         mFilter.mesh = TileController.instance.GetTileMesh(type, placing);
 

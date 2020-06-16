@@ -5,19 +5,24 @@ using UnityEngine.UI;
 
 public class ToolMenu : MonoBehaviour
 {
-    public GameObject brushes;
-    public GameObject slider;
-    public Button button;
-    public Text toolText;
-    public Text sizeText;
+    [SerializeField] private GameObject brushes;
+    [SerializeField] private GameObject sliderSize;
+    [SerializeField] private GameObject sliderHeight;
+    [SerializeField] private Button button;
+    [SerializeField] private Button[] brushButtons;
+    [SerializeField] private Text toolText;
+    [SerializeField] private Text sizeText;
+    [SerializeField] private Text heightText;
 
     private string selectionStr = "Selection";
     private string brushStr = "Brushes";
     private string sizeStr = "Size: ";
+    private string heightStr = "Height: ";
 
     void Start()
     {
         UpdateSize(1);
+        UpdateHeight(1);
         button.interactable = GameManager.instance.isDM;
     }
 
@@ -41,6 +46,19 @@ public class ToolMenu : MonoBehaviour
         sizeText.text = sizeStr + newSize;
     }
 
+    public void UpdateHeight(float newHeight)
+    {
+        heightText.text = heightStr + newHeight;
+    }
+
+    public void ReActivateBrushBruttons()
+    {
+        foreach(Button b in brushButtons)
+        {
+            b.interactable = true;
+        }
+    }
+
     private void UpdateTool()
     {
         ToolType newTool = GameController.instance.Tool;
@@ -50,14 +68,16 @@ public class ToolMenu : MonoBehaviour
             case ToolType.selection:
                 {
                     brushes.SetActive(false);
-                    slider.SetActive(false);
+                    sliderSize.SetActive(false);
+                    sliderHeight.SetActive(false);
                     toolText.text = selectionStr;
                     break;
                 }
             case ToolType.brush:
                 {
                     brushes.SetActive(true);
-                    slider.SetActive(true);
+                    sliderSize.SetActive(true);
+                    sliderHeight.SetActive(true);
                     toolText.text = brushStr;
                     break;
                 }

@@ -7,15 +7,20 @@ public class CameraMovement : MonoBehaviour
     [SerializeField] private float sensitivityX = 0.3f;
     [SerializeField] private float sensitivityY = 0.5f;
     [SerializeField] private float rotationSpeed = 1;
+    [SerializeField] private float zoomSensitivity = 1;
+    [SerializeField] private float maxZoom = 10;
+    [SerializeField] private float minZoom = 1;
     [SerializeField] private AnimationCurve rotationTween;
-    [SerializeField] private new Transform camera;
+    [SerializeField] private Transform tCamera;
 
+    private Camera[] cameras;
     private Vector3 accumulator;
     private bool rotating;
 
-    //void Start()
-    //{
-    //}
+    void Start()
+    {
+        cameras = tCamera.GetComponentsInChildren<Camera>();
+    }
 
     void Update()
     {
@@ -37,7 +42,17 @@ public class CameraMovement : MonoBehaviour
             }
         }
 
-        if(mouseWheel > 0)
+        // Zoom
+        if(mouseWheel != 0 && Input.GetKey(KeyCode.LeftControl))
+        {
+            foreach(Camera camera in cameras)
+            {
+                camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - mouseWheel * zoomSensitivity, minZoom, maxZoom);
+            }
+            //Debug.Log("Camera zoom: " + camera.orthographicSize);
+        }
+        // Up-down movement
+        else if(mouseWheel > 0)
         {
             transform.Translate(0, 1, 0);
         }
@@ -51,11 +66,11 @@ public class CameraMovement : MonoBehaviour
         {
             if(Input.GetKeyDown(KeyCode.E))
             {
-                StartCoroutine(DoRotation(90));
+                StartCoroutine(DoRotation(-90));
             }
             if(Input.GetKeyDown(KeyCode.Q))
             {
-                StartCoroutine(DoRotation(-90));
+                StartCoroutine(DoRotation(90));
             }
         }
     }
@@ -68,8 +83,8 @@ public class CameraMovement : MonoBehaviour
         angle = Mathf.Abs(angle);
         float t_angle = 0;
         float acc_angle = 0;
-        Vector3 initialPos = camera.position;
-        Quaternion initialRot = camera.rotation;
+        Vector3 initialPos = tCamera.position;
+        Quaternion initialRot = tCamera.rotation;
         Vector3 direction;
         Quaternion rot;
 
@@ -80,21 +95,21 @@ public class CameraMovement : MonoBehaviour
 
             direction = initialPos - transform.position;
             rot = Quaternion.AngleAxis(acc_angle * sign, Vector3.up);
-            camera.transform.position = transform.position + rot * direction;
-            camera.transform.rotation = initialRot * Quaternion.Inverse(initialRot) * rot * initialRot;
+            tCamera.transform.position = transform.position + rot * direction;
+            tCamera.transform.rotation = initialRot * Quaternion.Inverse(initialRot) * rot * initialRot;
 
             yield return null;
         }
         // Rotate to exact end rotation
         direction = initialPos - transform.position;
         rot = Quaternion.AngleAxis(angle * sign, Vector3.up);
-        camera.transform.position = transform.position + rot * direction;
-        camera.transform.rotation = initialRot * Quaternion.Inverse(initialRot) * rot * initialRot;
+        tCamera.transform.position = transform.position + rot * direction;
+        tCamera.transform.rotation = initialRot * Quaternion.Inverse(initialRot) * rot * initialRot;
 
         // Set controller rotation without moving the camera
-        camera.parent = null;
-        transform.eulerAngles = new Vector3(0, camera.rotation.eulerAngles.y - 45, 0);
-        camera.parent = transform;
+        tCamera.parent = null;
+        transform.eulerAngles = new Vector3(0, tCamera.rotation.eulerAngles.y - 45, 0);
+        tCamera.parent = transform;
 
         rotating = false;
     }

@@ -23,6 +23,15 @@ public class OutlineController : MonoBehaviour
         SliderInputPair.OnValueChanged += UpdateMaterial;
     }
 
+    private void Awake()
+    {
+        normalThickness.value = outlineMaterial.GetFloat(normalThickness.key);
+        depthThickness.value = outlineMaterial.GetFloat(depthThickness.key);
+        depthSensitivity.value = outlineMaterial.GetFloat(depthSensitivity.key);
+        normalsSensitivity.value = outlineMaterial.GetFloat(normalsSensitivity.key);
+        colorSensitivity.value = outlineMaterial.GetFloat(colorSensitivity.key);
+    }
+
     private void UpdateMaterial(string key, float value)
     {
         outlineMaterial.SetFloat(key, value);

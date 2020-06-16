@@ -1,20 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!114 &-5810440432888244892
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 423865f12d3f20e4f811a7d06b301a72, type: 3}
-  m_Name: NewOutlineFeature
-  m_EditorClassIdentifier: 
-  m_Active: 1
-  settings:
-    outlineMaterial: {fileID: 2100000, guid: 86e3f4290fd325e44acd934eab3aad47, type: 2}
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -25,12 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: de640fe3d0db1804a85f9fc8f5cadab6, type: 3}
-  m_Name: CustomForwardRendererData_Preview
+  m_Name: UniversalRenderPipelineAsset_Outline
   m_EditorClassIdentifier: 
   m_RendererFeatures:
-  - {fileID: 6516624931728061565}
-  - {fileID: -5810440432888244892}
-  m_RendererFeatureMap: 7df41a4ed9b36f5a64152119362b5daf
+  - {fileID: 8699149826302213463}
+  - {fileID: 2080273956418074399}
+  m_RendererFeatureMap: 57fda44cad96b9781fb7cb3f249ede1c
   postProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   shaders:
     blitPS: {fileID: 4800000, guid: c17132b1f77d20942aa75f8429c0f8bc, type: 3}
@@ -53,7 +38,22 @@ MonoBehaviour:
     failOperation: 0
     zFailOperation: 0
   m_ShadowTransparentReceive: 1
---- !u!114 &6516624931728061565
+--- !u!114 &2080273956418074399
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 423865f12d3f20e4f811a7d06b301a72, type: 3}
+  m_Name: UniversalRenderPipelineAssetOutline
+  m_EditorClassIdentifier: 
+  m_Active: 1
+  settings:
+    outlineMaterial: {fileID: 2100000, guid: dcf1e679cb097714aac186b2bb53521e, type: 2}
+--- !u!114 &8699149826302213463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -63,6 +63,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 082e281624038da4f809e01da17b0f05, type: 3}
-  m_Name: NewDepthNormalsFeature
+  m_Name: UniversalRenderPipelineAssetOutline
   m_EditorClassIdentifier: 
   m_Active: 1

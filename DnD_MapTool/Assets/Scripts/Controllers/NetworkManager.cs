@@ -77,6 +77,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks
         PhotonNetwork.LoadLevel("MainMenu");
     }
 
+    #region PUN CALLBACKS
+
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Master");
@@ -169,4 +171,11 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     //    if(PhotonNetwork.LocalPlayer.IsMasterClient)
     //        Debug.Log("I'm the master");
     //}
+
+    #endregion
+
+    public string GetCurrentRoomName()
+    {
+        return PhotonNetwork.CurrentRoom.Name;
+    }
 }
