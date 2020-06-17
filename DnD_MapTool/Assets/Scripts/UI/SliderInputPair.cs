@@ -16,7 +16,7 @@ public class SliderInputPair : MonoBehaviour
 
     void Start()
     {
-        slider = GetComponent<Slider>();
+        slider = GetComponentInChildren<Slider>();
         inputField = GetComponentInChildren<InputField>();
 
         slider.value = value;
