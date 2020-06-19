@@ -49,6 +49,11 @@ public class TileController : MonoBehaviour
     private Vector3 floorCorrection = new Vector3(0, 0.1f, 0);
     private object[][] tileInitData;
 
+    [Header("Data")]
+    [SerializeField] private int ctrlzAmount;
+    [SerializeField] private TileData tileBuffer;
+    [SerializeField] private TileData tileData; // For save functionality. To implement
+
     public static TileController instance = null;
 
     void Awake()
@@ -73,6 +78,8 @@ public class TileController : MonoBehaviour
             tileInitData[i] = new object[1];
             tileInitData[i][0] = i;
         }
+
+        tileBuffer = new TileData(ctrlzAmount);
     }
 
     void OnEnable()
@@ -164,6 +171,7 @@ public class TileController : MonoBehaviour
                                     //Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
                                     //tile.SetTile(brushType);
                                     PhotonNetwork.Instantiate(tilePrefab.name, tposition, Quaternion.identity/*, this.transform*/, 0, tileInitData[(int)brushType]);
+                                    tileBuffer.Add(brushType, transform);
                                 }
                             }
                         }

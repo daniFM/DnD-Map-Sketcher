@@ -21,9 +21,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject tokenPlayerPrefab;
     [SerializeField] private GameObject tokenNPCPrefab;
 
-    [HideInInspector] public NetworkInfo netInfo;
+    //public NetworkInfo netInfo;
     public static Action OnToolChanged;
-    public static Action OnTilesUpdated;
+    //public static Action OnTilesUpdated;
     public static GameController instance;
 
     void Awake()
@@ -36,8 +36,6 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        netInfo = GetComponent<NetworkInfo>();
-
         if(GameManager.instance.isDM)
         {
             //player = Instantiate(MasterPrefab, this.transform).GetComponent<Player>();

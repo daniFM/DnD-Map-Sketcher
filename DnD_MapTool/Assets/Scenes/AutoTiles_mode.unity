@@ -5605,6 +5605,13 @@ MonoBehaviour:
     - {fileID: -8459139033302336692, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     sides: []
     corners: []
+  ctrlzAmount: 5
+  tileBuffer:
+    tileTypes: 
+    transforms: []
+  tileData:
+    tileTypes: 
+    transforms: []
 --- !u!114 &1632520559
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7318,7 +7325,6 @@ MonoBehaviour:
     type: 3}
   tokenNPCPrefab: {fileID: 6842177347684969292, guid: c7ca834b1fa556142a070eb36e561c34,
     type: 3}
-  netInfo: {fileID: 0}
 --- !u!4 &2031366463
 Transform:
   m_ObjectHideFlags: 0
