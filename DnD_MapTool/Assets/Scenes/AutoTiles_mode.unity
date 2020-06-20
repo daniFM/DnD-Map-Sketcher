@@ -5606,12 +5606,9 @@ MonoBehaviour:
     sides: []
     corners: []
   ctrlzAmount: 5
-  tileBuffer:
-    tileTypes: 
-    transforms: []
-  tileData:
-    tileTypes: 
-    transforms: []
+  tileSnapshots:
+  - tileTypes: 
+    positions: []
 --- !u!114 &1632520559
 MonoBehaviour:
   m_ObjectHideFlags: 0

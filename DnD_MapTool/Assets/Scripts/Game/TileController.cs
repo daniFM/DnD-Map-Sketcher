@@ -51,8 +51,8 @@ public class TileController : MonoBehaviour
 
     [Header("Data")]
     [SerializeField] private int ctrlzAmount;
-    [SerializeField] private TileData tileBuffer;
-    [SerializeField] private TileData tileData; // For save functionality. To implement
+    [SerializeField] [ReadOnly] private int snapshotIndex;
+    [SerializeField] private TileData[] tileSnapshots;
 
     public static TileController instance = null;
 
@@ -79,7 +79,11 @@ public class TileController : MonoBehaviour
             tileInitData[i][0] = i;
         }
 
-        tileBuffer = new TileData(ctrlzAmount);
+        tileSnapshots = new TileData[ctrlzAmount];
+        for(int i = 0; i < ctrlzAmount; ++i)
+        {
+            tileSnapshots[i] = new TileData();
+        }
     }
 
     void OnEnable()
@@ -171,11 +175,51 @@ public class TileController : MonoBehaviour
                                     //Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
                                     //tile.SetTile(brushType);
                                     PhotonNetwork.Instantiate(tilePrefab.name, tposition, Quaternion.identity/*, this.transform*/, 0, tileInitData[(int)brushType]);
-                                    tileBuffer.Add(brushType, transform);
+                                    //tileBuffer.Add(brushType, transform);
                                 }
                             }
                         }
                     }
+                }
+                // Save snapshot
+                else if(Input.GetMouseButtonUp(0))
+                {
+                    if(snapshotIndex == tileSnapshots.Length)
+                    {
+                        for(int i = 0; i < snapshotIndex-1; ++i)
+                        {
+                            tileSnapshots[i] = new TileData(tileSnapshots[i + 1]);
+                        }
+                        snapshotIndex--;
+                        tileSnapshots[snapshotIndex].Clear();
+                    }
+
+                    foreach(Tile t in FindObjectsOfType<Tile>())
+                    {
+                        tileSnapshots[snapshotIndex].Add(t.type, t.transform.position);
+                    }
+                    snapshotIndex++;
+                }
+            }
+
+            // CTRL+Z
+            if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Space))
+            {
+                if(snapshotIndex > 1)
+                {
+                    foreach(Tile t in FindObjectsOfType<Tile>())
+                    {
+                        t.DestroyByAnybody();
+                    }
+
+                    snapshotIndex--;
+
+                    for(int i = 0; i < tileSnapshots[snapshotIndex - 1].Count; ++i)
+                    {
+                        PhotonNetwork.Instantiate(tilePrefab.name, tileSnapshots[snapshotIndex - 1].GetPositionAt(i), Quaternion.identity, 0, tileInitData[(int)tileSnapshots[snapshotIndex - 1].GetTypeAt(i)]);
+                    }
+
+                    tileSnapshots[snapshotIndex].Clear();
                 }
             }
         }
