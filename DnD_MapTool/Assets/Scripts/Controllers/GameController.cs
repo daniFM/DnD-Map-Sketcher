@@ -21,6 +21,10 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject tokenPlayerPrefab;
     [SerializeField] private GameObject tokenNPCPrefab;
 
+    [SerializeField] private ControlsScriptableObject editorControls;
+    [SerializeField] private ControlsScriptableObject webControls;
+    [HideInInspector] public ControlsScriptableObject controls;
+
     //public NetworkInfo netInfo;
     public static Action OnToolChanged;
     //public static Action OnTilesUpdated;
@@ -49,6 +53,15 @@ public class GameController : MonoBehaviour
             Token newToken = PhotonNetwork.Instantiate(tokenPlayerPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Token>();
             newToken.Init(GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber - 1));
             SetTool(ToolType.selection);
+        }
+
+        if(Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            controls = editorControls;
+        }
+        else if(Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            controls = webControls;
         }
     }
 

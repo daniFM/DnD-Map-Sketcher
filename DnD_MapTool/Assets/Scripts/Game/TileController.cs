@@ -203,7 +203,7 @@ public class TileController : MonoBehaviour
             }
 
             // CTRL+Z
-            if(Input.GetKey(KeyCode.LeftControl) && Input.GetKeyDown(KeyCode.Space))
+            if(Input.GetKey(GameController.instance.controls.keyCTRL) && Input.GetKeyDown(GameController.instance.controls.keyZ))
             {
                 if(snapshotIndex > 1)
                 {
@@ -216,6 +216,8 @@ public class TileController : MonoBehaviour
 
                     for(int i = 0; i < tileSnapshots[snapshotIndex - 1].Count; ++i)
                     {
+                        // TO DO: Implement conditions for optimization
+                        //if(tileSnapshots[snapshotIndex].GetPositionAt(i) != tileSnapshots[snapshotIndex - 1].GetPositionAt(i))
                         PhotonNetwork.Instantiate(tilePrefab.name, tileSnapshots[snapshotIndex - 1].GetPositionAt(i), Quaternion.identity, 0, tileInitData[(int)tileSnapshots[snapshotIndex - 1].GetTypeAt(i)]);
                     }
 

@@ -5606,6 +5606,7 @@ MonoBehaviour:
     sides: []
     corners: []
   ctrlzAmount: 5
+  snapshotIndex: 0
   tileSnapshots:
   - tileTypes: 
     positions: []
@@ -7322,6 +7323,9 @@ MonoBehaviour:
     type: 3}
   tokenNPCPrefab: {fileID: 6842177347684969292, guid: c7ca834b1fa556142a070eb36e561c34,
     type: 3}
+  editorControls: {fileID: 11400000, guid: 8e0185b746dbe444492524f231a3541d, type: 2}
+  webControls: {fileID: 11400000, guid: 93e9061873a6ebb41833a4b20d0003b3, type: 2}
+  controls: {fileID: 0}
 --- !u!4 &2031366463
 Transform:
   m_ObjectHideFlags: 0
