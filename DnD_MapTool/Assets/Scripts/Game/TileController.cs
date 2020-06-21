@@ -49,6 +49,12 @@ public class TileController : MonoBehaviour
     private Vector3 floorCorrection = new Vector3(0, 0.1f, 0);
     private object[][] tileInitData;
 
+    [Header("Floor")]
+    public bool createFloor = true;
+    [SerializeField] private int floorX = 10;
+    [SerializeField] private int floorZ = 10;
+
+
     [Header("Data")]
     [SerializeField] private int ctrlzAmount;
     [SerializeField] [ReadOnly] private int snapshotIndex;
@@ -84,6 +90,9 @@ public class TileController : MonoBehaviour
         {
             tileSnapshots[i] = new TileData();
         }
+
+        if(PhotonNetwork.IsMasterClient)
+            Invoke("CreateFloor", 0.1f);
     }
 
     void OnEnable()
@@ -223,6 +232,22 @@ public class TileController : MonoBehaviour
 
                     tileSnapshots[snapshotIndex].Clear();
                 }
+            }
+        }
+    }
+
+    public void CreateFloor()
+    {
+        for(int i = 0; i < floorX; ++i)
+        {
+            for(int j = 0; j < floorZ; ++j)
+            {
+                Vector3 pos = new Vector3(i - (int)(floorX / 2), -1, j - (int)(floorZ / 2));
+                if(!snapToCenter)
+                    pos += /*floorCorrection +*/ halfTile;
+                //else
+                //    pos += floorCorrection;
+                PhotonNetwork.Instantiate(tilePrefab.name, pos, Quaternion.identity, 0, tileInitData[(int)TileType.groundHigh]);
             }
         }
     }

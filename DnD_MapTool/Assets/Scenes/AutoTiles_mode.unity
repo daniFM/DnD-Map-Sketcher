@@ -5605,6 +5605,9 @@ MonoBehaviour:
     - {fileID: -8459139033302336692, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     sides: []
     corners: []
+  createFloor: 1
+  floorX: 10
+  floorZ: 10
   ctrlzAmount: 5
   snapshotIndex: 0
   tileSnapshots:
