@@ -91,6 +91,11 @@ public class GameController : MonoBehaviour
         return tool;
     }
 
+    public Color GetPlayerColor()
+    {
+        return GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber - 1);
+    }
+
     public Color GetPlayerColor(int index)
     {
         while(index > playerColors.Count - 1)
