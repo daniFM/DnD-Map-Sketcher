@@ -15,7 +15,18 @@ public enum TileType
     stair3,
     stair4,
     column,
-    eraser
+    eraser,
+    door1,
+    door2,
+    statue1,
+    statue2,
+    statue3,
+    statue4,
+    chest1,
+    chest2,
+    orb,
+    trap1on,
+    trap1off
 }
 public enum TilePlacing { center, side, corner }
 
