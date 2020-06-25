@@ -78,4 +78,9 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
             photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
         PhotonNetwork.Destroy(gameObject);
     }
+
+    public void RotateTile()
+    {
+        transform.Rotate(Vector3.up, 90);
+    }
 }

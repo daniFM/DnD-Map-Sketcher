@@ -183,6 +183,10 @@ public class TileController : MonoBehaviour
                                 if(hitColliders.Length > 0)
                                 {
                                     otherType = hitColliders[0].GetComponent<Tile>().type;
+                                    if(brushType == otherType && Input.GetMouseButtonDown(0))
+                                    {
+                                        hitColliders[0].GetComponent<Tile>().RotateTile();
+                                    }
                                     if(brushType == TileType.eraser || brushType != otherType)
                                     {
                                         //PhotonNetwork.Destroy(hitColliders[0].gameObject);
