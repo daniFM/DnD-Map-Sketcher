@@ -227,7 +227,7 @@ public class TileController : MonoBehaviour
 
                     foreach(Tile t in FindObjectsOfType<Tile>())
                     {
-                        tileSnapshots[snapshotIndex].Add(t.type, t.transform.position);
+                        tileSnapshots[snapshotIndex].Add(t.type, t.transform.position, t.transform.rotation);
                     }
                     snapshotIndex++;
                 }
@@ -249,7 +249,12 @@ public class TileController : MonoBehaviour
                     {
                         // TO DO: Implement conditions for optimization
                         //if(tileSnapshots[snapshotIndex].GetPositionAt(i) != tileSnapshots[snapshotIndex - 1].GetPositionAt(i))
-                        PhotonNetwork.Instantiate(tilePrefab.name, tileSnapshots[snapshotIndex - 1].GetPositionAt(i), Quaternion.identity, 0, tileInitData[(int)tileSnapshots[snapshotIndex - 1].GetTypeAt(i)]);
+                        PhotonNetwork.Instantiate(
+                            tilePrefab.name,
+                            tileSnapshots[snapshotIndex - 1].GetPositionAt(i),
+                            tileSnapshots[snapshotIndex - 1].GetRotationAt(i),
+                            0,
+                            tileInitData[(int)tileSnapshots[snapshotIndex - 1].GetTypeAt(i)]);
                     }
 
                     tileSnapshots[snapshotIndex].Clear();
@@ -323,5 +328,11 @@ public class TileController : MonoBehaviour
             active = false;
             brush.SetActive(false);
         }
+    }
+
+    // TO DO
+    private object[] GetTileInitData(TileType type, bool autorotate)
+    {
+        throw new System.NotImplementedException();
     }
 }
