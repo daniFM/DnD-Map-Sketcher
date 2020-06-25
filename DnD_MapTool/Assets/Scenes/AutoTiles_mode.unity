@@ -6046,7 +6046,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 110, y: 666.7, z: 1}
+  m_Size: {x: 110, y: 1500, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1428485744
 GameObject:
@@ -6854,6 +6854,7 @@ MonoBehaviour:
   - type: 19
     centers:
     - {fileID: -1839788162292039599, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
+    - {fileID: -3905872605834275575, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
     sides: []
     corners: []
   - type: 20
@@ -10826,7 +10827,14 @@ MonoBehaviour:
   - {fileID: 223092117}
   - {fileID: 1435324769}
   - {fileID: 1239668140}
+  - {fileID: 110737682}
+  - {fileID: 1232128568}
   - {fileID: 736507955}
+  - {fileID: 2047079094}
+  - {fileID: 1991782682}
+  - {fileID: 1870784313}
+  - {fileID: 2107124236}
+  - {fileID: 665025676}
   toolText: {fileID: 38939029}
   sizeText: {fileID: 1802019474}
   heightText: {fileID: 1016060394}
