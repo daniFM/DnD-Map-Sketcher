@@ -102,7 +102,7 @@ public class TileController : MonoBehaviour
             tileSnapshots[i] = new TileData();
         }
 
-        if(PhotonNetwork.IsMasterClient)
+        if(createFloor && PhotonNetwork.IsMasterClient)
             Invoke("CreateFloor", 0.1f);
     }
 
@@ -174,8 +174,15 @@ public class TileController : MonoBehaviour
                                 int offset = (int)Mathf.Ceil((float)brushSize / 2) - 1;
                                 Vector3 tposition = position - new Vector3(i - offset, -k, j - offset);
 
-                                Collider[] hitColliders = Physics.OverlapSphere(tposition + new Vector3(0, 0.2f, 0), 0.1f, tileLayer);
+                                Collider[] hitColliders = Physics.OverlapSphere(tposition + new Vector3(0, 0.2f, 0), 0.16f, tileLayer);
                                 //if(!Physics.CheckSphere(tposition, 0.1f, tileLayer))
+
+                                //Vector3 p = tposition + new Vector3(0, 0.2f, 0);
+                                //float a = 0.16f;
+                                //Debug.DrawLine(p, p + Vector3.up * a, Color.red, 10, false);
+                                //Debug.DrawLine(p, p + Vector3.down * a, Color.red, 10, false);
+                                //Debug.DrawLine(p, p + Vector3.right * a, Color.red, 10, false);
+                                //Debug.DrawLine(p, p + Vector3.left * a, Color.red, 10, false);
 
                                 // Paint/replace/erase logic
                                 TileType otherType = TileType.none;
