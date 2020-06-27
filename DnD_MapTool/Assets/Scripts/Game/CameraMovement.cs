@@ -50,6 +50,8 @@ public class CameraMovement : MonoBehaviour
                 camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - mouseWheel * zoomSensitivity, minZoom, maxZoom);
             }
             //Debug.Log("Camera zoom: " + camera.orthographicSize);
+
+            GameController.instance.outlineController.CameraCorrection(cameras[0].orthographicSize);
         }
         // Up-down movement
         else if(mouseWheel > 0)

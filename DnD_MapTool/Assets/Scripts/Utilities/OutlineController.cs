@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class OutlineController : MonoBehaviour
 {
     [SerializeField] private Material outlineMaterial;
+    [SerializeField] private float cameraCorrection;
 
     [SerializeField] private SliderInputPair normalThickness;
     [SerializeField] private SliderInputPair depthThickness;
@@ -13,8 +13,23 @@ public class OutlineController : MonoBehaviour
     [SerializeField] private SliderInputPair normalsSensitivity;
     [SerializeField] private SliderInputPair colorSensitivity;
 
+    private Material initMaterial;
+    private float cameraInitSize;
+
+    private void Start()
+    {
+        initMaterial = new Material(outlineMaterial);
+    }
+
+    private void OnDestroy()
+    {
+        if(initMaterial != null)
+            outlineMaterial.CopyPropertiesFromMaterial(initMaterial);
+    }
+
     private void OnEnable()
     {
+        cameraInitSize = Camera.main.orthographicSize;
         SliderInputPair.OnValueChanged += UpdateMaterial;
     }
 
@@ -30,6 +45,11 @@ public class OutlineController : MonoBehaviour
         depthSensitivity.value = outlineMaterial.GetFloat(depthSensitivity.key);
         normalsSensitivity.value = outlineMaterial.GetFloat(normalsSensitivity.key);
         colorSensitivity.value = outlineMaterial.GetFloat(colorSensitivity.key);
+    }
+
+    public void CameraCorrection(float cameraSize)
+    {
+        UpdateMaterial(depthSensitivity.key, depthSensitivity.value + (cameraInitSize - cameraSize) * cameraCorrection);
     }
 
     private void UpdateMaterial(string key, float value)

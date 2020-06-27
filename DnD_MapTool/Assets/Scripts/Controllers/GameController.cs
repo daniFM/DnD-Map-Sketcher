@@ -25,6 +25,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private ControlsScriptableObject webControls;
     [HideInInspector] public ControlsScriptableObject controls;
 
+    [HideInInspector] public OutlineController outlineController;
+
     //public NetworkInfo netInfo;
     public static Action OnToolChanged;
     //public static Action OnTilesUpdated;
@@ -40,6 +42,8 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        outlineController = GetComponent<OutlineController>();
+
         if(GameManager.instance.isDM)
         {
             //player = Instantiate(MasterPrefab, this.transform).GetComponent<Player>();
