@@ -25,6 +25,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private ControlsScriptableObject webControls;
     [HideInInspector] public ControlsScriptableObject controls;
 
+    [SerializeField] private GameMenuController gameMenuController;
     [HideInInspector] public OutlineController outlineController;
 
     //public NetworkInfo netInfo;
@@ -106,5 +107,10 @@ public class GameController : MonoBehaviour
             playerColors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
 
         return playerColors[index];
+    }
+
+    public void Tooltip(string message, float time = 5)
+    {
+        gameMenuController.ShowTooltip(message, time);
     }
 }
