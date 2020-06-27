@@ -1833,7 +1833,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526464814}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 621f056aa19b46547b533663a82462bc, type: 3}
   m_Name: 
@@ -1885,7 +1885,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526464814}
-  m_Mesh: {fileID: -6151747068533630916, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
+  m_Mesh: {fileID: -8740340137559968829, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
 --- !u!1 &529162515
 GameObject:
   m_ObjectHideFlags: 0
@@ -7156,6 +7156,11 @@ MonoBehaviour:
     - {fileID: -6151747068533630916, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
     sides: []
     corners: []
+  - type: 12
+    centers:
+    - {fileID: -8740340137559968829, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
+    sides: []
+    corners: []
   - type: 13
     centers:
     - {fileID: 7357924614554721019, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
@@ -7528,7 +7533,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1684757898}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 621f056aa19b46547b533663a82462bc, type: 3}
   m_Name: 
