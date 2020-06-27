@@ -36,6 +36,8 @@ public class ControlsScriptableObject: ScriptableObject
     public KeyCode keyCTRL = KeyCode.LeftControl;
     public KeyCode keyZ = KeyCode.Z;
     public KeyCode keyPing = KeyCode.P;
+    public KeyCode keySwitchTool = KeyCode.Tab;
+    public KeyCode keyHeight = KeyCode.Space;
 
 
     //public bool GetShortcut(Key[] keys)

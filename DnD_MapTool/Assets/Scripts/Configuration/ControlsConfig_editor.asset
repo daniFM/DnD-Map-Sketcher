@@ -14,3 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   keyCTRL: 306
   keyZ: 32
+  keyPing: 112
+  keySwitchTool: 9
+  keyHeight: 32

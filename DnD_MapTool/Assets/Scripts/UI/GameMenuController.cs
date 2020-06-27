@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class GameMenuController : MonoBehaviour
 {
-    [SerializeField] private GameObject toolsMenu;
+    [SerializeField] private ToolMenu toolMenu;
     [SerializeField] private GameObject pauseMenu;
     [SerializeField] private GameObject playersMenu;
     [SerializeField] private Text tooltip;
@@ -20,6 +20,14 @@ public class GameMenuController : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Escape))
         {
             pauseMenu.SetActive(!pauseMenu.activeSelf);
+        }
+        else if(Input.GetKeyDown(GameController.instance.controls.keySwitchTool))
+        {
+            toolMenu.SwitchTool();
+        }
+        else if(Input.GetKeyDown(GameController.instance.controls.keyHeight) && GameController.instance.Tool == ToolType.brush)
+        {
+            toolMenu.ToggleHeightPlane();
         }
     }
 

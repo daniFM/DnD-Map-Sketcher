@@ -54,11 +54,11 @@ public class CameraMovement : MonoBehaviour
             GameController.instance.outlineController.CameraCorrection(cameras[0].orthographicSize);
         }
         // Up-down movement
-        else if(mouseWheel > 0)
+        else if(mouseWheel > 0 && GameManager.instance.isDM)
         {
             transform.Translate(0, 1, 0);
         }
-        else if(mouseWheel < 0)
+        else if(mouseWheel < 0 && GameManager.instance.isDM)
         {
             transform.Translate(0, -1, 0);
         }
