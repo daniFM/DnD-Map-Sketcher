@@ -20,7 +20,7 @@ public class Ping : MonoBehaviourPun
         if(overrideColor)
             color = colorOverride;
         else
-            color = GameController.instance.GetPlayerColor(photonView.OwnerActorNr - 1);
+            color = GameController.instance.GetPlayerColor(photonView.OwnerActorNr);
 
         if(multiplyColor)
             color *= colorMultiply;

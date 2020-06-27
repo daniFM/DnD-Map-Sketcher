@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class Token : MonoBehaviourPun
+public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
 {
     public LayerMask movementLayers;
     public float sleepTime = 1;
@@ -15,17 +14,16 @@ public class Token : MonoBehaviourPun
     private new Renderer renderer;
     private Material mainMaterial;
     private Rigidbody rb;
-    private WaitForSeconds waitSleep;
     private Photon.Realtime.Player player;
-    private bool initialized;
+    //private bool initialized;
 
-    void Start()
-    {
-        if(!initialized)
-        {
-            Init(GameController.instance.GetPlayerColor(photonView.Owner.ActorNumber - 1));
-        }
-    }
+    //void Start()
+    //{
+    //    if(!initialized)
+    //    {
+    //        Init(GameController.instance.GetPlayerColor(photonView.Owner.ActorNumber - 1));
+    //    }
+    //}
 
     private void OnEnable()
     {
@@ -42,22 +40,28 @@ public class Token : MonoBehaviourPun
         mainMaterial.SetColor("_EmissionColor", Color.clear);
     }
 
+    public void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        int playerIndex = (int)info.photonView.InstantiationData[0];
+        Init(GameController.instance.GetPlayerColor(playerIndex));
+        if(playerIndex != photonView.OwnerActorNr)
+        {
+            photonView.TransferOwnership(playerIndex);
+        }
+    }
+
     public void Init(Color color)
     {
         renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;
         rb = GetComponent<Rigidbody>();
-        waitSleep = new WaitForSeconds(sleepTime);
         player = photonView.Owner;
 
         mainMaterial.SetColor("_BaseColor", color);
 
-        if(!photonView.IsMine)
-        {
-            SetPhysicsActive(false);
-        }
+        SetPhysics();
 
-        initialized = true;
+        //initialized = true;
     }
 
     void Update()
@@ -85,25 +89,20 @@ public class Token : MonoBehaviourPun
                 rb.angularVelocity = Vector3.zero;
                 rb.isKinematic = false;
                 //Debug.Log("Kinematic false");
-
-                //StartCoroutine(FakeOnSleep());
             }
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
+        if(other.tag == "KillBox")
+        {
+            PhotonNetwork.Destroy(photonView);
+        }
         if(photonView.IsMine && rb.IsSleeping() && other.gameObject.layer != gameObject.layer)
         {
-            //Reposition(1.4f);
-            photonView.RPC("Reposition", RpcTarget.All, 1.4f);
+            photonView.RPC("Reposition", RpcTarget.All, Random.Range(1.4f, 1.5f));
         }
-    }
-
-    public void SetPhysicsActive(bool activate)
-    {
-        rb.isKinematic = !activate;
-        //rb.detectCollisions = activate;
     }
 
     public bool Select()
@@ -131,27 +130,30 @@ public class Token : MonoBehaviourPun
     [PunRPC]
     private void Reposition(float height)
     {
-        transform.position = new Vector3(Mathf.Floor(transform.position.x), transform.position.y, Mathf.Floor(transform.position.z));
+        Vector3 repos = new Vector3(Mathf.Floor(transform.position.x), transform.position.y + height, Mathf.Floor(transform.position.z));
         if(!TileController.instance.snapToCenter)
-            transform.Translate(0.5f, height, 0.5f);
+            repos += new Vector3(0.5f, 0, 0.5f);
+        transform.position = repos;
     }
 
-    //private IEnumerator FakeOnSleep()
-    //{
-    //    yield return waitSleep;
-
-    //    rb.isKinematic = true;
-    //    //Debug.Log("Kinematic true");
-    //}
+    public void SetPhysics()
+    {
+        if(!photonView.IsMine)
+            rb.isKinematic = true;
+    }
 
     private void CheckLeavingPlayer(int id, string name)
     {
         if(photonView.Owner == null)
         {
             if(destroyOnPlayerLeave)
+            {
                 PhotonNetwork.Destroy(gameObject);
+            }
             else
+            {
                 photonView.TransferOwnership(PhotonNetwork.MasterClient);   //not tested
+            }
         }
     }
 }

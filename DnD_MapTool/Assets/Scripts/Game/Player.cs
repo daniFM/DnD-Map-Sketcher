@@ -11,9 +11,13 @@ public class Player : MonoBehaviour
     public Image colorIcon;
     [HideInInspector] public Color color;
 
-    public void Init(string name, bool isDM, Color color)
+    private int index;
+
+    public void Init(string name, int index, bool isDM, Color color)
     {
         playerName.text = "";
+        this.index = index;
+
         if(isDM)
             playerName.text += "(DM) ";
         playerName.text += name;
@@ -24,5 +28,11 @@ public class Player : MonoBehaviour
         colorIcon.color = color;
 
         this.color = color;
+    }
+
+    public void CreateToken()
+    {
+        if(GameController.instance.Tool == ToolType.selection)
+            GameController.instance.tokenController.CreateToken(index);
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using Photon.Realtime;
 
-public class NetworkManager: MonoBehaviourPunCallbacks
+public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
 {
     [SerializeField] private int maxPlayersPerRoom;
     public int MaxPlayersPerRoom { get { return maxPlayersPerRoom; } }
@@ -171,6 +171,21 @@ public class NetworkManager: MonoBehaviourPunCallbacks
     //    if(PhotonNetwork.LocalPlayer.IsMasterClient)
     //        Debug.Log("I'm the master");
     //}
+
+    public void OnOwnershipRequest(PhotonView targetView, Photon.Realtime.Player requestingPlayer)
+    {
+        throw new NotImplementedException();
+    }
+
+    public void OnOwnershipTransfered(PhotonView targetView, Photon.Realtime.Player previousOwner)
+    {
+        //Debug.Log("Transfering " + targetView.name);
+
+        Token token = targetView.GetComponent<Token>();
+
+        if(token != null)
+            token.SetPhysics();
+    }
 
     #endregion
 
