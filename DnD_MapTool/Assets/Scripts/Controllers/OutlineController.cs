@@ -30,12 +30,12 @@ public class OutlineController : MonoBehaviour
     private void OnEnable()
     {
         cameraInitSize = Camera.main.orthographicSize;
-        SliderInputPair.OnValueChanged += UpdateMaterial;
+        SliderInputPair.OnOutlineValueChanged += UpdateMaterial;
     }
 
     private void OnDisable()
     {
-        SliderInputPair.OnValueChanged += UpdateMaterial;
+        SliderInputPair.OnOutlineValueChanged -= UpdateMaterial;
     }
 
     private void Awake()

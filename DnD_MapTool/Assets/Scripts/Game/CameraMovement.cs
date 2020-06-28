@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] private float sensitivityX = 0.3f;
-    [SerializeField] private float sensitivityY = 0.5f;
+    public float sensitivityX = 0.3f;
+    public float sensitivityY = 0.5f;
     [SerializeField] private float rotationSpeed = 1;
     [SerializeField] private float zoomSensitivity = 1;
     [SerializeField] private float maxZoom = 10;
