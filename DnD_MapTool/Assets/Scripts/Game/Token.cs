@@ -97,9 +97,10 @@ public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
     {
         if(other.tag == "KillBox")
         {
+            GameController.instance.Tooltip("You can spawn another token by clicking over the player portraits with the Selection tool.", 8);
             PhotonNetwork.Destroy(photonView);
         }
-        if(photonView.IsMine && rb.IsSleeping() && other.gameObject.layer != gameObject.layer)
+        else if(photonView.IsMine && rb.IsSleeping() && other.gameObject.layer != gameObject.layer)
         {
             photonView.RPC("Reposition", RpcTarget.All, Random.Range(1.4f, 1.5f));
         }
