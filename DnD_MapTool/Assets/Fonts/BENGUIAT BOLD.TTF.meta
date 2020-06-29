@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: f378f2f6af1c88942b587c8fc5152d94
+guid: b78c77fa751aba4428da43c09bea9846
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -8,11 +8,10 @@ TrueTypeFontImporter:
   characterSpacing: 0
   characterPadding: 1
   includeFontData: 1
-  fontName: Arial
+  fontName: Benguiat
   fontNames:
-  - Arial
-  fallbackFontReferences:
-  - {fileID: 12800000, guid: 4153517f12e785a4b9bbafc1110c2461, type: 3}
+  - Benguiat
+  fallbackFontReferences: []
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

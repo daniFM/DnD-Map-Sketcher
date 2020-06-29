@@ -16,14 +16,18 @@ public class GameController : MonoBehaviour
     [ColorUsage(false, false)] public List<Color> playerColors;
     [ColorUsage(false, true)] public Color highlightColor;
 
-    //[SerializeField] private GameObject playerPrefab;
-    //[SerializeField] private GameObject masterPrefab;
-    [SerializeField] private GameObject tokenPlayerPrefab;
-    [SerializeField] private GameObject tokenNPCPrefab;
+    public TokenController tokenController;
 
-    [HideInInspector] public NetworkInfo netInfo;
+    [SerializeField] private ControlsScriptableObject editorControls;
+    [SerializeField] private ControlsScriptableObject webControls;
+    [HideInInspector] public ControlsScriptableObject controls;
+
+    [SerializeField] private GameMenuController gameMenuController;
+    [HideInInspector] public OutlineController outlineController;
+
+    //public NetworkInfo netInfo;
     public static Action OnToolChanged;
-    public static Action OnTilesUpdated;
+    //public static Action OnTilesUpdated;
     public static GameController instance;
 
     void Awake()
@@ -36,21 +40,30 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
-        netInfo = GetComponent<NetworkInfo>();
+        outlineController = GetComponent<OutlineController>();
 
         if(GameManager.instance.isDM)
         {
-            //player = Instantiate(MasterPrefab, this.transform).GetComponent<Player>();
-            Token newToken = PhotonNetwork.Instantiate(tokenNPCPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Token>(); // NO DEBERÍA DE HACERSE ASÍ NORMALMENTE
-            newToken.Init(GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber - 1));
+            //Token newToken = PhotonNetwork.Instantiate(tokenNPCPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Token>(); // NO DEBERÍA DE HACERSE ASÍ NORMALMENTE
+            //newToken.Init(GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber - 1));
             SetTool(ToolType.brush);
         }
         else
         {
-            //player = Instantiate(playerPrefab, this.transform).GetComponent<Player>();
-            Token newToken = PhotonNetwork.Instantiate(tokenPlayerPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Token>();
-            newToken.Init(GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber - 1));
+            //Token newToken = PhotonNetwork.Instantiate(tokenPlayerPrefab.name, Vector3.zero, Quaternion.identity).GetComponent<Token>();
+            //newToken.Init(GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber - 1));
             SetTool(ToolType.selection);
+        }
+
+        tokenController.CreateToken();
+
+        if(Application.platform == RuntimePlatform.WindowsEditor)
+        {
+            controls = editorControls;
+        }
+        else if(Application.platform == RuntimePlatform.WebGLPlayer)
+        {
+            controls = webControls;
         }
     }
 
@@ -80,11 +93,22 @@ public class GameController : MonoBehaviour
         return tool;
     }
 
+    public Color GetPlayerColor()
+    {
+        return GetPlayerColor(PhotonNetwork.LocalPlayer.ActorNumber);
+    }
+
     public Color GetPlayerColor(int index)
     {
+        index--;
         while(index > playerColors.Count - 1)
             playerColors.Add(new Color(Random.Range(0f, 1f), Random.Range(0f, 1f), Random.Range(0f, 1f)));
 
         return playerColors[index];
+    }
+
+    public void Tooltip(string message, float time = 5)
+    {
+        gameMenuController.ShowTooltip(message, time);
     }
 }

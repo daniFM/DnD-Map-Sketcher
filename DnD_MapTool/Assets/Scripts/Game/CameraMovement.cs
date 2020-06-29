@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
 {
-    [SerializeField] private float sensitivityX = 0.3f;
-    [SerializeField] private float sensitivityY = 0.5f;
+    public float sensitivityX = 0.3f;
+    public float sensitivityY = 0.5f;
     [SerializeField] private float rotationSpeed = 1;
     [SerializeField] private float zoomSensitivity = 1;
     [SerializeField] private float maxZoom = 10;
@@ -50,13 +50,15 @@ public class CameraMovement : MonoBehaviour
                 camera.orthographicSize = Mathf.Clamp(camera.orthographicSize - mouseWheel * zoomSensitivity, minZoom, maxZoom);
             }
             //Debug.Log("Camera zoom: " + camera.orthographicSize);
+
+            GameController.instance.outlineController.CameraCorrection(cameras[0].orthographicSize);
         }
         // Up-down movement
-        else if(mouseWheel > 0)
+        else if(mouseWheel > 0 && GameManager.instance.isDM)
         {
             transform.Translate(0, 1, 0);
         }
-        else if(mouseWheel < 0)
+        else if(mouseWheel < 0 && GameManager.instance.isDM)
         {
             transform.Translate(0, -1, 0);
         }

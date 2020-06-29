@@ -12,11 +12,12 @@ public class SliderInputPair : MonoBehaviour
     private Slider slider;
     private InputField inputField;
 
-    public static Action<string, float> OnValueChanged;
+    public static Action<string, float> OnOutlineValueChanged;
+    public static Action<string, float> OnSettingValueChanged;
 
     void Start()
     {
-        slider = GetComponent<Slider>();
+        slider = GetComponentInChildren<Slider>();
         inputField = GetComponentInChildren<InputField>();
 
         slider.value = value;
@@ -24,22 +25,42 @@ public class SliderInputPair : MonoBehaviour
         GetComponentInChildren<Text>().text = key;
     }
 
-    public void ChangeValue(float value)
+    public void ChangeOutlineValue(float value)
+    {
+        ChangeFloat(value);
+        OnOutlineValueChanged?.Invoke(key, value);
+    }
+
+    public void ChangeOutlineValue(string value)
+    {
+        ChangeString(value);
+        OnOutlineValueChanged?.Invoke(key, this.value);
+    }
+
+    public void ChangeSettingValue(float value)
+    {
+        ChangeFloat(value);
+        OnSettingValueChanged?.Invoke(key, value);
+    }
+
+    public void ChangeSettingValue(string value)
+    {
+        ChangeString(value);
+        OnSettingValueChanged?.Invoke(key, this.value);
+    }
+
+    private void ChangeFloat(float value)
     {
         this.value = value;
         inputField.text = value.ToString();
-
-        OnValueChanged?.Invoke(key, value);
     }
 
-    public void ChangeValue(string value)
+    private void ChangeString(string value)
     {
         if(value == "")
             this.value = 0;
         else
             this.value = float.Parse(value);
         slider.value = this.value;
-
-        OnValueChanged?.Invoke(key, this.value);
     }
 }

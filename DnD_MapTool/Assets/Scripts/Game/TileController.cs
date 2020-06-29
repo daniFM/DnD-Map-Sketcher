@@ -15,7 +15,18 @@ public enum TileType
     stair3,
     stair4,
     column,
-    eraser
+    eraser,
+    door1,
+    door2,
+    statue1,
+    statue2,
+    statue3,
+    statue4,
+    chest1,
+    chest2,
+    orb,
+    trap1on,
+    trap1off
 }
 public enum TilePlacing { center, side, corner }
 
@@ -49,6 +60,17 @@ public class TileController : MonoBehaviour
     private Vector3 floorCorrection = new Vector3(0, 0.1f, 0);
     private object[][] tileInitData;
 
+    [Header("Floor")]
+    public bool createFloor = true;
+    [SerializeField] private int floorX = 10;
+    [SerializeField] private int floorZ = 10;
+
+
+    [Header("Data")]
+    [SerializeField] private int ctrlzAmount;
+    [SerializeField] [ReadOnly] private int snapshotIndex;
+    [SerializeField] private TileData[] tileSnapshots;
+
     public static TileController instance = null;
 
     void Awake()
@@ -73,6 +95,15 @@ public class TileController : MonoBehaviour
             tileInitData[i] = new object[1];
             tileInitData[i][0] = i;
         }
+
+        tileSnapshots = new TileData[ctrlzAmount];
+        for(int i = 0; i < ctrlzAmount; ++i)
+        {
+            tileSnapshots[i] = new TileData();
+        }
+
+        if(createFloor && PhotonNetwork.IsMasterClient)
+            Invoke("CreateFloor", 0.1f);
     }
 
     void OnEnable()
@@ -143,8 +174,15 @@ public class TileController : MonoBehaviour
                                 int offset = (int)Mathf.Ceil((float)brushSize / 2) - 1;
                                 Vector3 tposition = position - new Vector3(i - offset, -k, j - offset);
 
-                                Collider[] hitColliders = Physics.OverlapSphere(tposition + new Vector3(0, 0.2f, 0), 0.1f, tileLayer);
+                                Collider[] hitColliders = Physics.OverlapSphere(tposition + new Vector3(0, 0.2f, 0), 0.16f, tileLayer);
                                 //if(!Physics.CheckSphere(tposition, 0.1f, tileLayer))
+
+                                //Vector3 p = tposition + new Vector3(0, 0.2f, 0);
+                                //float a = 0.16f;
+                                //Debug.DrawLine(p, p + Vector3.up * a, Color.red, 10, false);
+                                //Debug.DrawLine(p, p + Vector3.down * a, Color.red, 10, false);
+                                //Debug.DrawLine(p, p + Vector3.right * a, Color.red, 10, false);
+                                //Debug.DrawLine(p, p + Vector3.left * a, Color.red, 10, false);
 
                                 // Paint/replace/erase logic
                                 TileType otherType = TileType.none;
@@ -152,6 +190,10 @@ public class TileController : MonoBehaviour
                                 if(hitColliders.Length > 0)
                                 {
                                     otherType = hitColliders[0].GetComponent<Tile>().type;
+                                    if(brushType == otherType && Input.GetMouseButtonDown(0))
+                                    {
+                                        hitColliders[0].GetComponent<Tile>().RotateTile();
+                                    }
                                     if(brushType == TileType.eraser || brushType != otherType)
                                     {
                                         //PhotonNetwork.Destroy(hitColliders[0].gameObject);
@@ -164,11 +206,75 @@ public class TileController : MonoBehaviour
                                     //Tile tile = Instantiate(tilePrefab, tposition, Quaternion.identity/*, this.transform*/).GetComponent<Tile>();
                                     //tile.SetTile(brushType);
                                     PhotonNetwork.Instantiate(tilePrefab.name, tposition, Quaternion.identity/*, this.transform*/, 0, tileInitData[(int)brushType]);
+                                    //tileBuffer.Add(brushType, transform);
                                 }
                             }
                         }
                     }
                 }
+                // Save snapshot
+                else if(Input.GetMouseButtonUp(0))
+                {
+                    if(snapshotIndex == tileSnapshots.Length)
+                    {
+                        for(int i = 0; i < snapshotIndex-1; ++i)
+                        {
+                            tileSnapshots[i] = new TileData(tileSnapshots[i + 1]);
+                        }
+                        snapshotIndex--;
+                        tileSnapshots[snapshotIndex].Clear();
+                    }
+
+                    foreach(Tile t in FindObjectsOfType<Tile>())
+                    {
+                        tileSnapshots[snapshotIndex].Add(t.type, t.transform.position, t.transform.rotation);
+                    }
+                    snapshotIndex++;
+                }
+            }
+
+            // CTRL+Z
+            if(Input.GetKey(GameController.instance.controls.keyCTRL) && Input.GetKeyDown(GameController.instance.controls.keyZ))
+            {
+                if(snapshotIndex > 1)
+                {
+                    foreach(Tile t in FindObjectsOfType<Tile>())
+                    {
+                        t.DestroyByAnybody();
+                    }
+
+                    snapshotIndex--;
+
+                    for(int i = 0; i < tileSnapshots[snapshotIndex - 1].Count; ++i)
+                    {
+                        // TO DO: Implement conditions for optimization
+                        //if(tileSnapshots[snapshotIndex].GetPositionAt(i) != tileSnapshots[snapshotIndex - 1].GetPositionAt(i))
+                        PhotonNetwork.Instantiate(
+                            tilePrefab.name,
+                            tileSnapshots[snapshotIndex - 1].GetPositionAt(i),
+                            tileSnapshots[snapshotIndex - 1].GetRotationAt(i),
+                            0,
+                            tileInitData[(int)tileSnapshots[snapshotIndex - 1].GetTypeAt(i)]);
+                    }
+
+                    tileSnapshots[snapshotIndex].Clear();
+                }
+            }
+        }
+    }
+
+    public void CreateFloor()
+    {
+        for(int i = 0; i < floorX; ++i)
+        {
+            for(int j = 0; j < floorZ; ++j)
+            {
+                Vector3 pos = new Vector3(i - (int)(floorX / 2), -1, j - (int)(floorZ / 2));
+                if(!snapToCenter)
+                    pos += /*floorCorrection +*/ halfTile;
+                //else
+                //    pos += floorCorrection;
+                PhotonNetwork.Instantiate(tilePrefab.name, pos, Quaternion.identity, 0, tileInitData[(int)TileType.groundHigh]);
             }
         }
     }
@@ -222,5 +328,11 @@ public class TileController : MonoBehaviour
             active = false;
             brush.SetActive(false);
         }
+    }
+
+    // TO DO
+    private object[] GetTileInitData(TileType type, bool autorotate)
+    {
+        throw new System.NotImplementedException();
     }
 }

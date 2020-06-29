@@ -1,9 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Photon.Pun;
 
 public class TokenController: MonoBehaviour
 {
+    [SerializeField] private GameObject tokenPrefab;
     public LayerMask tokenLayer;
 
     private bool active;
@@ -44,6 +46,16 @@ public class TokenController: MonoBehaviour
                 }
             }
         }
+    }
+
+    public void CreateToken()
+    {
+        PhotonNetwork.Instantiate(tokenPrefab.name, Vector3.zero, Quaternion.identity, 0, new object[] { PhotonNetwork.LocalPlayer.ActorNumber });
+    }
+
+    public void CreateToken(int player)
+    {
+        PhotonNetwork.Instantiate(tokenPrefab.name, Vector3.zero, Quaternion.identity, 0, new object[] { player });
     }
 
     private void ToolChanged()

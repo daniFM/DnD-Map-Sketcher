@@ -13,6 +13,7 @@ public class ToolMenu : MonoBehaviour
     [SerializeField] private Text toolText;
     [SerializeField] private Text sizeText;
     [SerializeField] private Text heightText;
+    [SerializeField] private GameObject heightPlane;
 
     private string selectionStr = "Selection";
     private string brushStr = "Brushes";
@@ -39,6 +40,14 @@ public class ToolMenu : MonoBehaviour
     public void SwitchTool()
     {
         ToolType newTool = GameController.instance.SwitchTool();
+
+        if(newTool == ToolType.selection)
+            heightPlane.SetActive(false);
+    }
+
+    public void ToggleHeightPlane()
+    {
+        heightPlane.SetActive(!heightPlane.activeSelf);
     }
 
     public void UpdateSize(float newSize)

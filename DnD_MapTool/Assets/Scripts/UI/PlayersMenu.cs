@@ -36,16 +36,15 @@ public class PlayersMenu : MonoBehaviour
 
     public void AddPlayer(int index, string name)
     {
-        index -= 1;
         Player newPlayer = Instantiate(playerPrefab, transform).GetComponent<Player>();
-        newPlayer.Init(name, PhotonNetwork.MasterClient.ActorNumber == index+1, GameController.instance.GetPlayerColor(index));
-        while(index >= players.Count)   // indices might not be in order
+        newPlayer.Init(name, index, PhotonNetwork.MasterClient.ActorNumber == index, GameController.instance.GetPlayerColor(index));
+        while(index - 1 >= players.Count)   // indices might not be in order
             players.Add(null);
-        players[index] = newPlayer;
+        players[index - 1] = newPlayer;
     }
 
     public void RemovePlayer(int index, string name)
     {
-        Destroy(players[index-1].gameObject);
+        Destroy(players[index - 1].gameObject);
     }
 }

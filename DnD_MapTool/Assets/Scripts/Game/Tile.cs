@@ -39,19 +39,8 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
             transform.Rotate(0, rotations[type-TileType.stair1] + TileController.instance.transform.eulerAngles.y, 0);
             type = TileType.stair1;
         }
-        //else if(type == TileType.wall)
-        //{
-        //    for(int i = 0; i < 3; ++i)
-        //    {
-        //        //Instantiate(subTilePrefab, new Vector3(0, i, 0), Quaternion.Euler(0, rotations[Random.Range(0, 4)], 0), transform);
-        //        Transform t = PhotonNetwork.Instantiate(subTilePrefab.name, transform.position, Quaternion.identity).transform;
-        //        t.parent = transform;
-        //        t.Translate(0, i, 0);
-        //        t.Rotate(0, rotations[Random.Range(0, 4)], 0);
-        //    }
-        //}
-        // Other tiles logic
-        else
+        // Tiles with random-rotate
+        else if(type == TileType.column || type == TileType.groundHigh || type == TileType.groundLow || type == TileType.groundMH || type == TileType.groundML || type == TileType.orb)
         {
             transform.Rotate(0, rotations[Random.Range(0, 4)], 0); // Only for center tiles
         }
@@ -77,5 +66,10 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
         if(!photonView.IsMine)
             photonView.TransferOwnership(PhotonNetwork.LocalPlayer);
         PhotonNetwork.Destroy(gameObject);
+    }
+
+    public void RotateTile()
+    {
+        transform.Rotate(Vector3.up, 90);
     }
 }
