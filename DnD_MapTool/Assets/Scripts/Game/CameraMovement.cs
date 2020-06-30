@@ -70,7 +70,7 @@ public class CameraMovement : MonoBehaviour
             {
                 StartCoroutine(DoRotation(-90));
             }
-            if(Input.GetKeyDown(KeyCode.Q))
+            else if(Input.GetKeyDown(KeyCode.Q))
             {
                 StartCoroutine(DoRotation(90));
             }
