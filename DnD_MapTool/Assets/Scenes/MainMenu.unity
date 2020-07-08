@@ -133,6 +133,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &91524534 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8467647893531972079, guid: fffa316e9d20aa3469babe9c6aa5589a,
+    type: 3}
+  m_PrefabInstance: {fileID: 4517434358285964875}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &195048733 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4517434358162236246, guid: fffa316e9d20aa3469babe9c6aa5589a,
@@ -563,6 +575,7 @@ MonoBehaviour:
   roomButtonPrefab: {fileID: 3222661547787481157, guid: e377747f393789841bd42e9fd5e4ede6,
     type: 3}
   waitingStatusText: {fileID: 43207337}
+  regionText: {fileID: 91524534}
   roomNameField: {fileID: 909729333}
   createRoomButton: {fileID: 695780574}
   isDMCreate: {fileID: 1161908248}
@@ -1430,11 +1443,6 @@ PrefabInstance:
       propertyPath: m_OnValueChanged.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1155674426}
-    - target: {fileID: 4517434359071633416, guid: fffa316e9d20aa3469babe9c6aa5589a,
-        type: 3}
-      propertyPath: m_ScrollSensitivity
-      value: 20
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fffa316e9d20aa3469babe9c6aa5589a, type: 3}
 --- !u!1001 &5367721810221893488

@@ -17,6 +17,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject roomButtonPrefab;
     //[SerializeField] private GameObject waitingStatusPanel;
     [SerializeField] private Text waitingStatusText;
+    [SerializeField] private Text regionText;
     [SerializeField] private InputField roomNameField;
     [SerializeField] private Button createRoomButton;
     [SerializeField] private Toggle isDMCreate;
@@ -26,12 +27,14 @@ public class MainMenu : MonoBehaviour
     private void OnEnable()
     {
         NetworkManager.OnStatusChanged += SetStatus;
+        NetworkManager.OnConnectedToServer += SetRegion;
         NetworkManager.OnRoomsUpdated += UpdateRooms;
     }
 
     private void OnDisable()
     {
         NetworkManager.OnStatusChanged -= SetStatus;
+        NetworkManager.OnConnectedToServer -= SetRegion;
         NetworkManager.OnRoomsUpdated -= UpdateRooms;
     }
 
@@ -124,6 +127,11 @@ public class MainMenu : MonoBehaviour
                 AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
             }
         }
+    }
+
+    public void SetRegion(string region)
+    {
+        regionText.text += region.ToUpper();
     }
 
     public void CheckRoomNameValid(string name)

@@ -13,6 +13,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     public bool IsConnecting { get { return isConnecting; } }
 
     public static Action<string> OnStatusChanged;
+    public static Action<string> OnConnectedToServer;
     public static Action<List<RoomInfo>> OnRoomsUpdated;
     public static Action<int, string> OnPlayerJoined;
     public static Action<int, string> OnPlayerLeft;
@@ -82,6 +83,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Master");
+
+        OnConnectedToServer?.Invoke(PhotonNetwork.CloudRegion);
 
         if(isConnecting)
         {
