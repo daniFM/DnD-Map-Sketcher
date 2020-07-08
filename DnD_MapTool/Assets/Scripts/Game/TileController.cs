@@ -5,28 +5,25 @@ using Photon.Pun;
 
 public enum TileType
 {
-    none,
-    groundLow,
-    groundML,
-    groundMH,
-    groundHigh,
-    stair1,
-    stair2,
-    stair3,
-    stair4,
-    column,
-    eraser,
-    door1,
-    door2,
-    statue1,
-    statue2,
-    statue3,
-    statue4,
-    chest1,
-    chest2,
-    orb,
-    trap1on,
-    trap1off
+    none        = 0,
+    groundLow   = 1,
+    groundML    = 2,
+    groundMH    = 3,
+    groundHigh  = 4,
+    stair1      = 5,
+    column      = 9,
+    eraser      = 10,
+    door1       = 11,
+    door2       = 12,
+    statue1     = 13,
+    statue2     = 14,
+    statue3     = 15,
+    statue4     = 16,
+    chest1      = 17,
+    chest2      = 18,
+    orb         = 19,
+    trap1on     = 20,
+    trap1off    = 21
 }
 public enum TilePlacing { center, side, corner }
 

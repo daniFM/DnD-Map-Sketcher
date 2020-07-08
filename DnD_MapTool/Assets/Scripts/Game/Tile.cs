@@ -29,23 +29,13 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
     {
         this.type = type;
 
-        //Check neighbors
-        //...
         placing = TilePlacing.center;
 
-        // Stairs logic
-        if(type == TileType.stair1 || type == TileType.stair2 || type == TileType.stair3 || type == TileType.stair4)
-        {
-            transform.Rotate(0, rotations[type-TileType.stair1] + TileController.instance.transform.eulerAngles.y, 0);
-            type = TileType.stair1;
-        }
         // Tiles with random-rotate
-        else if(type == TileType.column || type == TileType.groundHigh || type == TileType.groundLow || type == TileType.groundMH || type == TileType.groundML || type == TileType.orb)
+        if(type == TileType.column || type == TileType.groundHigh || type == TileType.groundLow || type == TileType.groundMH || type == TileType.groundML || type == TileType.orb)
         {
             transform.Rotate(0, rotations[Random.Range(0, 4)], 0); // Only for center tiles
         }
-
-        
 
         mFilter.mesh = TileController.instance.GetTileMesh(type, placing);
 

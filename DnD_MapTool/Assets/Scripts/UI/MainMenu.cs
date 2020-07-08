@@ -21,7 +21,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Button createRoomButton;
     [SerializeField] private Toggle isDMCreate;
 
-    private List<GameObject> rooms;
+    private List<RoomPreview> rooms;
 
     private void OnEnable()
     {
@@ -69,7 +69,7 @@ public class MainMenu : MonoBehaviour
         namePanel.SetActive(false);
         lobbyPanel.SetActive(true);
 
-        rooms = new List<GameObject>();
+        rooms = new List<RoomPreview>();
         NetworkManager.instance.FindRooms();
     }
 
@@ -95,16 +95,34 @@ public class MainMenu : MonoBehaviour
     {
         RoomPreview room = Instantiate(roomButtonPrefab, roomsContainer).GetComponent<RoomPreview>();
         room.SetRoom(name, playerCount, maxPlayers, isOpen);
-        rooms.Add(room.gameObject);
+        rooms.Add(room);
     }
+
+    //public void RemoveRoom(int id)
+    //{
+    //    for(int i = 0; i < rooms.Count; ++i)
+    //    {
+    //        if(rooms[i].id == id)
+    //        {
+    //            Destroy(rooms[i].gameObject);
+    //            rooms.RemoveAt(i);
+    //        }
+    //    }
+    //}
 
     public void UpdateRooms(List<Photon.Realtime.RoomInfo> roomList)
     {
-        ClearRooms();
+        Debug.Log("Number of rooms: " + roomList.Count);
+        //ClearRooms();
         foreach(Photon.Realtime.RoomInfo room in roomList)
         {
-            Debug.Log("Found room: " + room.Name);
-            AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
+            // Rooms doesn't have proper ids :(
+            // So they'll just get added and never removed
+            if(!room.RemovedFromList)
+            {
+                Debug.Log("Found room: " + room.Name);
+                AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
+            }
         }
     }
 
