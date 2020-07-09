@@ -19,6 +19,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Text waitingStatusText;
     [SerializeField] private Text regionText;
     [SerializeField] private InputField roomNameField;
+    [SerializeField] private InputField roomPasswordField;
     [SerializeField] private Button createRoomButton;
     [SerializeField] private Toggle isDMCreate;
 
@@ -94,10 +95,10 @@ public class MainMenu : MonoBehaviour
         rooms.Clear();
     }
 
-    public void AddRoom(string name, int playerCount, byte maxPlayers, bool isOpen)
+    public void AddRoom(string name, string password, int playerCount, byte maxPlayers, bool isOpen)
     {
         RoomPreview room = Instantiate(roomButtonPrefab, roomsContainer).GetComponent<RoomPreview>();
-        room.SetRoom(name, playerCount, maxPlayers, isOpen);
+        room.SetRoom(name, password, playerCount, maxPlayers, isOpen);
         rooms.Add(room);
     }
 
@@ -124,7 +125,7 @@ public class MainMenu : MonoBehaviour
             if(!room.RemovedFromList)
             {
                 Debug.Log("Found room: " + room.Name);
-                AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
+                AddRoom(room.Name, room.CustomProperties["p"]?.ToString(), room.PlayerCount, room.MaxPlayers, room.IsOpen);
             }
         }
     }
@@ -141,7 +142,7 @@ public class MainMenu : MonoBehaviour
 
     public void CreateRoom()
     {
-        NetworkManager.instance.CreateRoom(roomNameField.text, isDMCreate.isOn);
+        NetworkManager.instance.CreateRoom(roomNameField.text, roomPasswordField.text, isDMCreate.isOn);
     }
 
     public void ActivateJoinRoom()

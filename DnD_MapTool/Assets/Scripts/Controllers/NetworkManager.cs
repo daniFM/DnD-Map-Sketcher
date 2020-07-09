@@ -12,6 +12,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     [SerializeField] private bool isConnecting = false;
     public bool IsConnecting { get { return isConnecting; } }
 
+    private List<RoomInfo> lobby;
+
     public static Action<string> OnStatusChanged;
     public static Action<string> OnConnectedToServer;
     public static Action<List<RoomInfo>> OnRoomsUpdated;
@@ -53,21 +55,34 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         }
     }
 
-    public void JoinRoom(string name, bool isDM)
+    public void JoinRoom(string name, string password, bool isDM)
     {
-        OnStatusChanged?.Invoke("Joining " + name);
-        PhotonNetwork.JoinRoom(name);
-        GameManager.instance.isDM = isDM;
+        //if(lobby.Find(i => i.Name == name).CustomProperties["p"].ToString() == password)
+        //{
+            OnStatusChanged?.Invoke("Joining " + name);
+            PhotonNetwork.JoinRoom(name);
+            GameManager.instance.isDM = isDM;
+        //}
+        //else
+        //{
+        //    Debug.Log("Password is not correct");
+        //    OnStatusChanged?.Invoke("Password is not correct");
+        //}
     }
 
-    public void CreateRoom(string name, bool isDM)
+    public void CreateRoom(string name, string password, bool isDM)
     {
         Debug.Log("Creating new room");
-        PhotonNetwork.CreateRoom(name, new RoomOptions
-            {
-                MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom,
-                CleanupCacheOnLeave = false
-            });
+
+        RoomOptions options = new RoomOptions
+        {
+            MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom,
+            CleanupCacheOnLeave = false
+        };
+        options.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
+        options.CustomRoomProperties.Add("p", password);
+
+        PhotonNetwork.CreateRoom(name, options);
 
         GameManager.instance.isDM = isDM;
     }
@@ -108,6 +123,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         Debug.Log("Successfully connected to lobby");
         OnStatusChanged?.Invoke("Found " + roomList.Count + " rooms. Searching for more...");
         OnRoomsUpdated?.Invoke(roomList);
+        lobby = roomList;
+
         //mainMenu.ClearRooms();
         //foreach(RoomInfo room in roomList)
         //{
