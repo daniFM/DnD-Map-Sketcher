@@ -125,7 +125,7 @@ public class MainMenu : MonoBehaviour
             if(!room.RemovedFromList)
             {
                 Debug.Log("Found room: " + room.Name);
-                AddRoom(room.Name, room.CustomProperties["p"]?.ToString(), room.PlayerCount, room.MaxPlayers, room.IsOpen);
+                AddRoom(room.Name, room.CustomProperties[NetworkManager.pwKey]?.ToString(), room.PlayerCount, room.MaxPlayers, room.IsOpen);
             }
         }
     }

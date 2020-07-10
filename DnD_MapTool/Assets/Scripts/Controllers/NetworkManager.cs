@@ -12,6 +12,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     [SerializeField] private bool isConnecting = false;
     public bool IsConnecting { get { return isConnecting; } }
 
+    public const string pwKey = "p";
+
     private List<RoomInfo> lobby;
 
     public static Action<string> OnStatusChanged;
@@ -76,11 +78,12 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
 
         RoomOptions options = new RoomOptions
         {
-            MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom,
-            CleanupCacheOnLeave = false
+            MaxPlayers = (byte)MaxPlayersPerRoom,
+            CleanupCacheOnLeave = false,
+            CustomRoomPropertiesForLobby = new string[] { pwKey },
+            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
         };
-        options.CustomRoomProperties = new ExitGames.Client.Photon.Hashtable();
-        options.CustomRoomProperties.Add("p", password);
+        options.CustomRoomProperties.Add(pwKey, password);
 
         PhotonNetwork.CreateRoom(name, options);
 

@@ -23,9 +23,10 @@ public class RoomPreview : MonoBehaviour
         openToggle.isOn = isOpen;
 
         this.password = password;
-        if(password == string.Empty)
+        if(string.IsNullOrEmpty(password))
         {
-            passwordText.gameObject.SetActive(false);
+            //passwordText.gameObject.SetActive(false);
+            passwordText.interactable = false;
         }
         localPos = joinPanel.anchoredPosition;
     }
