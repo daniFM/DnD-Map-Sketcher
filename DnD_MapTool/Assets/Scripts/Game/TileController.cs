@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using System.Linq;
 
 public enum TileType
 {
@@ -86,7 +87,7 @@ public class TileController : MonoBehaviour
         tileLayer = LayerMask.GetMask("Tile");
         blockRaycastLayer = LayerMask.NameToLayer("BlockRaycast");
 
-        tileInitData = new object[System.Enum.GetNames(typeof(TileType)).Length][];
+        tileInitData = new object[System.Enum.GetValues(typeof(TileType)).Cast<int>().Max() + 1][]; // Max value of the enum
         for(int i = 0; i < tileInitData.Length; ++i)
         {
             tileInitData[i] = new object[1];
