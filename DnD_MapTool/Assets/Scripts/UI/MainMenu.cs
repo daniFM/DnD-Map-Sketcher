@@ -117,16 +117,12 @@ public class MainMenu : MonoBehaviour
     public void UpdateRooms(List<Photon.Realtime.RoomInfo> roomList)
     {
         Debug.Log("Number of rooms: " + roomList.Count);
-        //ClearRooms();
+        ClearRooms();
+        roomList.Reverse();
         foreach(Photon.Realtime.RoomInfo room in roomList)
         {
-            // Rooms doesn't have proper ids :(
-            // So they'll just get added and never removed
-            if(!room.RemovedFromList)
-            {
-                Debug.Log("Found room: " + room.Name);
-                AddRoom(room.Name, room.CustomProperties[NetworkManager.pwKey]?.ToString(), room.PlayerCount, room.MaxPlayers, room.IsOpen);
-            }
+            Debug.Log("Found room: " + room.Name);
+            AddRoom(room.Name, room.CustomProperties[NetworkManager.pwKey]?.ToString(), room.PlayerCount, room.MaxPlayers, room.IsOpen);
         }
     }
 

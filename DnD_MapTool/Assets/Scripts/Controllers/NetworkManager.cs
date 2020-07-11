@@ -102,6 +102,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     {
         Debug.Log("Connected to Master");
 
+        lobby = new List<RoomInfo>();
+
         OnConnectedToServer?.Invoke(PhotonNetwork.CloudRegion);
 
         if(isConnecting)
@@ -124,16 +126,41 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("Successfully connected to lobby");
-        OnStatusChanged?.Invoke("Found " + roomList.Count + " rooms. Searching for more...");
-        OnRoomsUpdated?.Invoke(roomList);
-        lobby = roomList;
+        OnStatusChanged?.Invoke("Found " + roomList.Count + " new or updated rooms. Searching for more...");
 
-        //mainMenu.ClearRooms();
-        //foreach(RoomInfo room in roomList)
-        //{
-        //    Debug.Log("Found room: " + room.Name);
-        //    mainMenu.AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
-        //}
+        // Update room cache, knowing room names are unique
+        foreach(RoomInfo uproom in roomList)
+        {
+            RoomInfo room = lobby.Find(x => x.Name == uproom.Name);
+            // a room has been updated
+            if(room != null)
+            {
+                // room has been removed
+                if(uproom.RemovedFromList)
+                {
+                    lobby.Remove(room);
+                }
+                // room has been updated (a player joined)
+                else
+                {   // didn't find a better way to do this
+                    lobby.Remove(room);
+                    lobby.Add(uproom);
+                }
+            }
+            // a new room has been added
+            else
+            {
+                lobby.Add(uproom);
+            }
+        }
+
+        OnRoomsUpdated?.Invoke(new List<RoomInfo>(lobby));
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.LogError("Room creation failed: " + message);
+        OnStatusChanged?.Invoke("Failed to create room. A room with the same name already exists.");
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)
