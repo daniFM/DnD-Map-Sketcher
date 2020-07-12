@@ -141,9 +141,9 @@ public class MainMenu : MonoBehaviour
         NetworkManager.instance.CreateRoom(roomNameField.text, roomPasswordField.text, isDMCreate.isOn);
     }
 
-    public void ActivateJoinRoom()
+    public void SearchRooms(string search)
     {
-
+        NetworkManager.instance.FilterLobby(search);
     }
 
     #endregion

@@ -15,6 +15,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     public const string pwKey = "p";
 
     private List<RoomInfo> lobby;
+    private List<RoomInfo> lobbySearch;
+    private bool searching;
 
     public static Action<string> OnStatusChanged;
     public static Action<string> OnConnectedToServer;
@@ -96,6 +98,28 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         PhotonNetwork.LoadLevel("MainMenu");
     }
 
+    public void FilterLobby(string search)
+    {
+        if(search != string.Empty)
+        {
+            searching = true;
+            lobbySearch.Clear();
+            foreach(RoomInfo room in lobby)
+            {
+                // Like "if(room.Name.Contains(search))" but case insensitive
+                if(room.Name?.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0)
+                    lobbySearch.Add(room);
+            }
+            OnRoomsUpdated?.Invoke(new List<RoomInfo>(lobbySearch));
+        }
+        else
+        {
+            searching = false;
+            // Update to all rooms when finished searching
+            OnRoomsUpdated?.Invoke(new List<RoomInfo>(lobby));
+        }
+    }
+
     #region PUN CALLBACKS
 
     public override void OnConnectedToMaster()
@@ -103,6 +127,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         Debug.Log("Connected to Master");
 
         lobby = new List<RoomInfo>();
+        lobbySearch = new List<RoomInfo>();
 
         OnConnectedToServer?.Invoke(PhotonNetwork.CloudRegion);
 
@@ -154,7 +179,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
             }
         }
 
-        OnRoomsUpdated?.Invoke(new List<RoomInfo>(lobby));
+        if(!searching)
+            OnRoomsUpdated?.Invoke(new List<RoomInfo>(lobby));
     }
 
     public override void OnCreateRoomFailed(short returnCode, string message)
