@@ -18,6 +18,7 @@ public class MainMenu : MonoBehaviour
     //[SerializeField] private GameObject waitingStatusPanel;
     [SerializeField] private Text waitingStatusText;
     [SerializeField] private Text regionText;
+    [SerializeField] private Dropdown regionDropdown;
     [SerializeField] private InputField roomNameField;
     [SerializeField] private InputField roomPasswordField;
     [SerializeField] private Button createRoomButton;
@@ -29,6 +30,7 @@ public class MainMenu : MonoBehaviour
     {
         NetworkManager.OnStatusChanged += SetStatus;
         NetworkManager.OnConnectedToServer += SetRegion;
+        NetworkManager.OnRegionsUpdated += SetRegions;
         NetworkManager.OnRoomsUpdated += UpdateRooms;
     }
 
@@ -36,6 +38,7 @@ public class MainMenu : MonoBehaviour
     {
         NetworkManager.OnStatusChanged -= SetStatus;
         NetworkManager.OnConnectedToServer -= SetRegion;
+        NetworkManager.OnRegionsUpdated -= SetRegions;
         NetworkManager.OnRoomsUpdated -= UpdateRooms;
     }
 
@@ -128,7 +131,24 @@ public class MainMenu : MonoBehaviour
 
     public void SetRegion(string region)
     {
-        regionText.text += region.ToUpper();
+        Debug.Log("SetRegion");
+        regionDropdown.onValueChanged.RemoveAllListeners();
+        regionDropdown.value = regionDropdown.options.FindIndex(x => x.text == region);
+        regionDropdown.onValueChanged.AddListener(ChangeRegion);
+    }
+
+    public void SetRegions(List<string> regions)
+    {
+        Debug.Log("SetRegions");
+        regionDropdown.ClearOptions();
+        regionDropdown.AddOptions(regions);
+    }
+
+    // Se está llamando repetidas veces, causando unfallo de conexión
+    public void ChangeRegion(int a)
+    {
+        Debug.Log("On Value Changed");
+        NetworkManager.instance.ChangeRegion(regionDropdown.options[regionDropdown.value].text);
     }
 
     public void CheckRoomNameValid(string name)

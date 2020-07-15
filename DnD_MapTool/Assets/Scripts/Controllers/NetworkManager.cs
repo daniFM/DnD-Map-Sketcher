@@ -20,6 +20,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
 
     public static Action<string> OnStatusChanged;
     public static Action<string> OnConnectedToServer;
+    public static Action<List<string>> OnRegionsUpdated;
     public static Action<List<RoomInfo>> OnRoomsUpdated;
     public static Action<int, string> OnPlayerJoined;
     public static Action<int, string> OnPlayerLeft;
@@ -120,6 +121,13 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         }
     }
 
+    public void ChangeRegion(string region)
+    {
+        OnStatusChanged?.Invoke("Changing region...");
+        PhotonNetwork.Disconnect();
+        PhotonNetwork.ConnectToRegion(region);
+    }
+
     #region PUN CALLBACKS
 
     public override void OnConnectedToMaster()
@@ -146,6 +154,17 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         //lobbyPanel.SetActive(true);
 
         Debug.LogError($"Disconnected due to: {cause}");
+    }
+
+    public override void OnRegionListReceived(RegionHandler regionHandler)
+    {
+        List<string> regions = new List<string>();
+
+        foreach(Region region in regionHandler.EnabledRegions)
+        {
+            regions.Add(region.Code);
+        }
+        OnRegionsUpdated?.Invoke(regions);
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
