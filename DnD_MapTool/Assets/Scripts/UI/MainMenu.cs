@@ -131,10 +131,13 @@ public class MainMenu : MonoBehaviour
 
     public void SetRegion(string region)
     {
-        Debug.Log("SetRegion");
+        region = region.Split('/')[0];  // Sometimes regions get send with "/*"
+        Debug.Log("SetRegion (" + region + ")");
+
         regionDropdown.onValueChanged.RemoveAllListeners();
         regionDropdown.value = regionDropdown.options.FindIndex(x => x.text == region);
         regionDropdown.onValueChanged.AddListener(ChangeRegion);
+        regionDropdown.interactable = true;
     }
 
     public void SetRegions(List<string> regions)
@@ -149,6 +152,7 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("On Value Changed");
         NetworkManager.instance.ChangeRegion(regionDropdown.options[regionDropdown.value].text);
+        regionDropdown.interactable = false;
     }
 
     public void CheckRoomNameValid(string name)
