@@ -12,6 +12,9 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     [SerializeField] private bool isConnecting = false;
     public bool IsConnecting { get { return isConnecting; } }
 
+    public string region { get; private set; }
+    public List<string> regions { get; private set; }
+
     public const string pwKey = "p";
 
     private List<RoomInfo> lobby;
@@ -137,7 +140,8 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         lobby = new List<RoomInfo>();
         lobbySearch = new List<RoomInfo>();
 
-        OnConnectedToServer?.Invoke(PhotonNetwork.CloudRegion);
+        region = PhotonNetwork.CloudRegion;
+        OnConnectedToServer?.Invoke(region);
 
         if(isConnecting)
         {
@@ -164,7 +168,9 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         {
             regions.Add(region.Code);
         }
-        OnRegionsUpdated?.Invoke(regions);
+
+        this.regions = regions;
+        OnRegionsUpdated?.Invoke(this.regions);
     }
 
     public override void OnRoomListUpdate(List<RoomInfo> roomList)

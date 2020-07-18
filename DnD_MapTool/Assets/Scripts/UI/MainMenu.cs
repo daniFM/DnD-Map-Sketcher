@@ -32,6 +32,12 @@ public class MainMenu : MonoBehaviour
         NetworkManager.OnConnectedToServer += SetRegion;
         NetworkManager.OnRegionsUpdated += SetRegions;
         NetworkManager.OnRoomsUpdated += UpdateRooms;
+
+        if(regionDropdown.options.Count == 0 && NetworkManager.instance.regions != null)
+        {
+            SetRegions(NetworkManager.instance.regions);
+            SetRegion(NetworkManager.instance.region);
+        }
     }
 
     private void OnDisable()
@@ -143,6 +149,7 @@ public class MainMenu : MonoBehaviour
     public void SetRegions(List<string> regions)
     {
         Debug.Log("SetRegions");
+
         regionDropdown.ClearOptions();
         regionDropdown.AddOptions(regions);
     }
