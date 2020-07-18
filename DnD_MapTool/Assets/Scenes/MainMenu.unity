@@ -98,7 +98,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 1
+  m_UseShadowmask: 0
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -348,18 +348,6 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: 'Status: '
---- !u!114 &121319775 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 5367721811213757951, guid: 48f6f2c8da8546540af14f1f9d1d8705,
-    type: 3}
-  m_PrefabInstance: {fileID: 5367721810221893488}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31bb6772cc9454140b8801ea7c223ea5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &178765884
 GameObject:
   m_ObjectHideFlags: 0
@@ -4432,6 +4420,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1867517205}
   - component: {fileID: 1867517208}
+  - component: {fileID: 1867517209}
   - component: {fileID: 1867517207}
   - component: {fileID: 1867517206}
   m_Layer: 5
@@ -4503,18 +4492,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1867517207}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 121319775}
-        m_MethodName: QuitGame
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1867517207
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4552,6 +4530,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1867517204}
   m_CullTransparentMesh: 0
+--- !u!114 &1867517209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1867517204}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 289addffdf728ee418ccc3d484956918, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1869842226
 GameObject:
   m_ObjectHideFlags: 0
