@@ -17,7 +17,10 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private GameObject roomButtonPrefab;
     //[SerializeField] private GameObject waitingStatusPanel;
     [SerializeField] private Text waitingStatusText;
+    [SerializeField] private Text regionText;
+    [SerializeField] private Dropdown regionDropdown;
     [SerializeField] private InputField roomNameField;
+    [SerializeField] private InputField roomPasswordField;
     [SerializeField] private Button createRoomButton;
     [SerializeField] private Toggle isDMCreate;
 
@@ -26,12 +29,22 @@ public class MainMenu : MonoBehaviour
     private void OnEnable()
     {
         NetworkManager.OnStatusChanged += SetStatus;
+        NetworkManager.OnConnectedToServer += SetRegion;
+        NetworkManager.OnRegionsUpdated += SetRegions;
         NetworkManager.OnRoomsUpdated += UpdateRooms;
+
+        if(regionDropdown.options.Count == 0 && NetworkManager.instance.regions != null)
+        {
+            SetRegions(NetworkManager.instance.regions);
+            SetRegion(NetworkManager.instance.region);
+        }
     }
 
     private void OnDisable()
     {
         NetworkManager.OnStatusChanged -= SetStatus;
+        NetworkManager.OnConnectedToServer -= SetRegion;
+        NetworkManager.OnRegionsUpdated -= SetRegions;
         NetworkManager.OnRoomsUpdated -= UpdateRooms;
     }
 
@@ -91,10 +104,10 @@ public class MainMenu : MonoBehaviour
         rooms.Clear();
     }
 
-    public void AddRoom(string name, int playerCount, byte maxPlayers, bool isOpen)
+    public void AddRoom(string name, string password, int playerCount, byte maxPlayers, bool isOpen)
     {
         RoomPreview room = Instantiate(roomButtonPrefab, roomsContainer).GetComponent<RoomPreview>();
-        room.SetRoom(name, playerCount, maxPlayers, isOpen);
+        room.SetRoom(name, password, playerCount, maxPlayers, isOpen);
         rooms.Add(room);
     }
 
@@ -113,17 +126,40 @@ public class MainMenu : MonoBehaviour
     public void UpdateRooms(List<Photon.Realtime.RoomInfo> roomList)
     {
         Debug.Log("Number of rooms: " + roomList.Count);
-        //ClearRooms();
+        ClearRooms();
+        roomList.Reverse();
         foreach(Photon.Realtime.RoomInfo room in roomList)
         {
-            // Rooms doesn't have proper ids :(
-            // So they'll just get added and never removed
-            if(!room.RemovedFromList)
-            {
-                Debug.Log("Found room: " + room.Name);
-                AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
-            }
+            Debug.Log("Found room: " + room.Name);
+            AddRoom(room.Name, room.CustomProperties[NetworkManager.pwKey]?.ToString(), room.PlayerCount, room.MaxPlayers, room.IsOpen);
         }
+    }
+
+    public void SetRegion(string region)
+    {
+        region = region.Split('/')[0];  // Sometimes regions get send with "/*"
+        Debug.Log("SetRegion (" + region + ")");
+
+        regionDropdown.onValueChanged.RemoveAllListeners();
+        regionDropdown.value = regionDropdown.options.FindIndex(x => x.text == region);
+        regionDropdown.onValueChanged.AddListener(ChangeRegion);
+        regionDropdown.interactable = true;
+    }
+
+    public void SetRegions(List<string> regions)
+    {
+        Debug.Log("SetRegions");
+
+        regionDropdown.ClearOptions();
+        regionDropdown.AddOptions(regions);
+    }
+
+    // Se está llamando repetidas veces, causando unfallo de conexión
+    public void ChangeRegion(int a)
+    {
+        Debug.Log("On Value Changed");
+        NetworkManager.instance.ChangeRegion(regionDropdown.options[regionDropdown.value].text);
+        regionDropdown.interactable = false;
     }
 
     public void CheckRoomNameValid(string name)
@@ -133,12 +169,12 @@ public class MainMenu : MonoBehaviour
 
     public void CreateRoom()
     {
-        NetworkManager.instance.CreateRoom(roomNameField.text, isDMCreate.isOn);
+        NetworkManager.instance.CreateRoom(roomNameField.text, roomPasswordField.text, isDMCreate.isOn);
     }
 
-    public void ActivateJoinRoom()
+    public void SearchRooms(string search)
     {
-
+        NetworkManager.instance.FilterLobby(search);
     }
 
     #endregion

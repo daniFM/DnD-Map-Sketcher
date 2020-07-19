@@ -12,7 +12,18 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     [SerializeField] private bool isConnecting = false;
     public bool IsConnecting { get { return isConnecting; } }
 
+    public string region { get; private set; }
+    public List<string> regions { get; private set; }
+
+    public const string pwKey = "p";
+
+    private List<RoomInfo> lobby;
+    private List<RoomInfo> lobbySearch;
+    private bool searching;
+
     public static Action<string> OnStatusChanged;
+    public static Action<string> OnConnectedToServer;
+    public static Action<List<string>> OnRegionsUpdated;
     public static Action<List<RoomInfo>> OnRoomsUpdated;
     public static Action<int, string> OnPlayerJoined;
     public static Action<int, string> OnPlayerLeft;
@@ -52,21 +63,35 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         }
     }
 
-    public void JoinRoom(string name, bool isDM)
+    public void JoinRoom(string name, string password, bool isDM)
     {
-        OnStatusChanged?.Invoke("Joining " + name);
-        PhotonNetwork.JoinRoom(name);
-        GameManager.instance.isDM = isDM;
+        //if(lobby.Find(i => i.Name == name).CustomProperties["p"].ToString() == password)
+        //{
+            OnStatusChanged?.Invoke("Joining " + name);
+            PhotonNetwork.JoinRoom(name);
+            GameManager.instance.isDM = isDM;
+        //}
+        //else
+        //{
+        //    Debug.Log("Password is not correct");
+        //    OnStatusChanged?.Invoke("Password is not correct");
+        //}
     }
 
-    public void CreateRoom(string name, bool isDM)
+    public void CreateRoom(string name, string password, bool isDM)
     {
         Debug.Log("Creating new room");
-        PhotonNetwork.CreateRoom(name, new RoomOptions
-            {
-                MaxPlayers = (byte)NetworkManager.instance.MaxPlayersPerRoom,
-                CleanupCacheOnLeave = false
-            });
+
+        RoomOptions options = new RoomOptions
+        {
+            MaxPlayers = (byte)MaxPlayersPerRoom,
+            CleanupCacheOnLeave = false,
+            CustomRoomPropertiesForLobby = new string[] { pwKey },
+            CustomRoomProperties = new ExitGames.Client.Photon.Hashtable()
+        };
+        options.CustomRoomProperties.Add(pwKey, password);
+
+        PhotonNetwork.CreateRoom(name, options);
 
         GameManager.instance.isDM = isDM;
     }
@@ -77,11 +102,46 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         PhotonNetwork.LoadLevel("MainMenu");
     }
 
+    public void FilterLobby(string search)
+    {
+        if(search != string.Empty)
+        {
+            searching = true;
+            lobbySearch.Clear();
+            foreach(RoomInfo room in lobby)
+            {
+                // Like "if(room.Name.Contains(search))" but case insensitive
+                if(room.Name?.IndexOf(search, StringComparison.OrdinalIgnoreCase) >= 0)
+                    lobbySearch.Add(room);
+            }
+            OnRoomsUpdated?.Invoke(new List<RoomInfo>(lobbySearch));
+        }
+        else
+        {
+            searching = false;
+            // Update to all rooms when finished searching
+            OnRoomsUpdated?.Invoke(new List<RoomInfo>(lobby));
+        }
+    }
+
+    public void ChangeRegion(string region)
+    {
+        OnStatusChanged?.Invoke("Changing region...");
+        PhotonNetwork.Disconnect();
+        PhotonNetwork.ConnectToRegion(region);
+    }
+
     #region PUN CALLBACKS
 
     public override void OnConnectedToMaster()
     {
         Debug.Log("Connected to Master");
+
+        lobby = new List<RoomInfo>();
+        lobbySearch = new List<RoomInfo>();
+
+        region = PhotonNetwork.CloudRegion;
+        OnConnectedToServer?.Invoke(region);
 
         if(isConnecting)
         {
@@ -100,17 +160,58 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
         Debug.LogError($"Disconnected due to: {cause}");
     }
 
+    public override void OnRegionListReceived(RegionHandler regionHandler)
+    {
+        List<string> regions = new List<string>();
+
+        foreach(Region region in regionHandler.EnabledRegions)
+        {
+            regions.Add(region.Code);
+        }
+
+        this.regions = regions;
+        OnRegionsUpdated?.Invoke(this.regions);
+    }
+
     public override void OnRoomListUpdate(List<RoomInfo> roomList)
     {
         Debug.Log("Successfully connected to lobby");
-        OnStatusChanged?.Invoke("Found " + roomList.Count + " rooms. Searching for more...");
-        OnRoomsUpdated?.Invoke(roomList);
-        //mainMenu.ClearRooms();
-        //foreach(RoomInfo room in roomList)
-        //{
-        //    Debug.Log("Found room: " + room.Name);
-        //    mainMenu.AddRoom(room.Name, room.PlayerCount, room.MaxPlayers, room.IsOpen);
-        //}
+        OnStatusChanged?.Invoke("Found " + roomList.Count + " new or updated rooms. Searching for more...");
+
+        // Update room cache, knowing room names are unique
+        foreach(RoomInfo uproom in roomList)
+        {
+            RoomInfo room = lobby.Find(x => x.Name == uproom.Name);
+            // a room has been updated
+            if(room != null)
+            {
+                // room has been removed
+                if(uproom.RemovedFromList)
+                {
+                    lobby.Remove(room);
+                }
+                // room has been updated (a player joined)
+                else
+                {   // didn't find a better way to do this
+                    lobby.Remove(room);
+                    lobby.Add(uproom);
+                }
+            }
+            // a new room has been added
+            else
+            {
+                lobby.Add(uproom);
+            }
+        }
+
+        if(!searching)
+            OnRoomsUpdated?.Invoke(new List<RoomInfo>(lobby));
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        Debug.LogError("Room creation failed: " + message);
+        OnStatusChanged?.Invoke("Failed to create room. A room with the same name already exists.");
     }
 
     public override void OnJoinRoomFailed(short returnCode, string message)

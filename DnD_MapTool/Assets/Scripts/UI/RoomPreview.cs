@@ -6,20 +6,28 @@ using UnityEngine.UI;
 public class RoomPreview : MonoBehaviour
 {
     [SerializeField] private Text nameText;
+    [SerializeField] private InputField passwordText;
     [SerializeField] private Image image;
     [SerializeField] private Text playersText;
     [SerializeField] private Toggle openToggle;
     [SerializeField] private RectTransform joinPanel;
     [SerializeField] private Toggle isDMToggle;
 
+    private string password;
     private Vector2 localPos;
 
-    public void SetRoom(string name, int currentPlayers, int maxPlayers, bool isOpen)
+    public void SetRoom(string name, string password, int currentPlayers, int maxPlayers, bool isOpen)
     {
         nameText.text = name;
         playersText.text = currentPlayers + "/" + maxPlayers;
         openToggle.isOn = isOpen;
 
+        this.password = password;
+        if(string.IsNullOrEmpty(password))
+        {
+            //passwordText.gameObject.SetActive(false);
+            passwordText.interactable = false;
+        }
         localPos = joinPanel.anchoredPosition;
     }
 
@@ -40,7 +48,15 @@ public class RoomPreview : MonoBehaviour
 
     public void JoinRoom()
     {
-        NetworkManager.instance.JoinRoom(nameText.text, isDMToggle.isOn);
+        if(password == passwordText.text)
+        {
+            NetworkManager.instance.JoinRoom(nameText.text, passwordText.text, isDMToggle.isOn);
+        }
+        else
+        {
+            Debug.Log("Password is not correct");
+            NetworkManager.OnStatusChanged?.Invoke("Password is not correct");
+        }
         //menu.ActivateJoinRoom();
     }
 }
