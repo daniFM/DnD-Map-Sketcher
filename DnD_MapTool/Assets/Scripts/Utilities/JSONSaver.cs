@@ -37,24 +37,43 @@ public static class JSONSaver
         Write(obj, fullPath);
     }
 
-    public static T Load<T>(string path)
+    public static T Load<T>(string name)
     {
-        string jsonStr = File.ReadAllText(path);
-        return JsonUtility.FromJson<T>(jsonStr);
+        return Read<T>(MakeFullPath() + "/" + name + extension);
+    }
+
+    public static T Load<T>(string path, string name)
+    {
+        return Read<T>(path + "/" + name + extension);
     }
 
     private static string MakeFullPath(bool useFolder = true)
     {
+        // MakeFullPath now does't add the name and extension, as Write needs to have the path separated
         if(useFolder)
-            return defaultPath + "/" + defaultFolder + "/" + name + extension;
+            return defaultPath + "/" + defaultFolder;// + "/" + name + extension;
         else
-            return defaultPath + "/" + name + extension;
+            return defaultPath;// + "/" + name + extension;
     }
 
     private static void Write<T>(T obj, string path)
     {
+        if(!Directory.Exists(path))
+            Directory.CreateDirectory(path);
+
+        string finalPath = path + "/" + name + extension;
+        Debug.Log("Writing to: " + finalPath);
+
         string jsonStr = JsonUtility.ToJson(obj, true);
-        File.WriteAllText(path, jsonStr);
+        File.WriteAllText(finalPath, jsonStr);
+    }
+
+    private static T Read<T>(string path)
+    {
+        Debug.Log("Reafing from: " + path);
+
+        string jsonStr = File.ReadAllText(path);
+        return JsonUtility.FromJson<T>(jsonStr);
     }
 
     //private static string MakeFullPath(string path)

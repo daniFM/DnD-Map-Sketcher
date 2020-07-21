@@ -102,6 +102,8 @@ public class TileController : MonoBehaviour
 
         if(createFloor && PhotonNetwork.IsMasterClient)
             Invoke("CreateFloor", 0.1f);
+
+        Invoke("TakeSnapshot", 0.5f);
     }
 
     void OnEnable()
@@ -213,21 +215,7 @@ public class TileController : MonoBehaviour
                 // Save snapshot
                 else if(Input.GetMouseButtonUp(0))
                 {
-                    if(snapshotIndex == tileSnapshots.Length)
-                    {
-                        for(int i = 0; i < snapshotIndex-1; ++i)
-                        {
-                            tileSnapshots[i] = new TileData(tileSnapshots[i + 1]);
-                        }
-                        snapshotIndex--;
-                        tileSnapshots[snapshotIndex].Clear();
-                    }
-
-                    foreach(Tile t in FindObjectsOfType<Tile>())
-                    {
-                        tileSnapshots[snapshotIndex].Add(t.type, t.transform.position, t.transform.rotation);
-                    }
-                    snapshotIndex++;
+                    TakeSnapshot();
                 }
             }
 
@@ -236,31 +224,15 @@ public class TileController : MonoBehaviour
             {
                 if(snapshotIndex > 1)
                 {
-                    foreach(Tile t in FindObjectsOfType<Tile>())
-                    {
-                        t.DestroyByAnybody();
-                    }
-
                     snapshotIndex--;
-
-                    for(int i = 0; i < tileSnapshots[snapshotIndex - 1].Count; ++i)
-                    {
-                        // TO DO: Implement conditions for optimization
-                        //if(tileSnapshots[snapshotIndex].GetPositionAt(i) != tileSnapshots[snapshotIndex - 1].GetPositionAt(i))
-                        PhotonNetwork.Instantiate(
-                            tilePrefab.name,
-                            tileSnapshots[snapshotIndex - 1].GetPositionAt(i),
-                            tileSnapshots[snapshotIndex - 1].GetRotationAt(i),
-                            0,
-                            tileInitData[(int)tileSnapshots[snapshotIndex - 1].GetTypeAt(i)]);
-                    }
-
+                    LoadSnapshot(tileSnapshots[snapshotIndex - 1]);
                     tileSnapshots[snapshotIndex].Clear();
                 }
             }
         }
     }
 
+    // Called from Invoke
     public void CreateFloor()
     {
         for(int i = 0; i < floorX; ++i)
@@ -275,6 +247,57 @@ public class TileController : MonoBehaviour
                 PhotonNetwork.Instantiate(tilePrefab.name, pos, Quaternion.identity, 0, tileInitData[(int)TileType.groundHigh]);
             }
         }
+    }
+
+    public TileData GetLastSnapshot(bool takeSnapshot = false)
+    {
+        if(takeSnapshot)
+            TakeSnapshot();
+
+        return tileSnapshots[snapshotIndex-1];
+    }
+
+    private void TakeSnapshot()
+    {
+        if(snapshotIndex == tileSnapshots.Length)
+        {
+            for(int i = 0; i < snapshotIndex - 1; ++i)
+            {
+                tileSnapshots[i] = new TileData(tileSnapshots[i + 1]);
+            }
+            snapshotIndex--;
+            tileSnapshots[snapshotIndex].Clear();
+        }
+
+        foreach(Tile t in FindObjectsOfType<Tile>())
+        {
+            tileSnapshots[snapshotIndex].Add(t.type, t.transform.position, t.transform.rotation);
+        }
+
+        snapshotIndex++;
+    }
+
+    public void LoadSnapshot(TileData snapshot, bool takeSnapshot = false)
+    {
+        foreach(Tile t in FindObjectsOfType<Tile>())
+        {
+            t.DestroyByAnybody();
+        }
+
+        for(int i = 0; i < snapshot.Count; ++i)
+        {
+            // TO DO: Implement conditions for optimization
+            //if(tileSnapshots[snapshotIndex].GetPositionAt(i) != tileSnapshots[snapshotIndex - 1].GetPositionAt(i))
+            PhotonNetwork.Instantiate(
+                tilePrefab.name,
+                snapshot.GetPositionAt(i),
+                snapshot.GetRotationAt(i),
+                0,
+                tileInitData[(int)snapshot.GetTypeAt(i)]);
+        }
+
+        if(takeSnapshot)
+            TakeSnapshot();
     }
 
     public Mesh GetTileMesh(TileType type, TilePlacing placing)
