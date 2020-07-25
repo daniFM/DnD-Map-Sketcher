@@ -9,17 +9,22 @@ public class SaveLoadMenu : MonoBehaviour
     private Thread explorerThreadSave;
     private Thread explorerThreadLoad;
 
-    void Start()
-    {
-        explorerThreadSave = new Thread(OpenExplorerSave);
-        explorerThreadLoad = new Thread(OpenExplorerLoad);
-    }
+    //void Start()
+    //{
+    //    explorerThreadSave = new Thread(OpenExplorerSave);
+    //    explorerThreadLoad = new Thread(OpenExplorerLoad);
+    //}
 
     public void Save()
     {
         #if UNITY_EDITOR
             OpenExplorerSave();
         #else
+            //new Thread(OpenExplorerSave).Start();
+            //explorerThreadSave.Start();
+            
+            explorerThreadSave = null;
+            explorerThreadSave = new Thread(OpenExplorerSave);
             explorerThreadSave.Start();
         #endif
     }
@@ -29,6 +34,11 @@ public class SaveLoadMenu : MonoBehaviour
         #if UNITY_EDITOR
             OpenExplorerLoad();
         #else
+            //new Thread(OpenExplorerLoad).Start();
+            //explorerThreadLoad.Start();
+            
+            explorerThreadLoad = null;
+            explorerThreadLoad = new Thread(OpenExplorerLoad);
             explorerThreadLoad.Start();
         #endif
     }
@@ -56,6 +66,12 @@ public class SaveLoadMenu : MonoBehaviour
         {
             Debug.Log("Player cancelled explorer");
         }
+
+        #if UNITY_EDITOR
+
+        #else
+            explorerThreadSave.Abort();
+        #endif
     }
 
     private void OpenExplorerLoad()
@@ -84,5 +100,11 @@ public class SaveLoadMenu : MonoBehaviour
         {
             Debug.Log("Player cancelled explorer");
         }
+
+        #if UNITY_EDITOR
+
+        #else
+            explorerThreadLoad.Abort();
+        #endif
     }
 }
