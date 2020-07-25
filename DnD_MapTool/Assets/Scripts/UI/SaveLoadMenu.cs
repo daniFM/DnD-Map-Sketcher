@@ -1,11 +1,57 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using SFB;
+using UnityEngine.EventSystems;
 using System.Threading;
+using System.Runtime.InteropServices;
+using System.Text;
+using SFB;
 
 public class SaveLoadMenu : MonoBehaviour
 {
+
+#if UNITY_WEBGL && !UNITY_EDITOR
+
+    [DllImport("__Internal")]
+    private static extern void DownloadFile(string gameObjectName, string methodName, string filename, byte[] byteArray, int byteArraySize);
+
+    [DllImport("__Internal")]
+    private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple);
+
+    // Broser plugin should be called in OnPointerDown.
+    public void Save()
+    {
+        string data = JsonUtility.ToJson(TileController.instance.GetLastSnapshot(), true);
+        byte[] bytes = Encoding.UTF8.GetBytes(data);
+        DownloadFile(gameObject.name, "OnFileDownload", "untitled.map", bytes, bytes.Length);
+    }
+
+    // Called from browser
+    public void OnFileDownload()
+    {
+        Debug.Log("File Successfully Downloaded");
+    }
+
+    public void Load()
+    {
+        UploadFile(gameObject.name, "OnFileUpload", "." + JSONSaver.extension, false);
+    }
+
+    // Called from browser
+    public void OnFileUpload(string url)
+    {
+        StartCoroutine(OutputRoutine(url));
+    }
+
+    private IEnumerator OutputRoutine(string url)
+    {
+        var loader = new WWW(url);
+        yield return loader;
+        TileController.instance.LoadSnapshot(JsonUtility.FromJson<TileData>(loader.text));
+    }
+
+#else
+
     private Thread explorerThreadSave;
     private Thread explorerThreadLoad;
 
@@ -107,4 +153,5 @@ public class SaveLoadMenu : MonoBehaviour
             explorerThreadLoad.Abort();
         #endif
     }
+#endif
 }
