@@ -1641,7 +1641,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1211190193}
+      - m_Target: {fileID: 2090821487}
         m_MethodName: Save
         m_Mode: 1
         m_Arguments:
@@ -5090,7 +5090,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1211190193}
+      - m_Target: {fileID: 2090821487}
         m_MethodName: Load
         m_Mode: 1
         m_Arguments:
@@ -12376,6 +12376,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2090821483}
+  - component: {fileID: 2090821487}
   - component: {fileID: 2090821486}
   - component: {fileID: 2090821485}
   - component: {fileID: 2090821484}
@@ -12456,6 +12457,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2090821482}
   m_CullTransparentMesh: 0
+--- !u!114 &2090821487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2090821482}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 335731f978a38414e952d2e8b93577a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2105357844
 GameObject:
   m_ObjectHideFlags: 0

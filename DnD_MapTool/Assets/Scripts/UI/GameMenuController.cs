@@ -48,23 +48,4 @@ public class GameMenuController : MonoBehaviour
 
         tooltip.gameObject.SetActive(false);
     }
-
-    #region Save/Load
-
-    public void SaveLoadMenu()
-    {
-        
-    }
-
-    public void Save()
-    {
-        JSONSaver.Save(TileController.instance.GetLastSnapshot(), "test1");
-    }
-
-    public void Load()
-    {
-        TileController.instance.LoadSnapshot(JSONSaver.Load<TileData>("test1"), false); // works with false
-    }
-
-    #endregion
 }
