@@ -5,10 +5,10 @@ using UnityEngine;
 
 public static class JSONSaver
 {
-    private static string defaultPath = Application.persistentDataPath;
-    private static string defaultFolder = "Saves";
-    private static string name;
-    private static string extension = ".map";
+    public static string defaultPath = Application.persistentDataPath;
+    public static string defaultFolder = "Saves";
+    public static string name;
+    public static string extension = "map";
 
     public static void Save<T>(T obj)
     {
@@ -39,12 +39,12 @@ public static class JSONSaver
 
     public static T Load<T>(string name)
     {
-        return Read<T>(MakeFullPath() + "/" + name + extension);
+        return Read<T>(MakeFullPath() + "/" + name + "." + extension);
     }
 
     public static T Load<T>(string path, string name)
     {
-        return Read<T>(path + "/" + name + extension);
+        return Read<T>(path + "/" + name + "." + extension);
     }
 
     private static string MakeFullPath(bool useFolder = true)
@@ -61,7 +61,7 @@ public static class JSONSaver
         if(!Directory.Exists(path))
             Directory.CreateDirectory(path);
 
-        string finalPath = path + "/" + name + extension;
+        string finalPath = path + "/" + name + "." + extension;
         Debug.Log("Writing to: " + finalPath);
 
         string jsonStr = JsonUtility.ToJson(obj, true);

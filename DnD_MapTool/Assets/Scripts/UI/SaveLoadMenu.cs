@@ -6,40 +6,83 @@ using System.Threading;
 
 public class SaveLoadMenu : MonoBehaviour
 {
-    private Thread explorerThread;
+    private Thread explorerThreadSave;
+    private Thread explorerThreadLoad;
 
-    // Start is called before the first frame update
     void Start()
     {
-        explorerThread = new Thread(OpenExplorerSave);
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
+        explorerThreadSave = new Thread(OpenExplorerSave);
+        explorerThreadLoad = new Thread(OpenExplorerLoad);
     }
 
     public void Save()
     {
-        //// Save file
-        //string path;
-        //path = StandaloneFileBrowser.SaveFilePanel("Save File", string.Empty, string.Empty, string.Empty);
-        //Debug.Log("Saving map to: " + path);
-        explorerThread.Start();
-
-        //JSONSaver.Save(TileController.instance.GetLastSnapshot(), "test1");
+        #if UNITY_EDITOR
+            OpenExplorerSave();
+        #else
+            explorerThread.Start();
+        #endif
     }
 
     public void Load()
     {
-        TileController.instance.LoadSnapshot(JSONSaver.Load<TileData>("test1"), false); // works with false
+        #if UNITY_EDITOR
+            OpenExplorerLoad();
+        #else
+            explorerThreadLoad.Start();
+        #endif
     }
 
     private void OpenExplorerSave()
     {
         string path;
-        path = StandaloneFileBrowser.SaveFilePanel("Save File", string.Empty, string.Empty, string.Empty);
-        Debug.Log("Saving map to: " + path);
+        string name;
+        path = StandaloneFileBrowser.SaveFilePanel(
+            "Save Map",
+            JSONSaver.defaultPath + "/" + JSONSaver.defaultFolder,
+            JSONSaver.name,
+            JSONSaver.extension);
+
+        if(path != string.Empty)
+        {
+            int n = path.LastIndexOf('\\');
+            name = path.Substring(n + 1, path.LastIndexOf('.') - n - 1);
+            path = path.Substring(0, n);
+
+            //Debug.Log("Saving map to: " + pathName[0] + ", " + pathName[1]);
+            JSONSaver.Save(TileController.instance.GetLastSnapshot(), path, name);
+        }
+        else
+        {
+            Debug.Log("Player cancelled explorer");
+        }
+    }
+
+    private void OpenExplorerLoad()
+    {
+        string[] pathArr;
+        string path;
+        string name;
+        pathArr = StandaloneFileBrowser.OpenFilePanel(
+            "Load Map",
+            JSONSaver.defaultPath + "/" + JSONSaver.defaultFolder,
+            JSONSaver.extension,
+            false);
+
+        if(pathArr != null)
+        {
+            path = pathArr[0];
+
+            int n = path.LastIndexOf('\\');
+            name = path.Substring(n + 1, path.LastIndexOf('.') - n - 1);
+            path = path.Substring(0, n);
+
+            //Debug.Log("Loading map from: " + pathName[0] + ", " + pathName[1]);
+            TileController.instance.LoadSnapshot(JSONSaver.Load<TileData>(path, name), false); // works with false
+        }
+        else
+        {
+            Debug.Log("Player cancelled explorer");
+        }
     }
 }
