@@ -9,6 +9,7 @@ using SFB;
 
 public class SaveLoadMenu : MonoBehaviour
 {
+    public GameObject browserPanel;
 
 #if UNITY_WEBGL && !UNITY_EDITOR
 
@@ -21,6 +22,8 @@ public class SaveLoadMenu : MonoBehaviour
     // Broser plugin should be called in OnPointerDown.
     public void Save()
     {
+        browserPanel.SetActive(true);
+
         string data = JsonUtility.ToJson(TileController.instance.GetLastSnapshot(), true);
         byte[] bytes = Encoding.UTF8.GetBytes(data);
         DownloadFile(gameObject.name, "OnFileDownload", "untitled.map", bytes, bytes.Length);
@@ -34,6 +37,8 @@ public class SaveLoadMenu : MonoBehaviour
 
     public void Load()
     {
+        browserPanel.SetActive(true);
+
         UploadFile(gameObject.name, "OnFileUpload", "." + JSONSaver.extension, false);
     }
 
