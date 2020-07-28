@@ -130,11 +130,11 @@ public class Explorer : MonoBehaviour
 
         PathLoaded?.Invoke(path);
 
-        #if UNITY_EDITOR
+        //#if UNITY_EDITOR
 
-        #else
-            explorerThreadSave.Abort();
-        #endif
+        //#else
+        //    explorerThreadSave = null;
+        //#endif
     }
 
 #endif

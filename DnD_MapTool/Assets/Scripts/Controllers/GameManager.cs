@@ -21,6 +21,10 @@ public class GameManager: MonoBehaviour
 
     public void QuitGame()
     {
-        Application.Quit();
+        #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+            System.Diagnostics.Process.GetCurrentProcess().Kill();
+        #else
+            Application.Quit();
+        #endif
     }
 }

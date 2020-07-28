@@ -67,6 +67,7 @@ public class ScreenShotController: MonoBehaviour
             deactivateBeforeScrenshot[i].SetActive(false);
         }
 
+        yield return null;
         yield return new WaitForEndOfFrame();
 
         //Camera camera = GetComponent<Camera>();
