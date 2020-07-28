@@ -5987,6 +5987,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   resWidth: 1920
   resHeight: 1080
+  deactivateBeforeScrenshot:
+  - {fileID: 1211190188}
+  - {fileID: 8422605817000207573}
+  - {fileID: 1906599701}
 --- !u!1 &1169433948
 GameObject:
   m_ObjectHideFlags: 0

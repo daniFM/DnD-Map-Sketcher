@@ -35,13 +35,23 @@ public class Explorer : MonoBehaviour
     [DllImport("__Internal")]
     private static extern void UploadFile(string gameObjectName, string methodName, string filter, bool multiple);
 
-    // Broser plugin should be called in OnPointerDown.
     public void Save(string data, string extension)
     {
         browserPanel.SetActive(true);
 
         byte[] bytes = Encoding.UTF8.GetBytes(data);
-        DownloadFile(gameObject.name, "OnFileDownload", extension, bytes, bytes.Length);
+        Save(bytes, extension);
+    }
+
+    // Brwoser plugin should be called in OnPointerDown. (this needs IPointerDownHandler implementation)
+    public void Save(byte[] bytes, string extension)
+    {
+        string name = JSONSaver.name;
+        if(string.IsNullOrEmpty(name))
+            name = "untitled";
+
+        browserPanel.SetActive(true);
+        DownloadFile(gameObject.name, "OnFileDownload", name + "." + extension, bytes, bytes.Length);
     }
 
     // Called from browser
