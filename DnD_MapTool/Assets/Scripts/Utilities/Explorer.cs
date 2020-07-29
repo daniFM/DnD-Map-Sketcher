@@ -91,7 +91,7 @@ public class Explorer : MonoBehaviour
         Debug.Log("File Successfully Downloaded");
     }
 
-    public void LoadData(string extension)
+    public void Load(string extension)
     {
         browserPanel.SetActive(true);
 

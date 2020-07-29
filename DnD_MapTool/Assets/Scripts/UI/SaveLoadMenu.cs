@@ -81,7 +81,8 @@ public class SaveLoadMenu : MonoBehaviour
     public void Load()
     {
         #if UNITY_WEBGL && !UNITY_EDITOR
-            Explorer.PathLoaded += OnDataLoaded;
+            Explorer.DataLoaded += OnDataLoaded;
+            Explorer.instance.Load(JSONSaver.extension);
         #else
             Explorer.PathLoaded += OnPathLoadedLoad;
             Explorer.instance.GetPath(JSONSaver.name, JSONSaver.extension, ExplorerMode.Load);
@@ -93,6 +94,13 @@ public class SaveLoadMenu : MonoBehaviour
         Explorer.PathLoaded -= OnPathLoadedSave;
 
         TileController.instance.LoadSnapshot(JSONSaver.Load<TileData>(path.folder, path.name), false); // works with false
+    }
+
+    private void OnDataLoaded(string data)
+    {
+        Explorer.DataLoaded -= OnDataLoaded;
+
+        TileController.instance.LoadSnapshot(JsonUtility.FromJson<TileData>(data), false); // works with false
     }
 
     //private void OpenExplorerSave()
@@ -159,5 +167,5 @@ public class SaveLoadMenu : MonoBehaviour
     //        explorerThreadLoad.Abort();
     //    #endif
     //}
-//#endif
+    //#endif
 }
