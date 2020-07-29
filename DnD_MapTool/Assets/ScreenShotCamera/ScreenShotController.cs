@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using MyUtilities;
 
 public class ScreenShotController: MonoBehaviour
 {
@@ -47,14 +48,14 @@ public class ScreenShotController: MonoBehaviour
             StartCoroutine(TakeScreenshotRoutine("DOWNLOAD"));
         #else
             Explorer.PathLoaded += OnPathLoaded;
-            Explorer.instance.GetPath(defaultName, extension);
+            Explorer.instance.GetPath(defaultName, extension, ExplorerMode.Save);
         #endif
     }
 
-    private void OnPathLoaded(string path)
+    private void OnPathLoaded(Path path)
     {
         Explorer.PathLoaded -= OnPathLoaded;
-        StartCoroutine(TakeScreenshotRoutine(path));
+        StartCoroutine(TakeScreenshotRoutine(path.ToString()));
     }
 
     private IEnumerator TakeScreenshotRoutine(string path)

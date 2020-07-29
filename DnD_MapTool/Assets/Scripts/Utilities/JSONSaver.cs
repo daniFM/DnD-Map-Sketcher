@@ -32,9 +32,9 @@ public static class JSONSaver
     {
         JSONSaver.defaultPath = path;
         JSONSaver.name = name;
-        string fullPath = MakeFullPath(false);
+        //string fullPath = MakeFullPath(false);
 
-        Write(obj, fullPath);
+        Write(obj, path);
     }
 
     public static T Load<T>(string name)

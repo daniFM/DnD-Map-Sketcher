@@ -6,6 +6,35 @@ using System.Threading;
 using System.Runtime.InteropServices;
 using System.Text;
 using SFB;
+using MyUtilities;
+
+namespace MyUtilities
+{
+    public class Path
+    {
+        public string folder { get; }
+        public string name { get; }
+        public string extension { get; }
+        public string path { get { return folder + "\\" + name + "." + extension; } set { } }
+
+        public Path(string path)
+        {
+            this.path = path;
+            int b = path.LastIndexOf('\\');
+            int p = path.LastIndexOf('.');
+            folder = path.Substring(0, b);
+            name = path.Substring(b + 1, p - b - 1);
+            extension = path.Substring(p);
+        }
+
+        public override string ToString()
+        {
+            return path;
+        }
+    }
+}
+
+public enum ExplorerMode { Save, Load }
 
 public class Explorer : MonoBehaviour
 {
@@ -14,7 +43,9 @@ public class Explorer : MonoBehaviour
     private string name;
     private string extension;
 
-    public static Action<string> PathLoaded;
+    private ExplorerMode mode;
+
+    public static Action<Path> PathLoaded;
     public static Action<string> DataLoaded;
 
     public static Explorer instance;
@@ -88,10 +119,11 @@ public class Explorer : MonoBehaviour
     /// <summary>
     /// Result is provided in PathLoaded event. You should subscribe before calling this.
     /// </summary>
-    public void GetPath(string name, string extension)
+    public void GetPath(string name, string extension, ExplorerMode mode)
     {
         this.name = name;
         this.extension = extension;
+        this.mode = mode;
 
         #if UNITY_EDITOR
             GetExplorerPathAsync();
@@ -107,28 +139,45 @@ public class Explorer : MonoBehaviour
 
     private void GetExplorerPathAsync()
     {
-        string path;
-        path = StandaloneFileBrowser.SaveFilePanel(
-            "Save Map",
-            JSONSaver.defaultPath + "/" + JSONSaver.defaultFolder,
-            name,
-            extension);
+        string pathstr = string.Empty;
 
-        if(path != string.Empty)
+        switch(mode)
         {
-            int n = path.LastIndexOf('\\');
-            //name = path.Substring(n + 1, path.LastIndexOf('.') - n - 1);
-            string folder = path.Substring(0, n);
+            case ExplorerMode.Save:
 
-            if(!System.IO.Directory.Exists(folder))
-                System.IO.Directory.CreateDirectory(folder);
+                pathstr = StandaloneFileBrowser.SaveFilePanel(
+                    "Save Map",
+                    JSONSaver.defaultPath + "/" + JSONSaver.defaultFolder,
+                    name,
+                    extension);
+
+                break;
+            case ExplorerMode.Load:
+
+                string[] pathArr = StandaloneFileBrowser.OpenFilePanel(
+                    "Load Map",
+                    JSONSaver.defaultPath + "/" + JSONSaver.defaultFolder,
+                    extension,
+                    false);
+                if(pathArr != null)
+                    pathstr = pathArr[0];
+
+                break;
+        }
+        
+        if(pathstr != string.Empty)
+        {
+            Path path = new Path(pathstr);
+
+            if(!System.IO.Directory.Exists(path.folder))
+                System.IO.Directory.CreateDirectory(path.folder);
+
+            PathLoaded?.Invoke(path);
         }
         else
         {
             Debug.Log("Player cancelled explorer");
         }
-
-        PathLoaded?.Invoke(path);
 
         //#if UNITY_EDITOR
 
