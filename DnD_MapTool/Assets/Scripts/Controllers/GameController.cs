@@ -57,14 +57,11 @@ public class GameController : MonoBehaviour
 
         tokenController.CreateToken();
 
-        if(Application.platform == RuntimePlatform.WindowsEditor)
-        {
+        #if UNITY_EDITOR
             controls = editorControls;
-        }
-        else if(Application.platform == RuntimePlatform.WebGLPlayer)
-        {
+        #else
             controls = webControls;
-        }
+        #endif
     }
 
     public void SetTool(ToolType tool)

@@ -13,11 +13,11 @@ public class ToggleObjectsWithKey : MonoBehaviour
     {
         if(Input.GetKeyDown(key))
         {
-            ToggleChildren();
+            ToggleObjects();
         }
     }
 
-    void ToggleChildren()
+    void ToggleObjects()
     {
         active = !active;
         foreach(GameObject go in objects)
