@@ -5,7 +5,7 @@ using UnityEngine;
 using Photon.Pun;
 using Random = UnityEngine.Random;
 
-public enum ToolType { selection, brush }
+public enum ToolType { selection, brush, token, eraser }
 
 public class GameController : MonoBehaviour
 {
