@@ -114,6 +114,7 @@ MonoBehaviour:
   collider: {fileID: 994744679244623833}
   subTilePrefab: {fileID: 7135424826947586433, guid: fbf6d3f1712ba5b40849a69d2a8052b4,
     type: 3}
+  animMaterial: {fileID: 2100000, guid: 5e020887cf5dd424798a348ad1f234fb, type: 2}
 --- !u!114 &64434346435496782
 MonoBehaviour:
   m_ObjectHideFlags: 0
