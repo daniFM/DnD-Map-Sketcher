@@ -33,11 +33,11 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
         this.type = type;
         placing = TilePlacing.center;
         rend = GetComponent<Renderer>();
-        material = rend.material;
+        material = rend.sharedMaterial;
         rend.material = animMaterial;
-        Invoke("SetMaterialBack", 2);
-
-        //StartCoroutine(AppearRoutine());
+        //rend.material.SetFloat("_InitTime", rend.material.GetFloat("_Time"));
+        //Invoke("SetMaterialBack", 2);
+        StartCoroutine(AppearRoutine());
 
         // Tiles with random-rotate
         if(type == TileType.column || type == TileType.groundHigh || type == TileType.groundLow || type == TileType.groundMH || type == TileType.groundML || type == TileType.orb)
@@ -71,24 +71,28 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
         transform.Rotate(Vector3.up, 90);
     }
 
-    private void SetMaterialBack()
-    {
-        rend.material = material;
-    }
-
-    //private IEnumerator AppearRoutine()
+    //private void SetMaterialBack()
     //{
-    //    float size = 0;
-
-    //    do
-    //    {
-    //        material.SetFloat("_TimeSize", size);
-    //        size += 0.1f;
-
-    //        yield return null;
-    //    } while(size < 1);
-
-    //    size = 1;
-    //    material.SetFloat("_TimeSize", size);
+    //    rend.sharedMaterial = material;
     //}
+
+    private IEnumerator AppearRoutine()
+    {
+        float size = 0;
+
+        do
+        {
+            rend.material.SetFloat("_TimeSize", size);
+            size += 0.01f;
+
+            yield return null;
+        } while(size < 1);
+
+        size = 1;
+        rend.material.SetFloat("_TimeSize", size);
+
+        yield return null;
+
+        rend.sharedMaterial = material;
+    }
 }
