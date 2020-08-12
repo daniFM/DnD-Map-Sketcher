@@ -24,19 +24,17 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
 
     private TilePlacing placing;
     private float[] rotations = { 0, 90, 180, 270 };
-    private Renderer rend;
-    private Material material;
-    public Material animMaterial;
+
+    public Renderer rend;
+    public Material material;
+    private Material animMaterial;
+    public float animSpeed = 1;
 
     public void SetTile(TileType type)
     {
         this.type = type;
         placing = TilePlacing.center;
-        rend = GetComponent<Renderer>();
-        material = rend.sharedMaterial;
-        rend.material = animMaterial;
-        //rend.material.SetFloat("_InitTime", rend.material.GetFloat("_Time"));
-        //Invoke("SetMaterialBack", 2);
+        //animMaterial = rend.material;
         StartCoroutine(AppearRoutine());
 
         // Tiles with random-rotate
@@ -82,17 +80,19 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
 
         do
         {
-            rend.material.SetFloat("_TimeSize", size);
-            size += 0.01f;
-
+            //animMaterial.SetFloat("_TimeSize", size);
+            transform.localScale = Vector3.one * size;
+            size += animSpeed * Time.deltaTime;
             yield return null;
-        } while(size < 1);
+        } 
+        while(size < 1);
 
         size = 1;
-        rend.material.SetFloat("_TimeSize", size);
+        //animMaterial.SetFloat("_TimeSize", size);
+        transform.localScale = Vector3.one * size;
 
         yield return null;
 
-        rend.sharedMaterial = material;
+        //rend.sharedMaterial = material;
     }
 }
