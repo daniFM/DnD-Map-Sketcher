@@ -10,6 +10,7 @@ public class ToolButtonPaint : ToolButton
 
         if(!GameManager.instance.isDM)
         {
+            menu.SetActive(false);
             gameObject.SetActive(false);
         }
         else
@@ -18,11 +19,11 @@ public class ToolButtonPaint : ToolButton
         }
     }
 
-    public override void Activate()
+    public override void Deactivate()
     {
         if(GameManager.instance.isDM)
         {
-            base.Activate();
+            base.Deactivate();
         }
     }
 }

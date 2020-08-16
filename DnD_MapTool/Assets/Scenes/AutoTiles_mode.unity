@@ -13988,6 +13988,7 @@ MonoBehaviour:
   type: 1
   toggle: 0
   shortcutKey: 98
+  menu: {fileID: 666903537}
   button: {fileID: 0}
   text: {fileID: 0}
   incompatibleTools:
@@ -14807,6 +14808,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tool: 1
+  prevTool: 0
   playerColors:
   - {r: 1, g: 0, b: 0, a: 1}
   - {r: 1, g: 0.9780377, b: 0, a: 1}
@@ -15398,6 +15400,7 @@ MonoBehaviour:
   type: 2
   toggle: 1
   shortcutKey: 116
+  menu: {fileID: 1360610950}
   button: {fileID: 0}
   text: {fileID: 0}
   incompatibleTools: []
@@ -15843,6 +15846,7 @@ MonoBehaviour:
   type: 0
   toggle: 0
   shortcutKey: 115
+  menu: {fileID: 0}
   button: {fileID: 0}
   text: {fileID: 0}
   incompatibleTools:
@@ -16624,7 +16628,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0.5}
   m_AnchorMax: {x: 0, y: 0.5}
-  m_AnchoredPosition: {x: 15.26, y: -0}
+  m_AnchoredPosition: {x: 15.260002, y: 0}
   m_SizeDelta: {x: 30.52163, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3088018771623887829
@@ -17276,7 +17280,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 20.06, y: 0}
+  m_AnchoredPosition: {x: 20.059998, y: 0}
   m_SizeDelta: {x: -40.123123, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &5724606328367748085
@@ -18130,7 +18134,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
-  m_AnchoredPosition: {x: 0, y: 66.68}
+  m_AnchoredPosition: {x: 0, y: 66.67999}
   m_SizeDelta: {x: 230, y: 20}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!224 &8794974611458548714

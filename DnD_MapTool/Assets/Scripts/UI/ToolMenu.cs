@@ -21,15 +21,15 @@ public class ToolMenu : MonoBehaviour
     private const string sizeStr = "Size: ";
     private const string heightStr = "Height: ";
 
-    void OnEnable()
-    {
-        GameController.OnToolChanged += UpdateTool;
-    }
+    //void OnEnable()
+    //{
+    //    GameController.OnToolChanged += UpdateTool;
+    //}
 
-    void OnDisable()
-    {
-        GameController.OnToolChanged -= UpdateTool;
-    }
+    //void OnDisable()
+    //{
+    //    GameController.OnToolChanged -= UpdateTool;
+    //}
 
     void Start()
     {
@@ -73,33 +73,33 @@ public class ToolMenu : MonoBehaviour
         }
     }
 
-    private void UpdateTool()
-    {
-        ToolType newTool = GameController.instance.Tool;
+    //private void UpdateTool()
+    //{
+    //    ToolType newTool = GameController.instance.Tool;
 
-        switch(newTool)
-        {
-            case ToolType.selection:
-                {
-                    brushes.SetActive(false);
-                    sliderSize.SetActive(false);
-                    sliderHeight.SetActive(false);
-                    toolText.text = selectionStr;
-                    break;
-                }
-            case ToolType.brush:
-                {
-                    brushes.SetActive(true);
-                    sliderSize.SetActive(true);
-                    sliderHeight.SetActive(true);
-                    toolText.text = brushStr;
-                    break;
-                }
-            case ToolType.token:
-                {
-                    tokenPanel.SetActive(!tokenPanel.activeSelf);
-                    break;
-                }
-        }
-    }
+    //    switch(newTool)
+    //    {
+    //        case ToolType.selection:
+    //            {
+    //                brushes.SetActive(false);
+    //                sliderSize.SetActive(false);
+    //                sliderHeight.SetActive(false);
+    //                toolText.text = selectionStr;
+    //                break;
+    //            }
+    //        case ToolType.brush:
+    //            {
+    //                brushes.SetActive(true);
+    //                sliderSize.SetActive(true);
+    //                sliderHeight.SetActive(true);
+    //                toolText.text = brushStr;
+    //                break;
+    //            }
+    //        case ToolType.token:
+    //            {
+    //                tokenPanel.SetActive(!tokenPanel.activeSelf);
+    //                break;
+    //            }
+    //    }
+    //}
 }

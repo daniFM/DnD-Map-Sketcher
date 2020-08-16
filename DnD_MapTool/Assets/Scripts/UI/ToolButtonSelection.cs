@@ -15,11 +15,11 @@ public class ToolButtonSelection: ToolButton
         }
     }
 
-    public override void Activate()
+    public override void Deactivate()
     {
         if(GameManager.instance.isDM)
         {
-            base.Activate();
+            base.Deactivate();
         }
     }
 }

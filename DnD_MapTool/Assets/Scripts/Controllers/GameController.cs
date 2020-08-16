@@ -13,6 +13,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private ToolType tool;
     public ToolType Tool { get { return tool; } }
 
+    [ReadOnly] [SerializeField] private ToolType prevTool;
+    //public ToolType PrevTool { get { return prevTool; } }
+
     [ColorUsage(false, false)] public List<Color> playerColors;
     [ColorUsage(false, true)] public Color highlightColor;
 
@@ -64,12 +67,21 @@ public class GameController : MonoBehaviour
         #endif
     }
 
-    public void SetTool(ToolType tool)
+    public void SetTool(ToolType newTool, bool activate = true)
     {
-        this.tool = tool;
+        if(!activate)
+        {
+            tool = prevTool;
+        }
+        else
+        {
+            prevTool = tool;
+            tool = newTool;
+        }
         OnToolChanged?.Invoke();
     }
 
+    // DEPRECATED
     public ToolType SwitchTool()
     {
         switch(tool)
