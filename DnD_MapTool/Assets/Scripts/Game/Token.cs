@@ -15,6 +15,8 @@ public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
     private Material mainMaterial;
     private Rigidbody rb;
     private Photon.Realtime.Player player;
+    private int size;
+
     //private bool initialized;
 
     //void Start()
@@ -40,6 +42,16 @@ public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
         mainMaterial.SetColor("_EmissionColor", Color.clear);
     }
 
+    /// <summary>
+    /// Callback for instantiating a token on all clients.
+    /// </summary>
+    /// <param name="info">
+    /// [0] -> int player index
+    /// [1] -> float color.r
+    /// [2] -> float color.g
+    /// [3] -> float color.b
+    /// [4] -> int size
+    /// </param>
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
         object[] data = info.photonView.InstantiationData;
@@ -52,7 +64,11 @@ public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
         else
             color = GameController.instance.GetPlayerColor(playerIndex);
 
-        Init(color);
+        int size = 1;
+        if(data.Length > 4)
+            size = (int)data[4];
+
+        Init(color, size);
 
         if(playerIndex != photonView.OwnerActorNr)
         {
@@ -60,7 +76,7 @@ public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
         }
     }
 
-    private void Init(Color color)
+    private void Init(Color color, int size)
     {
         renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;
@@ -68,6 +84,9 @@ public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
         player = photonView.Owner;
 
         mainMaterial.SetColor("_BaseColor", color);
+
+        this.size = size;
+        transform.localScale = Vector3.one * size;
 
         SetPhysics();
 
@@ -142,7 +161,9 @@ public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
     private void Reposition(float height)
     {
         Vector3 repos = new Vector3(Mathf.Floor(transform.position.x), transform.position.y + height, Mathf.Floor(transform.position.z));
-        if(!TileController.instance.snapToCenter)
+
+        bool snapToCenter = size % 2 == 0 ? TileController.instance.snapToCenter : !TileController.instance.snapToCenter;
+        if(snapToCenter)
             repos += new Vector3(0.5f, 0, 0.5f);
         transform.position = repos;
     }

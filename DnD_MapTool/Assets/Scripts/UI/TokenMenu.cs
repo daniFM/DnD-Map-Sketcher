@@ -1,10 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TokenMenu : MonoBehaviour
 {
     public TokenController tokenController;
+    public Slider sliderSize;
 
     private Color color;
 
@@ -15,7 +17,7 @@ public class TokenMenu : MonoBehaviour
 
     public void CreateToken()
     {
-        tokenController.CreateToken(color);
+        tokenController.CreateToken(color, (int)sliderSize.value);
         GameController.instance.Tooltip("A token has been created.");
     }
 
