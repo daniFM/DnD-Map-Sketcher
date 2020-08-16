@@ -58,6 +58,16 @@ public class TokenController: MonoBehaviour
         PhotonNetwork.Instantiate(tokenPrefab.name, Vector3.zero, Quaternion.identity, 0, new object[] { player });
     }
 
+    public void CreateToken(Color color)
+    {
+        PhotonNetwork.Instantiate(tokenPrefab.name, Vector3.zero, Quaternion.identity, 0, new object[] { PhotonNetwork.LocalPlayer.ActorNumber, color.r, color.g, color.b });
+    }
+
+    public void CreateToken(int player, Color color)
+    {
+        PhotonNetwork.Instantiate(tokenPrefab.name, Vector3.zero, Quaternion.identity, 0, new object[] { player, color });
+    }
+
     private void ToolChanged()
     {
         if(GameController.instance.Tool == ToolType.selection)

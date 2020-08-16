@@ -42,15 +42,25 @@ public class Token : MonoBehaviourPun, IPunInstantiateMagicCallback
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
-        int playerIndex = (int)info.photonView.InstantiationData[0];
-        Init(GameController.instance.GetPlayerColor(playerIndex));
+        object[] data = info.photonView.InstantiationData;
+
+        int playerIndex = (int)data[0];
+
+        Color color;
+        if(data.Length > 1)
+            color = new Color((float)data[1], (float)data[2], (float)data[3]);
+        else
+            color = GameController.instance.GetPlayerColor(playerIndex);
+
+        Init(color);
+
         if(playerIndex != photonView.OwnerActorNr)
         {
             photonView.TransferOwnership(playerIndex);
         }
     }
 
-    public void Init(Color color)
+    private void Init(Color color)
     {
         renderer = GetComponent<Renderer>();
         mainMaterial = renderer.material;
