@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -16,6 +17,9 @@ public class CameraMovement : MonoBehaviour
     private Camera[] cameras;
     private Vector3 accumulator;
     private bool rotating;
+    private int height;
+
+    public static Action<int> HeightChanged;
 
     void Start()
     {
@@ -57,10 +61,12 @@ public class CameraMovement : MonoBehaviour
         else if(mouseWheel > 0 && GameManager.instance.isDM)
         {
             transform.Translate(0, 1, 0);
+            HeightChanged?.Invoke(++height);
         }
         else if(mouseWheel < 0 && GameManager.instance.isDM)
         {
             transform.Translate(0, -1, 0);
+            HeightChanged?.Invoke(--height);
         }
 
         // Camera rotation

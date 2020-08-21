@@ -8,33 +8,38 @@ public class ToolMenu : MonoBehaviour
     [SerializeField] private GameObject brushes;
     [SerializeField] private GameObject sliderSize;
     [SerializeField] private GameObject sliderHeight;
-    [SerializeField] private Button button;
+    [SerializeField] private GameObject tokenPanel;
+    //[SerializeField] private ToolButton[] toolButtons;
     [SerializeField] private Button[] brushButtons;
     [SerializeField] private Text toolText;
     [SerializeField] private Text sizeText;
     [SerializeField] private Text heightText;
     [SerializeField] private GameObject heightPlane;
 
-    private string selectionStr = "Selection";
-    private string brushStr = "Brushes";
-    private string sizeStr = "Size: ";
-    private string heightStr = "Height: ";
+    private const string selectionStr = "Selection";
+    private const string brushStr = "Brushes";
+    private const string sizeStr = "Size: ";
+    private const string heightStr = "Height: ";
+
+    //void OnEnable()
+    //{
+    //    GameController.OnToolChanged += UpdateTool;
+    //}
+
+    //void OnDisable()
+    //{
+    //    GameController.OnToolChanged -= UpdateTool;
+    //}
 
     void Start()
     {
         UpdateSize(1);
         UpdateHeight(1);
-        button.interactable = GameManager.instance.isDM;
     }
 
-    void OnEnable()
+    public void SetTool(ToolType newTool)
     {
-        GameController.OnToolChanged += UpdateTool;
-    }
-
-    void OnDisable()
-    {
-        GameController.OnToolChanged -= UpdateTool;
+        GameController.instance.SetTool(newTool);
     }
 
     public void SwitchTool()
@@ -68,28 +73,33 @@ public class ToolMenu : MonoBehaviour
         }
     }
 
-    private void UpdateTool()
-    {
-        ToolType newTool = GameController.instance.Tool;
+    //private void UpdateTool()
+    //{
+    //    ToolType newTool = GameController.instance.Tool;
 
-        switch(newTool)
-        {
-            case ToolType.selection:
-                {
-                    brushes.SetActive(false);
-                    sliderSize.SetActive(false);
-                    sliderHeight.SetActive(false);
-                    toolText.text = selectionStr;
-                    break;
-                }
-            case ToolType.brush:
-                {
-                    brushes.SetActive(true);
-                    sliderSize.SetActive(true);
-                    sliderHeight.SetActive(true);
-                    toolText.text = brushStr;
-                    break;
-                }
-        }
-    }
+    //    switch(newTool)
+    //    {
+    //        case ToolType.selection:
+    //            {
+    //                brushes.SetActive(false);
+    //                sliderSize.SetActive(false);
+    //                sliderHeight.SetActive(false);
+    //                toolText.text = selectionStr;
+    //                break;
+    //            }
+    //        case ToolType.brush:
+    //            {
+    //                brushes.SetActive(true);
+    //                sliderSize.SetActive(true);
+    //                sliderHeight.SetActive(true);
+    //                toolText.text = brushStr;
+    //                break;
+    //            }
+    //        case ToolType.token:
+    //            {
+    //                tokenPanel.SetActive(!tokenPanel.activeSelf);
+    //                break;
+    //            }
+    //    }
+    //}
 }

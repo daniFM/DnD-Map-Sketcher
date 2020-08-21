@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using Photon.Pun;
+using DG.Tweening;
 
 //public class TileInitData
 //{
@@ -20,7 +21,12 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
     [SerializeField] private MeshFilter mFilter;
     [SerializeField] private new Renderer renderer;
     [SerializeField] private new BoxCollider collider;
-    [SerializeField] private GameObject subTilePrefab;
+
+    [Header("Animation")]
+    public bool doAnimation = true;
+    [SerializeField] private float animationTime = 0.5f;
+    [SerializeField] private Ease easeType;
+    [SerializeField] private float overshoot = 1.70158f;
 
     private TilePlacing placing;
     private float[] rotations = { 0, 90, 180, 270 };
@@ -42,6 +48,12 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
         Vector3 size = renderer.bounds.size;
         collider.center = new Vector3(0, size.y/2, 0);
         collider.size = size;
+
+        if(doAnimation)
+        {
+            transform.GetChild(0).localScale = Vector3.zero;
+            transform.GetChild(0).DOScale(1, animationTime).SetEase(easeType, overshoot);
+        }
     }
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
