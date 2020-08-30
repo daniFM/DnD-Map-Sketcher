@@ -4,15 +4,31 @@ using UnityEngine;
 
 public class Dice : MonoBehaviour
 {
-    // Start is called before the first frame update
+    public RangeFloat spinForce;
+
+    private Rigidbody rb;
+
+    #region DEBUG
+
     void Start()
     {
-        
+        rb = GetComponent<Rigidbody>();
+        //Roll();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            Roll();
+        }
+    }
+
+    #endregion
+
+    public void Roll()
+    {
+        transform.Translate(0, 10, 0, Space.World);
+        rb.AddTorque(spinForce.GetRandom(), spinForce.GetRandom(), spinForce.GetRandom(), ForceMode.Impulse);
     }
 }
