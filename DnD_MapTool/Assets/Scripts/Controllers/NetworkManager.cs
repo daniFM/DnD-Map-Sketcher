@@ -44,6 +44,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
     public void SetPlayerName(string name)
     {
         PhotonNetwork.NickName = name;
+        GameManager.instance.playerName = name;
     }
 
     public void FindRooms()

@@ -6,6 +6,7 @@ public class GameManager: MonoBehaviour
 {
     //public string gameVersion = "0.0";
     public bool isDM = false;
+    public string playerName;
 
     public static GameManager instance = null;
 
