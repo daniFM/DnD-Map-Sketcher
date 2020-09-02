@@ -34,11 +34,17 @@ using UnityEngine;
 public class ControlsScriptableObject: ScriptableObject
 {
     public KeyCode keyCTRL = KeyCode.LeftControl;
-    public KeyCode keyZ = KeyCode.Z;
+    public KeyCode keyUndo = KeyCode.Z;
     public KeyCode keyPing = KeyCode.P;
     public KeyCode keySwitchTool = KeyCode.Tab;
     public KeyCode keyHeight = KeyCode.Space;
+    public bool keysDisabled = false;
 
+
+    public void ChangeToolKey(string toolToChange, KeyCode newKey)
+    {
+
+    }
 
     //public bool GetShortcut(Key[] keys)
     //{
