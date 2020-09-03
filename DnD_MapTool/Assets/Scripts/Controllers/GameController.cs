@@ -20,6 +20,8 @@ public class GameController : MonoBehaviour
     [ColorUsage(false, true)] public Color highlightColor;
 
     public TokenController tokenController;
+    public DiceController diceController;
+    public Chat chat;
 
     [SerializeField] private ControlsScriptableObject editorControls;
     [SerializeField] private ControlsScriptableObject webControls;

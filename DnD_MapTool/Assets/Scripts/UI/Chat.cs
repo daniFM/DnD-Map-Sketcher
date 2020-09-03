@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,6 +11,8 @@ public class Chat : MonoBehaviour
 
     private InputField input;
     private System.Text.StringBuilder sb;
+
+    private readonly string[] rollCommands = { "roll ", "roll" };
 
     private void Start()
     {
@@ -52,6 +55,35 @@ public class Chat : MonoBehaviour
 
         messageText.text = sb.ToString();
 
-        Debug.Log(sb.ToString());
+        CheckCommand(message);
+    }
+
+    private void CheckCommand(string message)
+    {
+        foreach(string command in rollCommands)
+        {
+            if(message.Contains(command))
+            {
+                int a = message.IndexOf(command);
+                int b = a + command.Length;
+                int c = message.IndexOf('d', b);
+                int d = c - b;
+                int n = int.Parse(message.Substring(b, d));
+                int e = message.IndexOf(' ', c);
+                int f = e - c;
+                int m = int.Parse(message.Substring(e, f));
+
+                if(Enum.IsDefined(typeof(DiceType), m))
+                {
+                    GameController.instance.diceController.Roll((DiceType)m, n);
+                }
+                else
+                {
+                    Debug.Log("Could not parse dice roll");
+                }
+
+                break;
+            }
+        }
     }
 }

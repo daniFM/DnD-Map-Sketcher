@@ -6,14 +6,22 @@ using UnityEngine;
 public class Dice : MonoBehaviour
 {
     [SerializeField] private RangeFloat spinForce;
+    [SerializeField] private float timeDespawn = 1;
 
     private bool instantiated;
     private Rigidbody rb;
     private Transform [] faces;
+    private WaitForSeconds waitDespawn;
 
     public static Action<int> Rolled;
 
-    #region DEBUG
+    private void Start()
+    {
+        if(!instantiated)
+        {
+            Instantiate();
+        }
+    }
 
     public void Instantiate()
     {
@@ -24,19 +32,13 @@ public class Dice : MonoBehaviour
         Array.Copy(transforms, 1, faces, 0, transforms.Length - 1);
         //faces = transform.GetComponentsInChildren<Transform>();
 
+        waitDespawn = new WaitForSeconds(timeDespawn);
+
+        gameObject.SetActive(false);
+
         //Roll();
         instantiated = true;
     }
-
-    //void Update()
-    //{
-    //    if(Input.GetKeyDown(KeyCode.R))
-    //    {
-    //        Roll();
-    //    }
-    //}
-
-    #endregion
 
     public void Roll()
     {
@@ -44,6 +46,7 @@ public class Dice : MonoBehaviour
         {
             Instantiate();
         }
+        gameObject.SetActive(true);
         StartCoroutine(RollRoutine());
     }
 
@@ -67,5 +70,9 @@ public class Dice : MonoBehaviour
         }
 
         Rolled?.Invoke(face + 1);
+
+        yield return waitDespawn;
+
+        gameObject.SetActive(false);
     }
 }
