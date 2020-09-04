@@ -14,6 +14,8 @@ public class Chat : MonoBehaviour
 
     private readonly string[] rollCommands = { "roll ", "roll" };
 
+    private const string errorRollMsg = "Error parsing dice command";
+
     private void Start()
     {
         input = GetComponentInChildren<InputField>();
@@ -24,7 +26,7 @@ public class Chat : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Return))
         {
-            SendChatMessage(input.text);
+            SendChatMessage(input.text, false);
         }
     }
 
@@ -33,7 +35,7 @@ public class Chat : MonoBehaviour
     //    //Debug.Log("Message: " + message);
     //}
 
-    public void SendChatMessage(string message)
+    public void SendChatMessage(string message, bool systemMessage = true)
     {
         input.text = string.Empty;
         input.Select();
@@ -46,12 +48,20 @@ public class Chat : MonoBehaviour
         //messageText.text = string.Format("<color={0}>{1}</color>: {2}", GameController.instance.GetPlayerColor(), GameManager.instance.playerName, message);
 
         sb.Length = 0;
-        sb.Append("<color=#")
-            .Append(UnityEngine.ColorUtility.ToHtmlStringRGB(GameController.instance.GetPlayerColor()))
-            .Append(">")
-            .Append(GameManager.instance.playerName)
-            .Append("</color>: ")
-            .Append(message);
+
+        if(systemMessage)
+        {
+            sb.Append("System: ");
+        }
+        else
+        {
+            sb.Append("<color=#")
+                .Append(UnityEngine.ColorUtility.ToHtmlStringRGB(GameController.instance.GetPlayerColor()))
+                .Append(">")
+                .Append(GameManager.instance.playerName)
+                .Append("</color>: ");
+        }
+        sb.Append(message);
 
         messageText.text = sb.ToString();
 
@@ -64,22 +74,33 @@ public class Chat : MonoBehaviour
         {
             if(message.Contains(command))
             {
-                int a = message.IndexOf(command);
-                int b = a + command.Length;
-                int c = message.IndexOf('d', b);
-                int d = c - b;
-                int n = int.Parse(message.Substring(b, d));
-                int e = message.IndexOf(' ', c);
-                int f = e - c;
-                int m = int.Parse(message.Substring(e, f));
+                try
+                {
+                    int a = message.IndexOf(command);
+                    int b = a + command.Length;
+                    int c = message.IndexOf('d', b);
+                    int d = c - b;
+                    int n = int.Parse(message.Substring(b, d));
+                    int e = message.IndexOf(' ', c);
+                    if(e == -1)
+                        e = message.Length;
+                    e--;
+                    int f = e - c;
+                    int m = int.Parse(message.Substring(e, f));
 
-                if(Enum.IsDefined(typeof(DiceType), m))
-                {
-                    GameController.instance.diceController.Roll((DiceType)m, n);
+                    if(Enum.IsDefined(typeof(DiceType), m))
+                    {
+                        GameController.instance.diceController.Roll((DiceType)m, n);
+                    }
+                    else
+                    {
+                        Debug.Log("Could not parse dice roll");
+                    }
                 }
-                else
+                catch(Exception e)
                 {
-                    Debug.Log("Could not parse dice roll");
+                    SendChatMessage(errorRollMsg);
+                    Debug.LogError(errorRollMsg + "\n" + e.Message);
                 }
 
                 break;

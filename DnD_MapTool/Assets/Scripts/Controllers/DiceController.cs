@@ -17,6 +17,7 @@ public class DiceController : MonoBehaviour
     [SerializeField] private GameObject[] dicePrefabs;
 
     private int diceQueue;
+    private List<int> results;
     private Dice[,] dicePool;
     private readonly Dictionary<DiceType, int> diceLookup = new Dictionary<DiceType, int>
     {
@@ -27,10 +28,13 @@ public class DiceController : MonoBehaviour
         { DiceType.D20,  4 },
         { DiceType.D100, 5 }
     };
+    private System.Text.StringBuilder sb;
 
     void Start()
     {
+        results = new List<int>();
         dicePool = new Dice[5, 5];
+        sb = new System.Text.StringBuilder();
 
         for(int i = 0; i < dicePrefabs.Length; ++i)
         {
@@ -43,46 +47,63 @@ public class DiceController : MonoBehaviour
 
     #region DEBUG
 
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.R))
-        {
-            Dice.Rolled += OnRollResult;
-            dicePool[0, 0].Roll();
-        }
-    }
+    //void Update()
+    //{
+    //    if(Input.GetKeyDown(KeyCode.R))
+    //    {
+    //        Dice.Rolled += OnRollResult;
+    //        dicePool[0, 0].Roll();
+    //    }
+    //}
+
+    #endregion
 
     public void Roll(DiceType dice, int number = 1)
     {
+        Dice.Rolled += OnRollResult;
+
         diceQueue = number;
         int diceIndex = diceLookup[dice];
 
         for(int i = 0; i < number; ++i)
         {
-            Dice.Rolled += OnRollResult;
             for(int j = 0; j < dicePool.GetLength(1); ++j)
             {
                 Dice rdice = dicePool[diceIndex, j];
                 if(!rdice.gameObject.activeSelf)
                 {
                     rdice.Roll();
+                    break;
                 }
             }
-            dicePool[0, 0].Roll();
         }
     }
 
     private void OnRollResult(int result)
     {
         diceQueue--;
+        results.Add(result);
+
         if(diceQueue == 0)
         {
             Dice.Rolled -= OnRollResult;
+
+            sb.Length = 0;
+            int total = 0;
+
+            sb.Append("Dice result: ");
+            foreach(int i in results)
+            {
+                total += i;
+                sb.Append(i).Append(", ");
+            }
+            sb.Append("(").Append(total).Append(")");
+
+            GameController.instance.chat.SendChatMessage(sb.ToString(), false);
+
+            results.Clear();
         }
 
-        GameController.instance.chat.SendChatMessage("Dice result: " + result);
         Debug.Log("Dice result: " + result);
     }
-
-    #endregion
 }

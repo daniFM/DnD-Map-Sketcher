@@ -52,6 +52,8 @@ public class Dice : MonoBehaviour
 
     private IEnumerator RollRoutine()
     {
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
         transform.Translate(0, 10, 0, Space.World);
         rb.AddTorque(spinForce.GetRandom(), spinForce.GetRandom(), spinForce.GetRandom(), ForceMode.Impulse);
 
