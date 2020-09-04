@@ -131,6 +131,7 @@ MonoBehaviour:
   spinForce:
     max: 1
     min: 2
+  timeDespawn: 3
 --- !u!64 &6494242489174110045
 MeshCollider:
   m_ObjectHideFlags: 0
