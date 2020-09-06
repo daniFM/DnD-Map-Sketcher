@@ -11,6 +11,7 @@ public class Chat : MonoBehaviour
 
     private InputField input;
     private System.Text.StringBuilder sb;
+    private string lastMessage;
 
     private readonly string[] rollCommands = { "roll ", "roll" };
 
@@ -26,7 +27,13 @@ public class Chat : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Return))
         {
+            lastMessage = input.text;
             SendChatMessage(input.text, false);
+        }
+
+        if(Input.GetKeyDown(KeyCode.UpArrow))
+        {
+            input.text = lastMessage;
         }
     }
 
