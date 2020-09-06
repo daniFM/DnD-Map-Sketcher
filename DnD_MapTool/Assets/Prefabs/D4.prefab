@@ -132,6 +132,10 @@ MonoBehaviour:
     max: 1
     min: 2
   timeDespawn: 3
+  doAnimation: 1
+  animationTime: 0.5
+  easeType: 23
+  overshoot: 1
 --- !u!64 &6494242489174110045
 MeshCollider:
   m_ObjectHideFlags: 0

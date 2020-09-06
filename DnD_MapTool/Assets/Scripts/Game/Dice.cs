@@ -2,16 +2,24 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using DG.Tweening;
 
 public class Dice : MonoBehaviour
 {
     [SerializeField] private RangeFloat spinForce;
     [SerializeField] private float timeDespawn = 1;
 
+    [Header("Animation")]
+    public bool doAnimation = true;
+    [SerializeField] private float animationTime = 0.5f;
+    [SerializeField] private Ease easeType;
+    [SerializeField] private float overshoot = 1.70158f;
+
     private bool instantiated;
     private Rigidbody rb;
     private Transform [] faces;
     private WaitForSeconds waitDespawn;
+    private WaitForSeconds waitAnimation;
 
     public static Action<int> Rolled;
 
@@ -33,6 +41,7 @@ public class Dice : MonoBehaviour
         //faces = transform.GetComponentsInChildren<Transform>();
 
         waitDespawn = new WaitForSeconds(timeDespawn);
+        waitAnimation = new WaitForSeconds(animationTime);
 
         gameObject.SetActive(false);
 
@@ -52,6 +61,7 @@ public class Dice : MonoBehaviour
 
     private IEnumerator RollRoutine()
     {
+        transform.localScale = Vector3.one;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         transform.Translate(0, 10, 0, Space.World);
@@ -74,6 +84,13 @@ public class Dice : MonoBehaviour
         Rolled?.Invoke(face + 1);
 
         yield return waitDespawn;
+
+        if(doAnimation)
+        {
+            transform.DOScale(0, animationTime).SetEase(easeType, overshoot);
+        }
+
+        yield return waitAnimation;
 
         gameObject.SetActive(false);
     }
