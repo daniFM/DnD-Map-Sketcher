@@ -15,6 +15,7 @@ public enum DiceType
 public class DiceController : MonoBehaviour
 {
     [SerializeField] private GameObject[] dicePrefabs;
+    [SerializeField] private Transform diceSpawn;
 
     private int diceQueue;
     private List<int> results;
@@ -72,7 +73,7 @@ public class DiceController : MonoBehaviour
                 Dice rdice = dicePool[diceIndex, j];
                 if(!rdice.gameObject.activeSelf)
                 {
-                    rdice.Roll();
+                    rdice.Roll(diceSpawn.position);
                     break;
                 }
             }

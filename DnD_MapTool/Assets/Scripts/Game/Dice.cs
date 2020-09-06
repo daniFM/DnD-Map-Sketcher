@@ -49,22 +49,34 @@ public class Dice : MonoBehaviour
         instantiated = true;
     }
 
-    public void Roll()
+    public void Roll(Vector3 position)
     {
         if(!instantiated)
         {
             Instantiate();
         }
         gameObject.SetActive(true);
-        StartCoroutine(RollRoutine());
+        StartCoroutine(RollRoutine(position));
     }
 
-    private IEnumerator RollRoutine()
+    private IEnumerator RollRoutine(Vector3 position)
     {
+        float offset = 3f;
+        position += new Vector3(UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset));
+        //int iterations = 0;
+        //do
+        //{
+        //    position += new Vector3(UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset), UnityEngine.Random.Range(-offset, offset));
+        //    iterations++;
+        //}
+        //while(Physics.CheckSphere(position, 1f));
+        //Debug.Log("Iterations: " + iterations);
+
+        transform.position = position;
         transform.localScale = Vector3.one;
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        transform.Translate(0, 10, 0, Space.World);
+        //transform.Translate(0, 10, 0, Space.World);
         rb.AddTorque(spinForce.GetRandom(), spinForce.GetRandom(), spinForce.GetRandom(), ForceMode.Impulse);
 
         yield return new WaitUntil(() => rb.IsSleeping());
