@@ -86,7 +86,7 @@ public class Chat : MonoBehaviour
                         e = message.Length;
                     e--;
                     int f = e - c;
-                    int m = int.Parse(message.Substring(e, f));
+                    int m = int.Parse(message.Substring(c + 1, f));
 
                     if(Enum.IsDefined(typeof(DiceType), m))
                     {
