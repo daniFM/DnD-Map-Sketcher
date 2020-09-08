@@ -19,7 +19,8 @@ public class DiceController : MonoBehaviour
 
     private int diceQueue;
     private List<int> results;
-    private Dice[,] dicePool;
+    //private Dice[,] dicePool;
+    private string[] dicePrefabNames;
     private readonly Dictionary<DiceType, int> diceLookup = new Dictionary<DiceType, int>
     {
         { DiceType.D4,   0 },
@@ -34,30 +35,24 @@ public class DiceController : MonoBehaviour
     void Start()
     {
         results = new List<int>();
-        dicePool = new Dice[5, 5];
-        sb = new System.Text.StringBuilder();
 
+        dicePrefabNames = new string[dicePrefabs.Length];
         for(int i = 0; i < dicePrefabs.Length; ++i)
         {
-            for(int j = 0; j < dicePool.GetLength(1); ++j)
-            {
-                dicePool[i, j] = Instantiate(dicePrefabs[i], null).GetComponent<Dice>();
-            }
+            dicePrefabNames[i] = dicePrefabs[i].name;
         }
+
+        //dicePool = new Dice[5, 5];
+        sb = new System.Text.StringBuilder();
+
+        //for(int i = 0; i < dicePrefabs.Length; ++i)
+        //{
+        //    for(int j = 0; j < dicePool.GetLength(1); ++j)
+        //    {
+        //        dicePool[i, j] = Instantiate(dicePrefabs[i], null).GetComponent<Dice>();
+        //    }
+        //}
     }
-
-    #region DEBUG
-
-    //void Update()
-    //{
-    //    if(Input.GetKeyDown(KeyCode.R))
-    //    {
-    //        Dice.Rolled += OnRollResult;
-    //        dicePool[0, 0].Roll();
-    //    }
-    //}
-
-    #endregion
 
     public void Roll(DiceType dice, int number = 1)
     {
@@ -68,15 +63,16 @@ public class DiceController : MonoBehaviour
 
         for(int i = 0; i < number; ++i)
         {
-            for(int j = 0; j < dicePool.GetLength(1); ++j)
-            {
-                Dice rdice = dicePool[diceIndex, j];
-                if(!rdice.gameObject.activeSelf)
-                {
-                    rdice.Roll(diceSpawn.position);
-                    break;
-                }
-            }
+            //for(int j = 0; j < dicePool.GetLength(1); ++j)
+            //{
+            //    Dice rdice = dicePool[diceIndex, j];
+            //    if(!rdice.gameObject.activeSelf)
+            //    {
+            //        rdice.Roll(diceSpawn.position);
+            //        break;
+            //    }
+            //}
+            Photon.Pun.PhotonNetwork.Instantiate(dicePrefabNames[diceIndex], diceSpawn.position, Quaternion.identity);
         }
     }
 

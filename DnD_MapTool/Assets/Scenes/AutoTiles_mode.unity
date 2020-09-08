@@ -21657,6 +21657,11 @@ MonoBehaviour:
   - {fileID: 6842177347684969292, guid: 5f0afafd21aaf78488fc2020ed9e1b7b, type: 3}
   - {fileID: 6842177347684969292, guid: c7ca834b1fa556142a070eb36e561c34, type: 3}
   - {fileID: 2307635911584312583, guid: 1442f47d759c249438205f3330dc8e88, type: 3}
+  - {fileID: 6494242489174110043, guid: 45e2c010cb8abf44ebd35ecc64da3972, type: 3}
+  - {fileID: 1403600605392208420, guid: 316a5d3ab3c649846925460020007063, type: 3}
+  - {fileID: 7451080408677851534, guid: 3676690d5e81ba242b41cede18fb2ed3, type: 3}
+  - {fileID: 745854862234274033, guid: 081a7bd9c73385a429680b477c824e42, type: 3}
+  - {fileID: 6694975676344628058, guid: e5a8389b7196dce4bbcf2a6481f39450, type: 3}
 --- !u!114 &2031366462
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -24776,6 +24781,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 1211190192}
     m_Modifications:
+    - target: {fileID: 903521903, guid: 8e834127e293a5a4bb70a1573863eab3, type: 3}
+      propertyPath: viewIdField
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5984692069329829859, guid: 8e834127e293a5a4bb70a1573863eab3,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -24815,6 +24824,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: PanelChat
+      objectReference: {fileID: 0}
+    - target: {fileID: 5984692070076662368, guid: 8e834127e293a5a4bb70a1573863eab3,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5984692070076662369, guid: 8e834127e293a5a4bb70a1573863eab3,
         type: 3}

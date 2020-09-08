@@ -3,8 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using Photon.Pun;
 
-public class Chat : MonoBehaviour
+public class Chat : MonoBehaviourPun
 {
     [SerializeField] private Text chatMessageTextPrefab;
     [SerializeField] private Transform chatMessagesContainer;
@@ -30,7 +31,8 @@ public class Chat : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Return))
         {
             lastMessage = input.text;
-            SendChatMessage(input.text, false);
+            //SendChatMessage(input.text, false);
+            photonView.RPC("SendChatMessage", RpcTarget.All, input.text, false);
         }
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
@@ -39,11 +41,7 @@ public class Chat : MonoBehaviour
         }
     }
 
-    //public void EndEdit(string message)
-    //{
-    //    //Debug.Log("Message: " + message);
-    //}
-
+    [PunRPC]
     public void SendChatMessage(string message, bool systemMessage = true)
     {
         input.text = string.Empty;
@@ -83,8 +81,8 @@ public class Chat : MonoBehaviour
         {
             if(message.Contains(command))
             {
-                try
-                {
+                //try
+                //{
                     int a = message.IndexOf(command);
                     int b = a + command.Length;
                     int c = message.IndexOf('d', b);
@@ -105,12 +103,12 @@ public class Chat : MonoBehaviour
                     {
                         Debug.Log("Could not parse dice roll");
                     }
-                }
-                catch(Exception e)
-                {
-                    SendChatMessage(errorRollMsg);
-                    Debug.LogError(errorRollMsg + "\n" + e.Message);
-                }
+                //}
+                //catch(Exception e)
+                //{
+                //    SendChatMessage(errorRollMsg);
+                //    Debug.LogError(errorRollMsg + "\n" + e.Message + "\n\n" + message);
+                //}
 
                 break;
             }
@@ -121,6 +119,7 @@ public class Chat : MonoBehaviour
     {
         sb.Length = 0;
         sb.Append("roll ").Append(diceNumber.options[diceNumber.value].text).Append("d").Append(diceType.options[diceType.value].text);
-        SendChatMessage(sb.ToString(), false);
+        //SendChatMessage(sb.ToString(), false);
+        photonView.RPC("SendChatMessage", RpcTarget.All, sb.ToString(), false);
     }
 }
