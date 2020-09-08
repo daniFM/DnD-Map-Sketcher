@@ -96,7 +96,7 @@ public class DiceController : MonoBehaviour
             }
             sb.Append("(").Append(total).Append(")");
 
-            GameController.instance.chat.SendChatMessage(sb.ToString(), false);
+            GameController.instance.chat.SendChatMessageToAll(sb.ToString(), false, false, GameController.instance.chat.playerColor);
 
             results.Clear();
         }

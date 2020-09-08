@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using DG.Tweening;
+using Photon.Pun;
 
 public class Dice : MonoBehaviour
 {
@@ -105,6 +106,7 @@ public class Dice : MonoBehaviour
 
         yield return waitAnimation;
 
-        gameObject.SetActive(false);
+        //gameObject.SetActive(false);
+        PhotonNetwork.Destroy(this.gameObject);
     }
 }

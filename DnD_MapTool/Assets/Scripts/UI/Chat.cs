@@ -15,6 +15,7 @@ public class Chat : MonoBehaviourPun
     private InputField input;
     private System.Text.StringBuilder sb;
     private string lastMessage;
+    public string playerColor { get; private set; }
 
     private readonly string[] rollCommands = { "roll ", "roll" };
 
@@ -24,6 +25,7 @@ public class Chat : MonoBehaviourPun
     {
         input = GetComponentInChildren<InputField>();
         sb = new System.Text.StringBuilder();
+        playerColor = UnityEngine.ColorUtility.ToHtmlStringRGB(GameController.instance.GetPlayerColor());
     }
 
     private void Update()
@@ -31,8 +33,9 @@ public class Chat : MonoBehaviourPun
         if(Input.GetKeyDown(KeyCode.Return))
         {
             lastMessage = input.text;
-            //SendChatMessage(input.text, false);
-            photonView.RPC("SendChatMessage", RpcTarget.All, input.text, false);
+            SendChatMessage(input.text, false, true, playerColor);
+            string msg = input.text;
+            photonView.RPC("SendChatMessage", RpcTarget.Others, msg, false, false, playerColor);
         }
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
@@ -42,7 +45,7 @@ public class Chat : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void SendChatMessage(string message, bool systemMessage = true)
+    public void SendChatMessage(string message, bool systemMessage, bool checkForCommands, string senderColor)
     {
         input.text = string.Empty;
         input.Select();
@@ -63,7 +66,7 @@ public class Chat : MonoBehaviourPun
         else
         {
             sb.Append("<color=#")
-                .Append(UnityEngine.ColorUtility.ToHtmlStringRGB(GameController.instance.GetPlayerColor()))
+                .Append(senderColor)
                 .Append(">")
                 .Append(GameManager.instance.playerName)
                 .Append("</color>: ");
@@ -72,7 +75,18 @@ public class Chat : MonoBehaviourPun
 
         messageText.text = sb.ToString();
 
-        CheckCommand(message);
+        if(checkForCommands)
+            CheckCommand(message);
+    }
+
+    public void SendChatMessageToAll(string message, bool systemMessage, bool checkForCommands, string senderColor)
+    {
+        photonView.RPC("SendChatMessage", RpcTarget.All, message, systemMessage, checkForCommands, senderColor);
+    }
+
+    public void SendChatMessageToOthers(string message, bool systemMessage, bool checkForCommands, string senderColor)
+    {
+        photonView.RPC("SendChatMessage", RpcTarget.Others, message, systemMessage, checkForCommands, senderColor);
     }
 
     private void CheckCommand(string message)
@@ -119,7 +133,7 @@ public class Chat : MonoBehaviourPun
     {
         sb.Length = 0;
         sb.Append("roll ").Append(diceNumber.options[diceNumber.value].text).Append("d").Append(diceType.options[diceType.value].text);
-        //SendChatMessage(sb.ToString(), false);
-        photonView.RPC("SendChatMessage", RpcTarget.All, sb.ToString(), false);
+        SendChatMessage(sb.ToString(), false, true, playerColor);
+        photonView.RPC("SendChatMessage", RpcTarget.Others, sb.ToString(), false, false, playerColor);
     }
 }
