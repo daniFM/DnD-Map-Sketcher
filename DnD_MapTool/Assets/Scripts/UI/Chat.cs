@@ -8,6 +8,8 @@ public class Chat : MonoBehaviour
 {
     [SerializeField] private Text chatMessageTextPrefab;
     [SerializeField] private Transform chatMessagesContainer;
+    [SerializeField] private Dropdown diceNumber;
+    [SerializeField] private Dropdown diceType;
 
     private InputField input;
     private System.Text.StringBuilder sb;
@@ -113,5 +115,12 @@ public class Chat : MonoBehaviour
                 break;
             }
         }
+    }
+
+    public void RollWithButton()
+    {
+        sb.Length = 0;
+        sb.Append("roll ").Append(diceNumber.options[diceNumber.value].text).Append("d").Append(diceType.options[diceType.value].text);
+        SendChatMessage(sb.ToString(), false);
     }
 }
