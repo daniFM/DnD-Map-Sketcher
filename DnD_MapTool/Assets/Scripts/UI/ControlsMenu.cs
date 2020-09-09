@@ -13,7 +13,6 @@ public class ControlsMenu : MonoBehaviour
     private GameObject configureButtonTooltip;
 
     private string currentButton;
-    public ControlsScriptableObject controlsScriptableObject;
     private KeyCode currentKeyPressed;
     private readonly Array keyCodes = Enum.GetValues(typeof(KeyCode));
 
@@ -26,7 +25,7 @@ public class ControlsMenu : MonoBehaviour
         {
             if(button.name != "ButtonBack")
             {
-                button.GetComponentInChildren<Text>().text = controlsScriptableObject.GetKeyCode(button.name);
+                button.GetComponentInChildren<Text>().text = GameController.instance.controls.GetKeyCodeToString(button.name);
                 button.onClick.AddListener(delegate ()
                     {
                         configureButtonTooltip.SetActive(true);
@@ -50,7 +49,7 @@ public class ControlsMenu : MonoBehaviour
                     if (Input.GetKey(keyCode))
                     {
                         configureButtonTooltip.SetActive(false);
-                        controlsScriptableObject.ChangeToolKey(currentButton, keyCode);
+                        GameController.instance.controls.ChangeToolKey(currentButton, keyCode);
                         GetNewKeyValues();
                         break;
                     }
@@ -65,7 +64,7 @@ public class ControlsMenu : MonoBehaviour
         {
             if(button.name != "ButtonBack")
             {
-                button.GetComponentInChildren<Text>().text = controlsScriptableObject.GetKeyCode(button.name);
+                button.GetComponentInChildren<Text>().text = GameController.instance.controls.GetKeyCodeToString(button.name);
             }
         }
     }

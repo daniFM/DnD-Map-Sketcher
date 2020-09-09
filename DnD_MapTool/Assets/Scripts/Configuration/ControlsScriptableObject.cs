@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 //[System.Serializable]
 //public class Key
@@ -31,7 +29,7 @@ using UnityEngine;
 //}
 
 [CreateAssetMenu(fileName = "ControlsConfig", menuName = "ScriptableObjects/ControlsConfig", order = 2)]
-public class ControlsScriptableObject: ScriptableObject
+public class ControlsScriptableObject : ScriptableObject
 {
     public KeyCode keyShortcut = KeyCode.C;
     public KeyCode keyPan = KeyCode.Mouse1;
@@ -50,11 +48,12 @@ public class ControlsScriptableObject: ScriptableObject
 
     public void ChangeToolKey(string toolToChange, KeyCode newKey)
     {
-        if(toolToChange == "keyShortcut")
+
+        if (toolToChange == "keyshOrtcut")
         {
             keyShortcut = newKey;
         }
-        if(toolToChange == "keyPan")
+        if (toolToChange == "keyPan")
         {
             keyPan = newKey;
         }
@@ -96,7 +95,7 @@ public class ControlsScriptableObject: ScriptableObject
         }
     }
 
-    public string GetKeyCode(string keyName)
+    public string GetKeyCodeToString(string keyName)
     {
         if (keyName == "keyShortcut")
         {
@@ -145,8 +144,57 @@ public class ControlsScriptableObject: ScriptableObject
         return "key not available";
     }
 
-    //public bool GetShortcut(Key[] keys)
-    //{
-    //    return false;
-    //}
+    public KeyCode GetKeyCodeValue(string keyName)
+    {
+        if(keysDisabled == true)
+        {
+            return KeyCode.None;
+        }
+        if (keyName == "keyShortcut")
+        {
+            return keyShortcut;
+        }
+        if (keyName == "keyPan")
+        {
+            return keyPan;
+        }
+        if (keyName == "keyRotateLeft")
+        {
+            return keyRotateLeft;
+        }
+        if (keyName == "keyRotateRight")
+        {
+            return keyRotateRight;
+        }
+        if (keyName == "keyPaint")
+        {
+            return keyPaint;
+        }
+        if (keyName == "keyInteract")
+        {
+            return keyInteract;
+        }
+        if (keyName == "keySwitchTool")
+        {
+            return keySwitchTool;
+        }
+        if (keyName == "keyHeight")
+        {
+            return keyHeight;
+        }
+        if (keyName == "keyPing")
+        {
+            return keyPing;
+        }
+        if (keyName == "keyHide")
+        {
+            return keyHide;
+        }
+        if (keyName == "keyUndo")
+        {
+            return keyUndo;
+        }
+        return KeyCode.None;
+    }
+
 }

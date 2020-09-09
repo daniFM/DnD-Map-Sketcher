@@ -11,7 +11,7 @@ public class PingController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        if(Input.GetKeyDown(GameController.instance.controls.GetKeyCodeValue("keyPing")))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
