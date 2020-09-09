@@ -9,6 +9,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
 {
     [SerializeField] private int maxPlayersPerRoom;
     public int MaxPlayersPerRoom { get { return maxPlayersPerRoom; } }
+    public Dictionary<int, string> players { get; private set; }
     [SerializeField] private bool isConnecting = false;
     public bool IsConnecting { get { return isConnecting; } }
 
@@ -236,11 +237,12 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
 
         isConnecting = false;
 
-        //bool setmaster = false;
-        //if(GameManager.instance.isDM)
-        //    setmaster = PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
-        //if(!setmaster)
-        //    Debug.Log("Failed to set master");
+        players = new Dictionary<int, string>();
+        players[PhotonNetwork.LocalPlayer.ActorNumber] = PhotonNetwork.LocalPlayer.NickName;
+        foreach(Photon.Realtime.Player otherPlayer in PhotonNetwork.PlayerListOthers)
+        {
+            players[otherPlayer.ActorNumber] = otherPlayer.NickName;
+        }
 
         PhotonNetwork.LoadLevel("AutoTiles_mode");
     }
@@ -253,6 +255,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
             Debug.Log("Room is full, closing room");
         }
 
+        players[newPlayer.ActorNumber] = newPlayer.NickName;
         OnPlayerJoined?.Invoke(newPlayer.ActorNumber, newPlayer.NickName);
     }
 
@@ -264,6 +267,7 @@ public class NetworkManager: MonoBehaviourPunCallbacks, IPunOwnershipCallbacks
             Debug.Log("Room now open for new players");
         }
 
+        players.Remove(otherPlayer.ActorNumber);
         OnPlayerLeft?.Invoke(otherPlayer.ActorNumber, otherPlayer.NickName);
     }
 

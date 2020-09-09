@@ -5,7 +5,7 @@ using UnityEngine;
 using DG.Tweening;
 using Photon.Pun;
 
-public class Dice : MonoBehaviour
+public class Dice : MonoBehaviourPun
 {
     [SerializeField] private RangeFloat spinForce;
     [SerializeField] private float timeDespawn = 1;
@@ -101,12 +101,18 @@ public class Dice : MonoBehaviour
 
         if(doAnimation)
         {
-            transform.DOScale(0, animationTime).SetEase(easeType, overshoot);
+            photonView.RPC("DoAnimation", RpcTarget.All);
         }
 
         yield return waitAnimation;
 
         //gameObject.SetActive(false);
         PhotonNetwork.Destroy(this.gameObject);
+    }
+
+    [PunRPC]
+    public void DoAnimation()
+    {
+        transform.DOScale(0, animationTime).SetEase(easeType, overshoot);
     }
 }

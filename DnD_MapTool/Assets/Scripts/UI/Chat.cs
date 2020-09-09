@@ -15,7 +15,6 @@ public class Chat : MonoBehaviourPun
     private InputField input;
     private System.Text.StringBuilder sb;
     private string lastMessage;
-    public string playerColor { get; private set; }
 
     private readonly string[] rollCommands = { "roll ", "roll" };
 
@@ -25,7 +24,6 @@ public class Chat : MonoBehaviourPun
     {
         input = GetComponentInChildren<InputField>();
         sb = new System.Text.StringBuilder();
-        playerColor = UnityEngine.ColorUtility.ToHtmlStringRGB(GameController.instance.GetPlayerColor());
     }
 
     private void Update()
@@ -33,9 +31,8 @@ public class Chat : MonoBehaviourPun
         if(Input.GetKeyDown(KeyCode.Return))
         {
             lastMessage = input.text;
-            SendChatMessage(input.text, false, true, playerColor);
-            string msg = input.text;
-            photonView.RPC("SendChatMessage", RpcTarget.Others, msg, false, false, playerColor);
+            //SendChatMessage(input.text, false, true, PhotonNetwork.LocalPlayer.ActorNumber);
+            photonView.RPC("SendChatMessage", RpcTarget.All, input.text, false, PhotonNetwork.LocalPlayer.ActorNumber);
         }
 
         if(Input.GetKeyDown(KeyCode.UpArrow))
@@ -45,49 +42,54 @@ public class Chat : MonoBehaviourPun
     }
 
     [PunRPC]
-    public void SendChatMessage(string message, bool systemMessage, bool checkForCommands, string senderColor)
+    public void SendChatMessage(string message, bool systemMessage, int senderID)
     {
         input.text = string.Empty;
         input.Select();
         input.ActivateInputField();
 
-        Text messageText = Instantiate(chatMessageTextPrefab, chatMessagesContainer).GetComponent<Text>();
-
-        //messageText.text = "<color=" + GameController.instance.GetPlayerColor() + ">" + GameManager.instance.playerName + "</color>: " + message;
-
-        //messageText.text = string.Format("<color={0}>{1}</color>: {2}", GameController.instance.GetPlayerColor(), GameManager.instance.playerName, message);
-
-        sb.Length = 0;
-
-        if(systemMessage)
+        if(!string.IsNullOrEmpty(message))
         {
-            sb.Append("System: ");
+            Text messageText = Instantiate(chatMessageTextPrefab, chatMessagesContainer).GetComponent<Text>();
+
+            //messageText.text = "<color=" + GameController.instance.GetPlayerColor() + ">" + GameManager.instance.playerName + "</color>: " + message;
+
+            //messageText.text = string.Format("<color={0}>{1}</color>: {2}", GameController.instance.GetPlayerColor(), GameManager.instance.playerName, message);
+
+            sb.Clear();
+
+            if(systemMessage)
+            {
+                sb.Append("System: ");
+            }
+            else
+            {
+                sb.Append("<color=#")
+                    .Append(UnityEngine.ColorUtility.ToHtmlStringRGB(GameController.instance.GetPlayerColor(senderID)))
+                    .Append(">")
+                    .Append(NetworkManager.instance.players[senderID])
+                    .Append("</color>: ");
+            }
+            sb.Append(message);
+
+            messageText.text = sb.ToString();
+
+            if(PhotonNetwork.LocalPlayer.ActorNumber == senderID)
+            {
+                CheckCommand(message);
+            }
         }
-        else
-        {
-            sb.Append("<color=#")
-                .Append(senderColor)
-                .Append(">")
-                .Append(GameManager.instance.playerName)
-                .Append("</color>: ");
-        }
-        sb.Append(message);
-
-        messageText.text = sb.ToString();
-
-        if(checkForCommands)
-            CheckCommand(message);
     }
 
-    public void SendChatMessageToAll(string message, bool systemMessage, bool checkForCommands, string senderColor)
+    public void SendChatMessageToAll(string message, bool systemMessage)
     {
-        photonView.RPC("SendChatMessage", RpcTarget.All, message, systemMessage, checkForCommands, senderColor);
+        photonView.RPC("SendChatMessage", RpcTarget.All, message, systemMessage, PhotonNetwork.LocalPlayer.ActorNumber);
     }
 
-    public void SendChatMessageToOthers(string message, bool systemMessage, bool checkForCommands, string senderColor)
-    {
-        photonView.RPC("SendChatMessage", RpcTarget.Others, message, systemMessage, checkForCommands, senderColor);
-    }
+    //public void SendChatMessageToOthers(string message, bool systemMessage)
+    //{
+    //    photonView.RPC("SendChatMessage", RpcTarget.Others, message, systemMessage, PhotonNetwork.LocalPlayer.ActorNumber);
+    //}
 
     private void CheckCommand(string message)
     {
@@ -95,8 +97,8 @@ public class Chat : MonoBehaviourPun
         {
             if(message.Contains(command))
             {
-                //try
-                //{
+                try
+                {
                     int a = message.IndexOf(command);
                     int b = a + command.Length;
                     int c = message.IndexOf('d', b);
@@ -117,12 +119,12 @@ public class Chat : MonoBehaviourPun
                     {
                         Debug.Log("Could not parse dice roll");
                     }
-                //}
-                //catch(Exception e)
-                //{
-                //    SendChatMessage(errorRollMsg);
-                //    Debug.LogError(errorRollMsg + "\n" + e.Message + "\n\n" + message);
-                //}
+                }
+                catch(Exception e)
+                {
+                    SendChatMessage(errorRollMsg, true, PhotonNetwork.LocalPlayer.ActorNumber);
+                    Debug.LogError(errorRollMsg + "\n" + e.Message + "\n\n" + message);
+                }
 
                 break;
             }
@@ -131,9 +133,9 @@ public class Chat : MonoBehaviourPun
 
     public void RollWithButton()
     {
-        sb.Length = 0;
+        sb.Clear();
         sb.Append("roll ").Append(diceNumber.options[diceNumber.value].text).Append("d").Append(diceType.options[diceType.value].text);
-        SendChatMessage(sb.ToString(), false, true, playerColor);
-        photonView.RPC("SendChatMessage", RpcTarget.Others, sb.ToString(), false, false, playerColor);
+        //SendChatMessage(sb.ToString(), false, PhotonNetwork.LocalPlayer.ActorNumber);
+        photonView.RPC("SendChatMessage", RpcTarget.All, sb.ToString(), false, PhotonNetwork.LocalPlayer.ActorNumber);
     }
 }
