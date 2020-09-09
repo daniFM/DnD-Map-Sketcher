@@ -69,6 +69,7 @@ public class TileController : MonoBehaviour
     [SerializeField] [ReadOnly] private int snapshotIndex;
     [SerializeField] private TileData[] tileSnapshots;
 
+    [SerializeField]
     public static TileController instance = null;
 
     void Awake()
@@ -156,9 +157,9 @@ public class TileController : MonoBehaviour
                 }
 
                 // Tile placing and erasing
-                if(Input.GetMouseButtonDown(0) || 
+                if(Input.GetKey(GameController.instance.controls.keyPaint) || 
                     (
-                        Input.GetMouseButton(0) && 
+                        Input.GetKey(GameController.instance.controls.keyPaint) && 
                         (
                             Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0
                         )
@@ -190,7 +191,7 @@ public class TileController : MonoBehaviour
                                 if(hitColliders.Length > 0)
                                 {
                                     otherType = hitColliders[0].GetComponent<Tile>().type;
-                                    if(brushType == otherType && Input.GetMouseButtonDown(0))
+                                    if(brushType == otherType && Input.GetKey(GameController.instance.controls.keyPaint))
                                     {
                                         hitColliders[0].GetComponent<Tile>().RotateTile();
                                     }
@@ -213,7 +214,7 @@ public class TileController : MonoBehaviour
                     }
                 }
                 // Save snapshot
-                else if(Input.GetMouseButtonUp(0))
+                else if(Input.GetKeyUp(GameController.instance.controls.keyPaint))
                 {
                     TakeSnapshot();
                 }
