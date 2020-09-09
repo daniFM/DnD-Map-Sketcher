@@ -220,7 +220,7 @@ public class TileController : MonoBehaviour
             }
 
             // CTRL+Z
-            if(Input.GetKey(GameController.instance.controls.keyCTRL) && Input.GetKeyDown(GameController.instance.controls.keyZ))
+            if(Input.GetKey(GameController.instance.controls.keyCTRL) && Input.GetKeyDown(GameController.instance.controls.keyUndo))
             {
                 if(snapshotIndex > 1)
                 {
