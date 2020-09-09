@@ -1066,7 +1066,8 @@ MonoBehaviour:
   toolButtons: []
   configureButtonTooltip: {fileID: 6308088784069025675, guid: d7e41ed3885efb948bc3096d4ff06c61,
     type: 3}
-  controlsScriptableObject: {fileID: 0}
+  controlsScriptableObject: {fileID: 11400000, guid: 93e9061873a6ebb41833a4b20d0003b3,
+    type: 2}
 --- !u!1 &8061989784219410303
 GameObject:
   m_ObjectHideFlags: 0
