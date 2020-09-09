@@ -25,7 +25,7 @@ public class ControlsMenu : MonoBehaviour
         {
             if(button.name != "ButtonBack")
             {
-                button.GetComponentInChildren<Text>().text = GameController.instance.controls.GetKeyCode(button.name);
+                button.GetComponentInChildren<Text>().text = GameController.instance.controls.GetKeyCodeToString(button.name);
                 button.onClick.AddListener(delegate ()
                     {
                         configureButtonTooltip.SetActive(true);
@@ -64,7 +64,7 @@ public class ControlsMenu : MonoBehaviour
         {
             if(button.name != "ButtonBack")
             {
-                button.GetComponentInChildren<Text>().text = GameController.instance.controls.GetKeyCode(button.name);
+                button.GetComponentInChildren<Text>().text = GameController.instance.controls.GetKeyCodeToString(button.name);
             }
         }
     }

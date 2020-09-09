@@ -157,9 +157,9 @@ public class TileController : MonoBehaviour
                 }
 
                 // Tile placing and erasing
-                if(Input.GetKey(GameController.instance.controls.keyPaint) || 
+                if(Input.GetKey(GameController.instance.controls.GetKeyCodeValue("keyPaint")) || 
                     (
-                        Input.GetKey(GameController.instance.controls.keyPaint) && 
+                        Input.GetKey(GameController.instance.controls.GetKeyCodeValue("keyPaint")) && 
                         (
                             Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0
                         )
@@ -191,7 +191,7 @@ public class TileController : MonoBehaviour
                                 if(hitColliders.Length > 0)
                                 {
                                     otherType = hitColliders[0].GetComponent<Tile>().type;
-                                    if(brushType == otherType && Input.GetKey(GameController.instance.controls.keyPaint))
+                                    if(brushType == otherType && Input.GetKey(GameController.instance.controls.GetKeyCodeValue("keyPaint")))
                                     {
                                         hitColliders[0].GetComponent<Tile>().RotateTile();
                                     }
@@ -214,14 +214,14 @@ public class TileController : MonoBehaviour
                     }
                 }
                 // Save snapshot
-                else if(Input.GetKeyUp(GameController.instance.controls.keyPaint))
+                else if(Input.GetKeyUp(GameController.instance.controls.GetKeyCodeValue("keyPaint")))
                 {
                     TakeSnapshot();
                 }
             }
 
             // CTRL+Z
-            if(Input.GetKey(GameController.instance.controls.keyCTRL) && Input.GetKeyDown(GameController.instance.controls.keyUndo))
+            if(Input.GetKey(GameController.instance.controls.GetKeyCodeValue("keyCTRL")) && Input.GetKeyDown(GameController.instance.controls.GetKeyCodeValue("keyUndo")))
             {
                 if(snapshotIndex > 1)
                 {
