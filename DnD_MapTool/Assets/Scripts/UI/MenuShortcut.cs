@@ -12,7 +12,7 @@ public class MenuShortcut : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(GameController.instance.controls.GetKeyCodeValue("keyShortcut")) && !parentMenu.activeSelf)
+        if(GameController.instance.controls.DetectKeyPress(0) && !parentMenu.activeSelf)
         {
             ToggleSubMenu();
         }

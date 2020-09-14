@@ -21,20 +21,7 @@ public class ControlsMenu : MonoBehaviour
     {
         currentKeyPressed = KeyCode.None;
         toolButtons = GetComponentsInChildren<Button>();
-        foreach (Button button in toolButtons)
-        {
-            if(button.name != "ButtonBack")
-            {
-                button.GetComponentInChildren<Text>().text = GameController.instance.controls.GetKeyCodeToString(button.name);
-                button.onClick.AddListener(delegate ()
-                    {
-                        configureButtonTooltip.SetActive(true);
-                        configureButtonTooltip.GetComponentInChildren<Text>().text = button.name + ": ";
-                        currentButton = button.name;
-                    }
-                );
-            }
-        }
+        WriteNewKeysToMenu();
     }
 
     // Update is called once per frame
@@ -50,7 +37,7 @@ public class ControlsMenu : MonoBehaviour
                     {
                         configureButtonTooltip.SetActive(false);
                         GameController.instance.controls.ChangeToolKey(currentButton, keyCode);
-                        GetNewKeyValues();
+                        WriteNewKeysToMenu();
                         break;
                     }
                 }
@@ -58,13 +45,33 @@ public class ControlsMenu : MonoBehaviour
         }
     }
 
-    void GetNewKeyValues()
+    void WriteNewKeysToMenu()
     {
-        foreach(Button button in toolButtons)
+        int keyCount = 0;
+        string keyName = "";
+        foreach (Button button in toolButtons)
         {
-            if(button.name != "ButtonBack")
+            if (button.name != "ButtonBack")
             {
-                button.GetComponentInChildren<Text>().text = GameController.instance.controls.GetKeyCodeToString(button.name);
+                if (keyCount == 10)
+                {
+                    keyCount++;
+                    keyName = "CTRL + " + GameController.instance.controls.keys[keyCount].GetKeyCode().ToString();
+
+                }
+                else
+                {
+                    keyName = GameController.instance.controls.keys[keyCount].GetKeyCode().ToString();
+                    keyCount++;
+                }
+                button.GetComponentInChildren<Text>().text = keyName;
+                button.onClick.AddListener(delegate ()
+                {
+                    configureButtonTooltip.SetActive(true);
+                    configureButtonTooltip.GetComponentInChildren<Text>().text = button.name + ": ";
+                    currentButton = button.name;
+                }
+                );
             }
         }
     }

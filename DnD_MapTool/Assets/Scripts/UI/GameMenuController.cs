@@ -21,11 +21,11 @@ public class GameMenuController : MonoBehaviour
         {
             pauseMenu.SetActive(!pauseMenu.activeSelf);
         }
-        else if(Input.GetKeyDown(GameController.instance.controls.GetKeyCodeValue("keySwitchTool")))
+        else if(GameController.instance.controls.DetectKeyPress(6))
         {
             toolMenu.SwitchTool();
         }
-        else if(Input.GetKeyDown(GameController.instance.controls.GetKeyCodeValue("keyHeight")) && GameController.instance.Tool == ToolType.brush)
+        else if((GameController.instance.controls.DetectKeyPress(7)) && GameController.instance.Tool == ToolType.brush)
         {
             toolMenu.ToggleHeightPlane();
         }

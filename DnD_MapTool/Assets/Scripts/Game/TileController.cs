@@ -157,9 +157,9 @@ public class TileController : MonoBehaviour
                 }
 
                 // Tile placing and erasing
-                if(Input.GetKey(GameController.instance.controls.GetKeyCodeValue("keyPaint")) || 
+                if(GameController.instance.controls.DetectKeyHeld(4) || 
                     (
-                        Input.GetKey(GameController.instance.controls.GetKeyCodeValue("keyPaint")) && 
+                        GameController.instance.controls.DetectKeyHeld(4) && 
                         (
                             Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0
                         )
@@ -191,7 +191,7 @@ public class TileController : MonoBehaviour
                                 if(hitColliders.Length > 0)
                                 {
                                     otherType = hitColliders[0].GetComponent<Tile>().type;
-                                    if(brushType == otherType && Input.GetKey(GameController.instance.controls.GetKeyCodeValue("keyPaint")))
+                                    if(brushType == otherType && GameController.instance.controls.DetectKeyHeld(4))
                                     {
                                         hitColliders[0].GetComponent<Tile>().RotateTile();
                                     }
@@ -214,14 +214,14 @@ public class TileController : MonoBehaviour
                     }
                 }
                 // Save snapshot
-                else if(Input.GetKeyUp(GameController.instance.controls.GetKeyCodeValue("keyPaint")))
+                else if(GameController.instance.controls.DetectKeyUp(4))
                 {
                     TakeSnapshot();
                 }
             }
 
             // CTRL+Z
-            if(Input.GetKey(GameController.instance.controls.GetKeyCodeValue("keyCTRL")) && Input.GetKeyDown(GameController.instance.controls.GetKeyCodeValue("keyUndo")))
+            if(GameController.instance.controls.DetectKeyHeld(10) && GameController.instance.controls.DetectKeyPress(11))
             {
                 if(snapshotIndex > 1)
                 {

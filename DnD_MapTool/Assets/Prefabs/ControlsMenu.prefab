@@ -661,7 +661,7 @@ GameObject:
   - component: {fileID: 3720306933344368556}
   - component: {fileID: 5596492578661939170}
   m_Layer: 5
-  m_Name: keyRotateRight
+  m_Name: Rotate Right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1066,8 +1066,6 @@ MonoBehaviour:
   toolButtons: []
   configureButtonTooltip: {fileID: 6308088784069025675, guid: d7e41ed3885efb948bc3096d4ff06c61,
     type: 3}
-  controlsScriptableObject: {fileID: 11400000, guid: 93e9061873a6ebb41833a4b20d0003b3,
-    type: 2}
 --- !u!1 &8061989784219410303
 GameObject:
   m_ObjectHideFlags: 0
@@ -2644,7 +2642,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyPaint
+      value: Paint
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -2809,7 +2807,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyPing
+      value: Ping
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -2972,7 +2970,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyHide
+      value: Hide
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -3125,7 +3123,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keySwitchTool
+      value: Switch Tool
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -3303,7 +3301,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyShortcut
+      value: Shortcut
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -3468,7 +3466,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyPan
+      value: Pan
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -3643,7 +3641,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyRotateLeft
+      value: Rotate Left
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -4428,7 +4426,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyHeight
+      value: Height Assist
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -4591,7 +4589,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyUndo
+      value: Undo
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
@@ -4744,7 +4742,7 @@ PrefabInstance:
     - target: {fileID: 8985111512888016896, guid: cbf110fe82a44424cb9f4312787c142a,
         type: 3}
       propertyPath: m_Name
-      value: keyInteract
+      value: Interact
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1480400079971761264, guid: cbf110fe82a44424cb9f4312787c142a, type: 3}
