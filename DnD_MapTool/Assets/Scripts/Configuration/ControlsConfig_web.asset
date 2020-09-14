@@ -12,8 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e3b36b974e2c744a4af6a00ae4b516, type: 3}
   m_Name: ControlsConfig_web
   m_EditorClassIdentifier: 
-  keyCTRL: 306
-  keyZ: 122
-  keyPing: 112
-  keySwitchTool: 9
-  keyHeight: 32
+  keys:
+  - code: 99
+    keyName: Shortcut
+  - code: 324
+    keyName: Pan
+  - code: 113
+    keyName: Rotate Left
+  - code: 101
+    keyName: Rotate Right
+  - code: 323
+    keyName: Paint
+  - code: 323
+    keyName: Interact
+  - code: 9
+    keyName: Switch Tool
+  - code: 32
+    keyName: Height Assist
+  - code: 112
+    keyName: Ping
+  - code: 104
+    keyName: Hide
+  - code: 306
+    keyName: CTRL
+  - code: 122
+    keyName: Undo
+  keysDisabled: 0
