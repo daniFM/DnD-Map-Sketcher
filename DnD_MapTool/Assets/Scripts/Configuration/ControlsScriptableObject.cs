@@ -67,17 +67,17 @@ public class ControlsScriptableObject : ScriptableObject
         return keys[arrIndex].KeyName();
     }
 
-    public bool DetectKeyPress(int arrIndex)
+    public bool GetKeyDown(int arrIndex)
     {
         return keysDisabled ? false : keys[arrIndex].GetKeyDown();
     }
 
-    public bool DetectKeyHeld(int arrIndex)
+    public bool GetKey(int arrIndex)
     {
         return keysDisabled ? false : keys[arrIndex].GetKey();
     }
 
-    public bool DetectKeyUp(int arrIndex)
+    public bool GetKeyUp(int arrIndex)
     {
         return keysDisabled ? false : keys[arrIndex].GetKeyUp();
     }

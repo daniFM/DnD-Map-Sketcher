@@ -157,9 +157,9 @@ public class TileController : MonoBehaviour
                 }
 
                 // Tile placing and erasing
-                if(GameController.instance.controls.DetectKeyHeld(4) || 
+                if(GameController.instance.controls.GetKey(4) || 
                     (
-                        GameController.instance.controls.DetectKeyHeld(4) && 
+                        GameController.instance.controls.GetKey(4) && 
                         (
                             Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0
                         )
@@ -191,7 +191,7 @@ public class TileController : MonoBehaviour
                                 if(hitColliders.Length > 0)
                                 {
                                     otherType = hitColliders[0].GetComponent<Tile>().type;
-                                    if(brushType == otherType && GameController.instance.controls.DetectKeyHeld(4))
+                                    if(brushType == otherType && GameController.instance.controls.GetKey(4))
                                     {
                                         hitColliders[0].GetComponent<Tile>().RotateTile();
                                     }
@@ -214,14 +214,14 @@ public class TileController : MonoBehaviour
                     }
                 }
                 // Save snapshot
-                else if(GameController.instance.controls.DetectKeyUp(4))
+                else if(GameController.instance.controls.GetKeyUp(4))
                 {
                     TakeSnapshot();
                 }
             }
 
             // CTRL+Z
-            if(GameController.instance.controls.DetectKeyHeld(10) && GameController.instance.controls.DetectKeyPress(11))
+            if(GameController.instance.controls.GetKey(10) && GameController.instance.controls.GetKeyDown(11))
             {
                 if(snapshotIndex > 1)
                 {

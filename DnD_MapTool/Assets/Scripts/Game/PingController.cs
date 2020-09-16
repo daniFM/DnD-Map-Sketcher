@@ -11,7 +11,7 @@ public class PingController : MonoBehaviour
 
     void Update()
     {
-        if(GameController.instance.controls.DetectKeyPress(8))
+        if(GameController.instance.controls.GetKeyDown(8))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
