@@ -945,7 +945,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8061989784207479568}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -1064,8 +1064,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   toolButtons: []
-  configureButtonTooltip: {fileID: 6308088784069025675, guid: d7e41ed3885efb948bc3096d4ff06c61,
-    type: 3}
+  configureButtonTooltip: {fileID: 0}
 --- !u!1 &8061989784219410303
 GameObject:
   m_ObjectHideFlags: 0

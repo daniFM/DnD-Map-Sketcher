@@ -33,7 +33,7 @@ public class CameraMovement : MonoBehaviour
         float mouseWheel = Input.GetAxis("Mouse ScrollWheel");
 
         // Grid movement
-        if(GameController.instance.controls.GetKey(1))
+        if(GameController.instance.controls.GetKey(ControlAction.Pan))
         {
             // Multiply by rotation to make it local
             accumulator += transform.rotation * new Vector3(mouseX * sensitivityX, 0, mouseY * sensitivityY);
@@ -72,11 +72,11 @@ public class CameraMovement : MonoBehaviour
         // Camera rotation
         if(!rotating)
         {
-            if(GameController.instance.controls.GetKeyDown(2))
+            if(GameController.instance.controls.GetKeyDown(ControlAction.RotateLeft))
             {
                 StartCoroutine(DoRotation(-90));
             }
-            else if(GameController.instance.controls.GetKeyDown(3))
+            else if(GameController.instance.controls.GetKeyDown(ControlAction.RotateRight))
             {
                 StartCoroutine(DoRotation(90));
             }

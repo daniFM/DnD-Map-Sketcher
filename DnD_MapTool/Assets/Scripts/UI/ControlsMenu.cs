@@ -45,34 +45,34 @@ public class ControlsMenu : MonoBehaviour
         }
     }
 
+    // To Do
     void WriteNewKeysToMenu()
     {
-        int keyCount = 0;
-        string keyName = "";
-        foreach (Button button in toolButtons)
-        {
-            if (button.name != "ButtonBack")
-            {
-                if (keyCount == 10)
-                {
-                    keyCount++;
-                    keyName = "CTRL + " + GameController.instance.controls.keys[keyCount].GetKeyCode().ToString();
-
-                }
-                else
-                {
-                    keyName = GameController.instance.controls.keys[keyCount].GetKeyCode().ToString();
-                    keyCount++;
-                }
-                button.GetComponentInChildren<Text>().text = keyName;
-                button.onClick.AddListener(delegate ()
-                {
-                    configureButtonTooltip.SetActive(true);
-                    configureButtonTooltip.GetComponentInChildren<Text>().text = button.name + ": ";
-                    currentButton = button.name;
-                }
-                );
-            }
-        }
+        //int keyCount = 0;
+        //string keyName = "";
+        //foreach (Button button in toolButtons)
+        //{
+        //    if (button.name != "ButtonBack")
+        //    {
+        //        if (keyCount == 10)
+        //        {
+        //            keyCount++;
+        //            keyName = "CTRL + " + GameController.instance.controls.controlsConfig[keyCount].GetMainKey().ToString();
+        //        }
+        //        else
+        //        {
+        //            keyName = GameController.instance.controls.controlsConfig[keyCount].GetMainKey().ToString();
+        //            keyCount++;
+        //        }
+        //        button.GetComponentInChildren<Text>().text = keyName;
+        //        button.onClick.AddListener(delegate ()
+        //        {
+        //            configureButtonTooltip.SetActive(true);
+        //            configureButtonTooltip.GetComponentInChildren<Text>().text = button.name + ": ";
+        //            currentButton = button.name;
+        //        }
+        //        );
+        //    }
+        //}
     }
 }
