@@ -138,4 +138,9 @@ public class Chat : MonoBehaviourPun
         //SendChatMessage(sb.ToString(), false, PhotonNetwork.LocalPlayer.ActorNumber);
         photonView.RPC("SendChatMessage", RpcTarget.All, sb.ToString(), false, PhotonNetwork.LocalPlayer.ActorNumber);
     }
+
+    public void BlockShortcuts(bool block)
+    {
+        GameController.instance.controls.keysDisabled = block;
+    }
 }
