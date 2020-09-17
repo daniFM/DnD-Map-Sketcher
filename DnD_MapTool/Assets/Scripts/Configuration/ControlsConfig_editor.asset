@@ -12,29 +12,62 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 56e3b36b974e2c744a4af6a00ae4b516, type: 3}
   m_Name: ControlsConfig_editor
   m_EditorClassIdentifier: 
-  keys:
-  - code: 99
-    keyName: Shortcut
-  - code: 324
-    keyName: Pan
-  - code: 113
-    keyName: Rotate Left
-  - code: 101
-    keyName: Rotate Right
-  - code: 323
-    keyName: Paint
-  - code: 323
-    keyName: Interact
-  - code: 9
-    keyName: Switch Tool
-  - code: 32
-    keyName: Height Assist
-  - code: 112
-    keyName: Ping
-  - code: 104
-    keyName: Hide
-  - code: 306
-    keyName: CTRL
-  - code: 122
-    keyName: Undo
-  keysDisabled: 1
+  keysDisabled: 0
+  controlsConfig:
+  - action: 0
+    mainKey: 99
+    shiftKey: 0
+  - action: 1
+    mainKey: 324
+    shiftKey: 0
+  - action: 2
+    mainKey: 0
+    shiftKey: 0
+  - action: 3
+    mainKey: 0
+    shiftKey: 0
+  - action: 4
+    mainKey: 0
+    shiftKey: 0
+  - action: 5
+    mainKey: 113
+    shiftKey: 0
+  - action: 6
+    mainKey: 101
+    shiftKey: 0
+  - action: 7
+    mainKey: 325
+    shiftKey: 306
+  - action: 8
+    mainKey: 323
+    shiftKey: 0
+  - action: 9
+    mainKey: 323
+    shiftKey: 0
+  - action: 10
+    mainKey: 9
+    shiftKey: 0
+  - action: 11
+    mainKey: 323
+    shiftKey: 0
+  - action: 12
+    mainKey: 0
+    shiftKey: 0
+  - action: 13
+    mainKey: 0
+    shiftKey: 0
+  - action: 14
+    mainKey: 32
+    shiftKey: 0
+  - action: 15
+    mainKey: 112
+    shiftKey: 0
+  - action: 16
+    mainKey: 323
+    shiftKey: 0
+  - action: 17
+    mainKey: 104
+    shiftKey: 0
+  - action: 18
+    mainKey: 32
+    shiftKey: 306

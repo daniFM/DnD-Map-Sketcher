@@ -67,6 +67,8 @@ public class GameController : MonoBehaviour
         #else
             controls = webControls;
         #endif
+
+        controls.Instantiate();
     }
 
     public void SetTool(ToolType newTool, bool activate = true)

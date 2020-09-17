@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public enum ControlAction
@@ -27,17 +29,14 @@ public enum ControlAction
 [System.Serializable]
 public class Control
 {
-    [SerializeField]
-    private ControlAction action;
-    [SerializeField]
-    private KeyCode mainKey;
-    [SerializeField]
-    private KeyCode shiftKey;
+    [SerializeField] private ControlAction action;
+    [SerializeField] private KeyCode mainKey;
+    [SerializeField] private KeyCode shiftKey;  // ATM this is always pre-configured
 
-    //public Control(ControlAction code)
-    //{
-    //    this.code = code;
-    //}
+    public Control(ControlAction action)
+    {
+        this.action = action;
+    }
 
     public ControlAction GetAction()
     {
@@ -66,26 +65,27 @@ public class Control
 
     public bool GetKey()
     {
-        return shiftKey == KeyCode.None ? Input.GetKey(mainKey) : Input.GetKey(mainKey) && Input.GetKey(shiftKey);
+        return shiftKey == KeyCode.None ? Input.GetKey(mainKey) : Input.GetKey(mainKey) && Input.GetKeyDown(shiftKey);
     }
 
     public bool GetKeyUp()
     {
-        return shiftKey == KeyCode.None ? Input.GetKeyUp(mainKey) : Input.GetKeyUp(mainKey) && Input.GetKeyUp(shiftKey);
+        return shiftKey == KeyCode.None ? Input.GetKeyUp(mainKey) : Input.GetKeyUp(mainKey) && Input.GetKeyDown(shiftKey);
     }
 }
 
 [CreateAssetMenu(fileName = "ControlsConfig", menuName = "ScriptableObjects/ControlsConfig", order = 2)]
 public class ControlsScriptableObject : ScriptableObject
 {
-    [SerializeField] private Control[] controlsConfig;
-    public bool keysDisabled = false;
+    [HideInInspector] public bool keysDisabled;
 
+    [SerializeField] private Control[] controlsConfig;
     private Dictionary<ControlAction, Control> controlsLookup;
 
-    void Start()
+    public void Instantiate()
     {
         UpdateLookup();
+        keysDisabled = false;
     }
 
     public void ChangeToolKey(string keyName, KeyCode newKey)
@@ -126,4 +126,41 @@ public class ControlsScriptableObject : ScriptableObject
             controlsLookup[control.GetAction()] = control;
         }
     }
+
+    #if UNITY_EDITOR
+
+    public void GenerateEmptyControls()
+    {
+        ControlAction[] controls = Enum.GetValues(typeof(ControlAction)).Cast<ControlAction>().ToArray();
+        controlsConfig = new Control[controls.Length];
+
+        for(int i = 0; i < controls.Length; ++i)
+        {
+            controlsConfig[i] = new Control(controls[i]);
+        }
+    }
+
+    public void UpdateConfig()
+    {
+        ControlAction[] controls = Enum.GetValues(typeof(ControlAction)).Cast<ControlAction>().ToArray();
+        
+        Control[] newConfig = new Control[controls.Length];
+
+        for(int i = 0; i < controls.Length; ++i)
+        {
+            Control control = Array.Find(controlsConfig, c => c.GetAction() == controls[i]);
+            if(control != null)
+            {
+                newConfig[i] = control;
+            }
+            else
+            {
+                newConfig[i] = new Control(controls[i]);
+            }
+        }
+
+        controlsConfig = newConfig;
+    }
+
+    #endif
 }
