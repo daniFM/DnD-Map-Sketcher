@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ToggleChildrenWithKey : MonoBehaviour
 {
-    public KeyCode key;
+    public ControlAction key;
     public bool startActive = true;
 
     private bool active;
@@ -17,7 +17,7 @@ public class ToggleChildrenWithKey : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(key))
+        if(GameController.instance.controls.GetKeyDown(key))
         {
             ToggleChildren();
         }

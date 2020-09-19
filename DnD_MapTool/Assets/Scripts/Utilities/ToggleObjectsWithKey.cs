@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class ToggleObjectsWithKey : MonoBehaviour
 {
-    public KeyCode key;
+    public ControlAction key;
     public GameObject[] objects;
 
     private bool active = true;
 
     void Update()
     {
-        if(Input.GetKeyDown(key))
+        if(GameController.instance.controls.GetKeyDown(key))
         {
             ToggleObjects();
         }

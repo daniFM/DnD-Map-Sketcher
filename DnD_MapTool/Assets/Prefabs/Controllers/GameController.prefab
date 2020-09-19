@@ -65,7 +65,7 @@ MonoBehaviour:
   diceController: {fileID: 0}
   chat: {fileID: 0}
   editorControls: {fileID: 11400000, guid: 8e0185b746dbe444492524f231a3541d, type: 2}
-  webControls: {fileID: 11400000, guid: 93e9061873a6ebb41833a4b20d0003b3, type: 2}
+  webControls: {fileID: 0}
   controls: {fileID: 0}
   gameMenuController: {fileID: 0}
   outlineController: {fileID: 0}
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bee28a8bd3884e0478cb39d470ab6e97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  key: 104
+  key: 17
   objects:
   - {fileID: 0}
   - {fileID: 0}
