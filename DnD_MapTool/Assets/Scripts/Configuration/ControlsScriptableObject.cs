@@ -66,17 +66,17 @@ public class Control
 
     public bool GetKeyDown()
     {
-        return shiftKey == KeyCode.None ? Input.GetKeyDown(mainKey) : Input.GetKeyDown(mainKey) && Input.GetKeyDown(shiftKey);
+        return shiftKey == KeyCode.None ? Input.GetKeyDown(mainKey) : Input.GetKeyDown(mainKey) && Input.GetKey(shiftKey);
     }
 
     public bool GetKey()
     {
-        return shiftKey == KeyCode.None ? Input.GetKey(mainKey) : Input.GetKey(mainKey) && Input.GetKeyDown(shiftKey);
+        return shiftKey == KeyCode.None ? Input.GetKey(mainKey) : Input.GetKey(mainKey) && Input.GetKey(shiftKey);
     }
 
     public bool GetKeyUp()
     {
-        return shiftKey == KeyCode.None ? Input.GetKeyUp(mainKey) : Input.GetKeyUp(mainKey) && Input.GetKeyDown(shiftKey);
+        return shiftKey == KeyCode.None ? Input.GetKeyUp(mainKey) : Input.GetKeyUp(mainKey) && Input.GetKey(shiftKey);
     }
 }
 
