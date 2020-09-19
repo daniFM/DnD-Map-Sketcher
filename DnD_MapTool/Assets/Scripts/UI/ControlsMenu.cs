@@ -4,25 +4,36 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ControlsMenu : MonoBehaviour
+public class ControlsMenu : IManagedInstantiation
 {
     [SerializeField]
     private ControlButton[] toolButtons;
-
     [SerializeField]
     private GameObject configureButtonTooltip;
 
     private ControlButton currentButton;
     private readonly Array keyCodes = Enum.GetValues(typeof(KeyCode));
 
-    // Start is called before the first frame update
-    void Start()
+    public override void Instantiate()
     {
-        toolButtons = GetComponentsInChildren<ControlButton>();
-        WriteNewKeysToMenu();
+        if(!instantiated)
+        {
+            instantiated = true;
+            toolButtons = GetComponentsInChildren<ControlButton>();
+            WriteNewKeysToMenu();
+        }
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        if(!instantiated)
+        {
+            instantiated = true;
+            toolButtons = GetComponentsInChildren<ControlButton>();
+            WriteNewKeysToMenu();
+        }
+    }
+
     void Update()
     {
         if (configureButtonTooltip.activeInHierarchy)
@@ -34,7 +45,7 @@ public class ControlsMenu : MonoBehaviour
                     if (Input.GetKey(keyCode))
                     {
                         configureButtonTooltip.SetActive(false);
-                        GameController.instance.controls.ChangeToolKey(currentButton.controlAction, keyCode);
+                        GameController.instance.controls.RemapControl(currentButton.controlAction, keyCode);
                         WriteNewKeysToMenu();
                         break;
                     }
@@ -47,23 +58,15 @@ public class ControlsMenu : MonoBehaviour
     {
         int keyCount = 0;
         string keyName = "";
-        string[] actions = GameController.instance.controls.GetKeyNames();
 
         foreach(ControlButton button in toolButtons)
         {
             if(button.name != "ButtonBack")
             {
-                if(keyCount == 10)
-                {
-                    keyCount++;
-                    keyName = "CTRL + " + actions[keyCount];
-                }
-                else
-                {
-                    keyName = actions[keyCount];
-                    keyCount++;
-                }
-                button.GetComponentInChildren<Text>().text = keyName;
+                keyName = GameController.instance.controls.GetKeyName(button.controlAction);
+                keyCount++;
+
+                button.text.text = keyName;
                 button.button.onClick.AddListener(delegate ()
                 {
                     configureButtonTooltip.SetActive(true);

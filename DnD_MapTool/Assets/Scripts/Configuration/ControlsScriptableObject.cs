@@ -94,17 +94,10 @@ public class ControlsScriptableObject : ScriptableObject
         keysDisabled = false;
     }
 
-    public void ChangeToolKey(ControlAction action, KeyCode newKey)
+    public void RemapControl(ControlAction action, KeyCode newKey)
     {
-        foreach(Control c in controlsConfig)
-        {
-            if(c.GetKey() == controlsLookup[action].GetKey())
-            {
-                c.ReassignKey(newKey);
-            }
-        }
-
-        UpdateLookup();
+        controlsLookup[action].ReassignKey(newKey);
+        UpdateConfig();
     }
 
     public bool GetKeyDown(ControlAction arrIndex)
@@ -133,6 +126,16 @@ public class ControlsScriptableObject : ScriptableObject
         }
     }
 
+    private void UpdateConfig()
+    {
+        controlsConfig = new Control[controlsLookup.Count];
+
+        for(int i = 0; i < controlsConfig.Length; ++i)
+        {
+            controlsConfig[i] = controlsLookup.Values.ElementAt(i);
+        }
+    }
+
     public ControlAction[] GetActions()
     {
         return controlsLookup.Keys.ToArray();
@@ -155,19 +158,36 @@ public class ControlsScriptableObject : ScriptableObject
         string[] names = new string[controlsConfig.Length];
         StringBuilder sb = new StringBuilder();
 
-        for(int i = 0; i < names.Length; ++i)
+        int i = 0;
+        foreach(Control control in controlsConfig)
         {
-            sb.Clear();
-            KeyCode shiftKey = controlsConfig[i].GetShiftKey();
-            if(shiftKey != KeyCode.None)
-            {
-                sb.Append(shiftKey).Append(" + ");
-            }
-            sb.Append(controlsConfig[i].GetMainKey());
-            names[i] = sb.ToString();
+            names[i] = GetKeyName(control.GetAction(), sb);
+            i++;
         }
 
         return names;
+    }
+
+    public string GetKeyName(ControlAction action, StringBuilder sb = null)
+    {
+        if(sb == null)
+            sb = new StringBuilder();
+
+        Control control = controlsLookup[action];
+        sb.Clear();
+        KeyCode shiftKey = control.GetShiftKey();
+        if(shiftKey != KeyCode.None)
+        {
+            sb.Append(shiftKey).Append(" + ");
+        }
+        sb.Append(control.GetMainKey());
+
+        return sb.ToString();
+    }
+
+    public Control GetControl(ControlAction action)
+    {
+        return controlsLookup[action];
     }
 
     #if UNITY_EDITOR
@@ -183,7 +203,7 @@ public class ControlsScriptableObject : ScriptableObject
         }
     }
 
-    public void UpdateConfig()
+    public void UpdateConfigEditor()
     {
         ControlAction[] controls = Enum.GetValues(typeof(ControlAction)).Cast<ControlAction>().ToArray();
         

@@ -21,7 +21,7 @@ public class ControlsScriptableObjectEditor : Editor
 
         if(GUILayout.Button("Update config"))
         {
-            controls.UpdateConfig();
+            controls.UpdateConfigEditor();
         }
 
         GUILayout.EndHorizontal();

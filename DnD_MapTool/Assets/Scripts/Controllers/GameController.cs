@@ -41,6 +41,15 @@ public class GameController : MonoBehaviour
             instance = this;
         else if(instance != this)
             Destroy(gameObject);
+        
+
+        #if UNITY_EDITOR
+            controls = editorControls;
+        #else
+            controls = webControls;
+        #endif
+
+        controls.Instantiate();
     }
 
     void Start()
@@ -61,14 +70,6 @@ public class GameController : MonoBehaviour
         }
 
         tokenController.CreateToken();
-
-        #if UNITY_EDITOR
-            controls = editorControls;
-        #else
-            controls = webControls;
-        #endif
-
-        controls.Instantiate();
     }
 
     public void SetTool(ToolType newTool, bool activate = true)
