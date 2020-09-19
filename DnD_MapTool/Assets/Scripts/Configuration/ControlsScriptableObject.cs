@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 
 public enum ControlAction
@@ -48,6 +49,11 @@ public class Control
         return mainKey;
     }
 
+    public KeyCode GetShiftKey()
+    {
+        return shiftKey;
+    }
+
     public string KeyName()
     {
         return mainKey.ToString();
@@ -88,13 +94,13 @@ public class ControlsScriptableObject : ScriptableObject
         keysDisabled = false;
     }
 
-    public void ChangeToolKey(string keyName, KeyCode newKey)
+    public void ChangeToolKey(ControlAction action, KeyCode newKey)
     {
-        foreach(Control k in controlsConfig)
+        foreach(Control c in controlsConfig)
         {
-            if(k.KeyName() == keyName)
+            if(c.GetKey() == controlsLookup[action].GetKey())
             {
-                k.ReassignKey(newKey);
+                c.ReassignKey(newKey);
             }
         }
 
@@ -125,6 +131,43 @@ public class ControlsScriptableObject : ScriptableObject
             Control control = controlsConfig[i];
             controlsLookup[control.GetAction()] = control;
         }
+    }
+
+    public ControlAction[] GetActions()
+    {
+        return controlsLookup.Keys.ToArray();
+    }
+
+    public KeyCode[] GetActionKeys()
+    {
+        KeyCode[] codes = new KeyCode[controlsConfig.Length];
+
+        for(int i = 0; i < codes.Length; ++i)
+        {
+            codes[i] = controlsConfig[i].GetMainKey();
+        }
+
+        return codes;
+    }
+
+    public string[] GetKeyNames()
+    {
+        string[] names = new string[controlsConfig.Length];
+        StringBuilder sb = new StringBuilder();
+
+        for(int i = 0; i < names.Length; ++i)
+        {
+            sb.Clear();
+            KeyCode shiftKey = controlsConfig[i].GetShiftKey();
+            if(shiftKey != KeyCode.None)
+            {
+                sb.Append(shiftKey).Append(" + ");
+            }
+            sb.Append(controlsConfig[i].GetMainKey());
+            names[i] = sb.ToString();
+        }
+
+        return names;
     }
 
     #if UNITY_EDITOR

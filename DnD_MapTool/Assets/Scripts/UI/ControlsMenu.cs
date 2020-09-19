@@ -7,20 +7,18 @@ using UnityEngine.UI;
 public class ControlsMenu : MonoBehaviour
 {
     [SerializeField]
-    private Button[] toolButtons;
+    private ControlButton[] toolButtons;
 
     [SerializeField]
     private GameObject configureButtonTooltip;
 
-    private string currentButton;
-    private KeyCode currentKeyPressed;
+    private ControlButton currentButton;
     private readonly Array keyCodes = Enum.GetValues(typeof(KeyCode));
 
     // Start is called before the first frame update
     void Start()
     {
-        currentKeyPressed = KeyCode.None;
-        toolButtons = GetComponentsInChildren<Button>();
+        toolButtons = GetComponentsInChildren<ControlButton>();
         WriteNewKeysToMenu();
     }
 
@@ -36,7 +34,7 @@ public class ControlsMenu : MonoBehaviour
                     if (Input.GetKey(keyCode))
                     {
                         configureButtonTooltip.SetActive(false);
-                        GameController.instance.controls.ChangeToolKey(currentButton, keyCode);
+                        GameController.instance.controls.ChangeToolKey(currentButton.controlAction, keyCode);
                         WriteNewKeysToMenu();
                         break;
                     }
@@ -45,34 +43,35 @@ public class ControlsMenu : MonoBehaviour
         }
     }
 
-    // To Do
     void WriteNewKeysToMenu()
     {
-        //int keyCount = 0;
-        //string keyName = "";
-        //foreach (Button button in toolButtons)
-        //{
-        //    if (button.name != "ButtonBack")
-        //    {
-        //        if (keyCount == 10)
-        //        {
-        //            keyCount++;
-        //            keyName = "CTRL + " + GameController.instance.controls.controlsConfig[keyCount].GetMainKey().ToString();
-        //        }
-        //        else
-        //        {
-        //            keyName = GameController.instance.controls.controlsConfig[keyCount].GetMainKey().ToString();
-        //            keyCount++;
-        //        }
-        //        button.GetComponentInChildren<Text>().text = keyName;
-        //        button.onClick.AddListener(delegate ()
-        //        {
-        //            configureButtonTooltip.SetActive(true);
-        //            configureButtonTooltip.GetComponentInChildren<Text>().text = button.name + ": ";
-        //            currentButton = button.name;
-        //        }
-        //        );
-        //    }
-        //}
+        int keyCount = 0;
+        string keyName = "";
+        string[] actions = GameController.instance.controls.GetKeyNames();
+
+        foreach(ControlButton button in toolButtons)
+        {
+            if(button.name != "ButtonBack")
+            {
+                if(keyCount == 10)
+                {
+                    keyCount++;
+                    keyName = "CTRL + " + actions[keyCount];
+                }
+                else
+                {
+                    keyName = actions[keyCount];
+                    keyCount++;
+                }
+                button.GetComponentInChildren<Text>().text = keyName;
+                button.button.onClick.AddListener(delegate ()
+                {
+                    configureButtonTooltip.SetActive(true);
+                    configureButtonTooltip.GetComponentInChildren<Text>().text = button.name + ": ";
+                    currentButton = button;
+                }
+                );
+            }
+        }
     }
 }
