@@ -64,8 +64,6 @@ MonoBehaviour:
   mFilter: {fileID: 6853940227026473932}
   renderer: {fileID: 7883786517515087690}
   collider: {fileID: 994744679244623833}
-  subTilePrefab: {fileID: 7135424826947586433, guid: fbf6d3f1712ba5b40849a69d2a8052b4,
-    type: 3}
   doAnimation: 1
   animationTime: 0.5
   easeType: 24

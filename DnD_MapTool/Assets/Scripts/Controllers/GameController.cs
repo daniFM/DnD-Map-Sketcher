@@ -20,9 +20,11 @@ public class GameController : MonoBehaviour
     [ColorUsage(false, true)] public Color highlightColor;
 
     public TokenController tokenController;
+    public DiceController diceController;
+    public Chat chat;
 
     [SerializeField] private ControlsScriptableObject editorControls;
-    [SerializeField] private ControlsScriptableObject webControls;
+    [SerializeField] private ControlsScriptableObject buildControls;
     [HideInInspector] public ControlsScriptableObject controls;
 
     [SerializeField] private GameMenuController gameMenuController;
@@ -39,6 +41,15 @@ public class GameController : MonoBehaviour
             instance = this;
         else if(instance != this)
             Destroy(gameObject);
+
+
+        //#if UNITY_EDITOR
+        //    controls = editorControls;
+        //#else
+        //    controls = buildControls;
+        //#endif
+        controls = buildControls;
+        controls.Instantiate();
     }
 
     void Start()
@@ -59,12 +70,6 @@ public class GameController : MonoBehaviour
         }
 
         tokenController.CreateToken();
-
-        #if UNITY_EDITOR
-            controls = editorControls;
-        #else
-            controls = webControls;
-        #endif
     }
 
     public void SetTool(ToolType newTool, bool activate = true)

@@ -11,7 +11,7 @@ public class PingController : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.P))
+        if(GameController.instance.controls.GetKeyDown(ControlAction.Ping))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -22,7 +22,8 @@ public class PingController : MonoBehaviour
             }
             else
             {
-                GameController.instance.Tooltip("Try hovering your mouse over the map and pressing " + GameController.instance.controls.keyPing.ToString() + " to ping in that position");
+                // To Do
+                //GameController.instance.Tooltip("Try hovering your mouse over the map and pressing " + GameController.instance.controls.controlsConfig[8].GetMainKey() + " to ping in that position");
             }
         }
     }

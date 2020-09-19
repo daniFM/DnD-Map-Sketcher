@@ -69,6 +69,7 @@ public class TileController : MonoBehaviour
     [SerializeField] [ReadOnly] private int snapshotIndex;
     [SerializeField] private TileData[] tileSnapshots;
 
+    [SerializeField]
     public static TileController instance = null;
 
     void Awake()
@@ -156,9 +157,9 @@ public class TileController : MonoBehaviour
                 }
 
                 // Tile placing and erasing
-                if(Input.GetMouseButtonDown(0) || 
+                if(GameController.instance.controls.GetKey(ControlAction.Paint) || 
                     (
-                        Input.GetMouseButton(0) && 
+                        GameController.instance.controls.GetKey(ControlAction.Paint) && 
                         (
                             Input.GetAxis("Mouse X") != 0 || Input.GetAxis("Mouse Y") != 0
                         )
@@ -190,7 +191,7 @@ public class TileController : MonoBehaviour
                                 if(hitColliders.Length > 0)
                                 {
                                     otherType = hitColliders[0].GetComponent<Tile>().type;
-                                    if(brushType == otherType && Input.GetMouseButtonDown(0))
+                                    if(brushType == otherType && GameController.instance.controls.GetKey(ControlAction.Paint))
                                     {
                                         hitColliders[0].GetComponent<Tile>().RotateTile();
                                     }
@@ -213,14 +214,14 @@ public class TileController : MonoBehaviour
                     }
                 }
                 // Save snapshot
-                else if(Input.GetMouseButtonUp(0))
+                else if(GameController.instance.controls.GetKeyUp(ControlAction.Paint))
                 {
                     TakeSnapshot();
                 }
             }
 
             // CTRL+Z
-            if(Input.GetKey(GameController.instance.controls.keyCTRL) && Input.GetKeyDown(GameController.instance.controls.keyZ))
+            if(GameController.instance.controls.GetKeyDown(ControlAction.Undo))
             {
                 if(snapshotIndex > 1)
                 {
