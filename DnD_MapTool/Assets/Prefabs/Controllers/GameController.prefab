@@ -65,7 +65,7 @@ MonoBehaviour:
   diceController: {fileID: 0}
   chat: {fileID: 0}
   editorControls: {fileID: 11400000, guid: 8e0185b746dbe444492524f231a3541d, type: 2}
-  webControls: {fileID: 0}
+  buildControls: {fileID: 11400000, guid: f6ae4101ac1f7c0498779a029e6ae9f7, type: 2}
   controls: {fileID: 0}
   gameMenuController: {fileID: 0}
   outlineController: {fileID: 0}

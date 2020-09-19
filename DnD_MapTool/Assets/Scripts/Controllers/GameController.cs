@@ -24,7 +24,7 @@ public class GameController : MonoBehaviour
     public Chat chat;
 
     [SerializeField] private ControlsScriptableObject editorControls;
-    [SerializeField] private ControlsScriptableObject webControls;
+    [SerializeField] private ControlsScriptableObject buildControls;
     [HideInInspector] public ControlsScriptableObject controls;
 
     [SerializeField] private GameMenuController gameMenuController;
@@ -41,14 +41,14 @@ public class GameController : MonoBehaviour
             instance = this;
         else if(instance != this)
             Destroy(gameObject);
-        
 
-        #if UNITY_EDITOR
-            controls = editorControls;
-        #else
-            controls = webControls;
-        #endif
 
+        //#if UNITY_EDITOR
+        //    controls = editorControls;
+        //#else
+        //    controls = buildControls;
+        //#endif
+        controls = buildControls;
         controls.Instantiate();
     }
 
