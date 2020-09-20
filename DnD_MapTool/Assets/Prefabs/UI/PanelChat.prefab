@@ -1953,6 +1953,7 @@ GameObject:
   - component: {fileID: 5984692070076662369}
   - component: {fileID: 5984692070076662429}
   - component: {fileID: 5984692070076662428}
+  - component: {fileID: 639867822980414119}
   - component: {fileID: 5984692070076662371}
   - component: {fileID: 903521903}
   m_Layer: 5
@@ -1983,10 +1984,10 @@ RectTransform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 0}
-  m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -150.70001, y: 186}
-  m_SizeDelta: {x: 256.16122, y: 351.9124}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 149, y: 277}
+  m_SizeDelta: {x: 256.16125, y: 351.9124}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5984692070076662429
 CanvasRenderer:
@@ -2013,6 +2014,19 @@ MonoBehaviour:
   chatMessagesContainer: {fileID: 5984692069620965395}
   diceNumber: {fileID: 872262751628135744}
   diceType: {fileID: 7519073568076051}
+--- !u!114 &639867822980414119
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5984692070076662368}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fe43e76fd5596c4eb8cf4d263240b86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivity: 0.15
 --- !u!114 &5984692070076662371
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2371,7 +2385,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 5984692070846144238}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.9999999
+  m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
