@@ -6,6 +6,7 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private Text roomName;
+    [SerializeField] private PopupYesNo popup;
 
     void Start()
     {
@@ -14,6 +15,7 @@ public class PauseMenu : MonoBehaviour
 
     public void ExitRoom()
     {
-        NetworkManager.instance.ExitRoom();
+        //NetworkManager.instance.ExitRoom();
+        popup.PopupQuestion("Are you sure you want to exit? Unsaved maps will be lost", NetworkManager.instance.ExitRoom, null);
     }
 }
