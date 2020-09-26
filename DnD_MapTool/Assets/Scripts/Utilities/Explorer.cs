@@ -77,10 +77,7 @@ public class Explorer : MonoBehaviour
     // Brwoser plugin should be called in OnPointerDown. (this needs IPointerDownHandler implementation)
     public void Save(byte[] bytes, string extension)
     {
-        string name = JSONSaver.name;
-        if(string.IsNullOrEmpty(name))
-            name = "untitled";
-
+        name = NetworkManager.instance.GetCurrentRoomName();
         browserPanel.SetActive(true);
         DownloadFile(gameObject.name, "OnFileDownload", name + "." + extension, bytes, bytes.Length);
     }
