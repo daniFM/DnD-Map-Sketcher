@@ -29,6 +29,7 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
     [SerializeField] private float overshoot = 1.70158f;
 
     private TilePlacing placing;
+    private int rotation;
     private float[] rotations = { 0, 90, 180, 270 };
 
     public void SetTile(TileType type)
@@ -40,7 +41,13 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
         // Tiles with random-rotate
         if(type == TileType.column || type == TileType.groundHigh || type == TileType.groundLow || type == TileType.groundMH || type == TileType.groundML || type == TileType.orb)
         {
-            transform.Rotate(0, rotations[Random.Range(0, 4)], 0); // Only for center tiles
+            rotation = Random.Range(0, 4);
+            transform.Rotate(0, rotations[rotation], 0); // Only for center tiles
+        }
+        // Tiles with auto-rotate
+        else if(type == TileType.wall)
+        {
+            AutoRotate();
         }
 
         mFilter.mesh = TileController.instance.GetTileMesh(type, placing);
@@ -73,5 +80,17 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
     public void RotateTile()
     {
         transform.Rotate(Vector3.up, 90);
+    }
+
+    private void AutoRotate()
+    {
+        Collider[] adjacents = Physics.OverlapSphere(transform.position, 1, 1 << gameObject.layer);
+        Debug.Log("Found " + adjacents.Length + " adjacents: " + adjacents);
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawSphere(transform.position, 1);
     }
 }

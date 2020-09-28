@@ -11,6 +11,7 @@ public enum TileType
     groundML    = 2,
     groundMH    = 3,
     groundHigh  = 4,
+    wall        = 23,
     stair1      = 5,
     column      = 9,
     eraser      = 10,
@@ -24,7 +25,8 @@ public enum TileType
     chest2      = 18,
     orb         = 19,
     trap1on     = 20,
-    trap1off    = 21
+    trap1off    = 21,
+    chair       = 22
 }
 public enum TilePlacing { center, side, corner }
 

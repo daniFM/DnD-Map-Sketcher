@@ -802,7 +802,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2025959197464072307}
   - component: {fileID: 2025959197464072332}
-  - component: {fileID: 2025959197464072333}
   m_Layer: 8
   m_Name: Collider
   m_TagString: Untagged
@@ -838,19 +837,6 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!65 &2025959197464072333
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2025959197464072306}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 0
-  serializedVersion: 2
-  m_Size: {x: 0.95, y: 0.95, z: 0.02}
-  m_Center: {x: 0, y: 0, z: 0.01}
 --- !u!1 &2025959197471925863
 GameObject:
   m_ObjectHideFlags: 0
@@ -939,6 +925,10 @@ MonoBehaviour:
     - {fileID: 6249090603567425705, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -1886524202609254737, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -818305372806316911, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
+    sides: []
+    corners: []
+  - type: 23
+    centers: []
     sides: []
     corners: []
   - type: 5
