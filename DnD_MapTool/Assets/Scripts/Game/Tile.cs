@@ -47,6 +47,12 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
         // Tiles with auto-rotate
         else if(type == TileType.wall)
         {
+            //debug
+            GameObject wall = GameObject.CreatePrimitive(PrimitiveType.Cube);
+            wall.transform.parent = transform;
+            wall.transform.localPosition = new Vector3(0.4f, 0.5f, 0);
+            wall.transform.localScale = new Vector3(0.1f, 1, 1);
+            //debug
             AutoRotate();
         }
 
@@ -80,17 +86,54 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
     public void RotateTile()
     {
         transform.Rotate(Vector3.up, 90);
+
+        rotation++;
+        if(rotation >= 4)
+            rotation = 0;
+    }
+
+    private int GetRotation()
+    {
+        return rotation;
     }
 
     private void AutoRotate()
     {
-        Collider[] adjacents = Physics.OverlapSphere(transform.position, 1, 1 << gameObject.layer);
-        Debug.Log("Found " + adjacents.Length + " adjacents: " + adjacents);
+        //Collider[] adjacents = Physics.OverlapSphere(transform.position, 1, 1 << gameObject.layer);
+        Collider[] adjacents = Physics.OverlapBox(transform.position + new Vector3(0, 0.5f, 0), new Vector3(0.4f, 0.2f, 0.4f), Quaternion.Euler(0, 45, 0), 1 << gameObject.layer);
+        Debug.Log("Found " + (adjacents.Length - 1) + " adjacents: " + adjacents);
+
+        foreach (Collider coll in adjacents)
+        {
+            Tile tile = coll.GetComponent<Tile>();
+            if(coll != collider && tile.type == TileType.wall)
+            {
+                // Safe check if it's in the same X
+                if (Mathf.Abs(coll.transform.position.x - transform.position.x)> 0.1f)
+                {
+                    if(tile.rotation == rotation)
+                    {
+                        Debug.Log("Same rotation... rotating?");
+                        transform.eulerAngles = new Vector3(0, rotations[rotation], 0);
+                    }
+                }
+                // So this is the same Z
+                else
+                {
+                    if(tile.rotation == rotation)
+                    {
+                        Debug.Log("Different rotation... rotating?");
+                        rotation = tile.rotation;
+                        transform.eulerAngles = new Vector3(0, rotations[rotation], 0);
+                    }
+                }
+            }
+        }
     }
 
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.white;
-        Gizmos.DrawSphere(transform.position, 1);
-    }
+    //private void OnDrawGizmosSelected()
+    //{
+    //    Gizmos.color = Color.white;
+    //    Gizmos.DrawSphere(transform.position, 1);
+    //}
 }
