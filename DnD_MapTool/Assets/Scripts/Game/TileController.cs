@@ -191,7 +191,7 @@ public class TileController : MonoBehaviour
                                 if(hitColliders.Length > 0)
                                 {
                                     otherType = hitColliders[0].GetComponent<Tile>().type;
-                                    if(brushType == otherType && GameController.instance.controls.GetKey(ControlAction.Paint))
+                                    if(brushType == otherType && GameController.instance.controls.GetKeyDown(ControlAction.Paint))
                                     {
                                         hitColliders[0].GetComponent<Tile>().RotateTile();
                                     }
