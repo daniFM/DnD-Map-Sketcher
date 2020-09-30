@@ -52,15 +52,19 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
             wall.transform.parent = transform;
             wall.transform.localPosition = new Vector3(0.4f, 0.5f, 0);
             wall.transform.localScale = new Vector3(0.1f, 1, 1);
+            GetComponentInChildren<Renderer>().enabled = false;
             //debug
             AutoRotate();
         }
 
         mFilter.mesh = TileController.instance.GetTileMesh(type, placing);
 
-        Vector3 size = renderer.bounds.size;
-        collider.center = new Vector3(0, size.y/2, 0);
-        collider.size = size;
+        if(type != TileType.wall)
+        {
+            Vector3 size = renderer.bounds.size;
+            collider.center = new Vector3(0, size.y / 2, 0);
+            collider.size = size;
+        }
 
         if(doAnimation)
         {
@@ -92,6 +96,15 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
             rotation = 0;
     }
 
+    private void RotateTile(int rotation)
+    {
+        if(rotation >= 4)
+            rotation = 0;
+        this.rotation = rotation;
+
+        transform.eulerAngles = new Vector3(0, rotations[rotation], 0);
+    }
+
     private int GetRotation()
     {
         return rotation;
@@ -109,22 +122,26 @@ public class Tile : MonoBehaviourPun, IPunInstantiateMagicCallback
             if(coll != collider && tile.type == TileType.wall)
             {
                 // Safe check if it's in the same X
-                if (Mathf.Abs(coll.transform.position.x - transform.position.x)> 0.1f)
+                if (Mathf.Abs(coll.transform.position.x - transform.position.x) > 0.1f)
                 {
-                    if(tile.rotation == rotation)
+                    if(tile.rotation == 1)
                     {
-                        Debug.Log("Same rotation... rotating?");
-                        transform.eulerAngles = new Vector3(0, rotations[rotation], 0);
+                        Debug.Log("Rotating because 1");
+                        RotateTile(1);
+                    }
+                    else if(tile.rotation == 3)
+                    {
+                        Debug.Log("Rotating because 3");
+                        RotateTile(3);
                     }
                 }
-                // So this is the same Z
+                // If it's in the same Z
                 else
                 {
-                    if(tile.rotation == rotation)
+                    if(tile.rotation == 2)
                     {
-                        Debug.Log("Different rotation... rotating?");
-                        rotation = tile.rotation;
-                        transform.eulerAngles = new Vector3(0, rotations[rotation], 0);
+                        Debug.Log("Rotating because 2");
+                        RotateTile(2);
                     }
                 }
             }
