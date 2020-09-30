@@ -7,6 +7,6 @@ public class TileGroup
 {
     public TileType type;
     public Mesh[] centers;
-    public Mesh[] sides;
-    public Mesh[] corners;
+    //public Mesh[] sides;
+    //public Mesh[] corners;
 }

@@ -904,40 +904,29 @@ MonoBehaviour:
     - {fileID: -638796332247715043, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -2038144382271770770, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: 1090492410693768650, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
-    sides: []
-    corners: []
   - type: 2
     centers:
     - {fileID: 282376633424467057, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -6466987643860485750, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -6300207038993853419, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
-    sides: []
-    corners: []
   - type: 3
     centers:
     - {fileID: -4788666089401622877, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -2092267775658219684, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: 5726790452586884886, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
-    sides: []
-    corners: []
   - type: 4
     centers:
     - {fileID: 6249090603567425705, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -1886524202609254737, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -818305372806316911, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
-    sides: []
-    corners: []
   - type: 23
-    centers: []
-    sides: []
-    corners: []
+    centers:
+    - {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
   - type: 5
     centers:
     - {fileID: -4294042315681436398, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -236010108720106251, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: 5901325945587238116, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
-    sides: []
-    corners: []
   - type: 9
     centers:
     - {fileID: 7096193561684467862, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
@@ -945,44 +934,31 @@ MonoBehaviour:
     - {fileID: -2676669663529159939, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -2676669663529159939, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
     - {fileID: -8459139033302336692, guid: 6223cfb33717e7c4d8077d29659515d9, type: 3}
-    sides: []
-    corners: []
   - type: 11
     centers:
     - {fileID: -6151747068533630916, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
-    sides: []
-    corners: []
   - type: 12
     centers:
     - {fileID: -8740340137559968829, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
-    sides: []
-    corners: []
   - type: 13
     centers:
     - {fileID: 7357924614554721019, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
-    sides: []
-    corners: []
   - type: 17
     centers:
     - {fileID: -5708381156788539481, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
-    sides: []
-    corners: []
   - type: 19
     centers:
     - {fileID: -1839788162292039599, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
     - {fileID: -3905872605834275575, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
-    sides: []
-    corners: []
   - type: 20
     centers:
     - {fileID: 7338464792754768691, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
-    sides: []
-    corners: []
   - type: 21
     centers:
     - {fileID: 707640791719354886, guid: 77682a304eeaa0e4791b3e6e4b454666, type: 3}
-    sides: []
-    corners: []
+  - type: 22
+    centers:
+    - {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
   createFloor: 1
   floorX: 10
   floorZ: 10

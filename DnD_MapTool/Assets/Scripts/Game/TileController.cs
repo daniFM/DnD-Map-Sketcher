@@ -311,12 +311,12 @@ public class TileController : MonoBehaviour
             {
                 switch(placing)
                 {
-                    case TilePlacing.side:
-                        return group.sides[Random.Range(0, group.sides.Length)];
+                    //case TilePlacing.side:
+                    //    return group.sides[Random.Range(0, group.sides.Length)];
                     case TilePlacing.center:
                         return group.centers[Random.Range(0, group.centers.Length)];
-                    case TilePlacing.corner:
-                        return group.corners[Random.Range(0, group.corners.Length)];
+                    //case TilePlacing.corner:
+                    //    return group.corners[Random.Range(0, group.corners.Length)];
                 }
             }
         }
