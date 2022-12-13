@@ -1,4 +1,7 @@
-﻿//using UnityEngine;
+// Copyright (c) Daniel Fernández 2022
+
+
+//using UnityEngine;
 //using UnityEditor;
 //using UnityEditor.SceneManagement;
 

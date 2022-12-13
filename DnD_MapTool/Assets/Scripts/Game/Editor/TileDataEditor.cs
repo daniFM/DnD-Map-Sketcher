@@ -1,4 +1,7 @@
-﻿using System.Collections;
+// Copyright (c) Daniel Fernández 2022
+
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
