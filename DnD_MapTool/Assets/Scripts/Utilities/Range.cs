@@ -1,4 +1,6 @@
-﻿using System;
+// Copyright (c) 2022 Daniel Fernández Marqués
+
+using System;
 
 public abstract class Range<T>
 {

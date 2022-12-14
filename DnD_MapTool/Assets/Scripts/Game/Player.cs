@@ -1,4 +1,6 @@
-﻿using Photon.Pun;
+// Copyright (c) 2022 Daniel Fernández Marqués
+
+using Photon.Pun;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

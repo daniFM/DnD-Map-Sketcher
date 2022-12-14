@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+// Copyright (c) 2022 Daniel Fernández Marqués
+
+using UnityEngine;
 using UnityEditor;
 
 public class RangeDrawer: PropertyDrawer
