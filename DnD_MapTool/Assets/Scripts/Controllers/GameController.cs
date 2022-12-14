@@ -1,5 +1,4 @@
-// Copyright (c) Daniel Fernández 2022
-
+// Copyright (c) 2022 Daniel Fernández Marqués
 
 using System;
 using System.Collections;
