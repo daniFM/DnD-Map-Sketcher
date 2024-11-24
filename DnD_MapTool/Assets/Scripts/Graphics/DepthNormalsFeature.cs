@@ -10,7 +10,7 @@ public class DepthNormalsFeature: ScriptableRendererFeature
     class DepthNormalsPass: ScriptableRenderPass
     {
         int kDepthBufferBits = 32;
-        private RenderTargetHandle depthAttachmentHandle { get; set; }
+        private RTHandle depthAttachmentHandle { get; set; }
         internal RenderTextureDescriptor descriptor { get; private set; }
 
         private Material depthNormalsMaterial = null;
@@ -24,7 +24,7 @@ public class DepthNormalsFeature: ScriptableRendererFeature
             depthNormalsMaterial = material;
         }
 
-        public void Setup(RenderTextureDescriptor baseDescriptor, RenderTargetHandle depthAttachmentHandle)
+        public void Setup(RenderTextureDescriptor baseDescriptor, RTHandle depthAttachmentHandle)
         {
             this.depthAttachmentHandle = depthAttachmentHandle;
             baseDescriptor.colorFormat = RenderTextureFormat.ARGB32;
@@ -86,16 +86,16 @@ public class DepthNormalsFeature: ScriptableRendererFeature
         /// Cleanup any allocated resources that were created during the execution of this render pass.
         public override void FrameCleanup(CommandBuffer cmd)
         {
-            if(depthAttachmentHandle != RenderTargetHandle.CameraTarget)
+            if(depthAttachmentHandle != RTHandle.CameraTarget)
             {
                 cmd.ReleaseTemporaryRT(depthAttachmentHandle.id);
-                depthAttachmentHandle = RenderTargetHandle.CameraTarget;
+                depthAttachmentHandle = RTHandle.CameraTarget;
             }
         }
     }
 
     DepthNormalsPass depthNormalsPass;
-    RenderTargetHandle depthNormalsTexture;
+    RTHandle depthNormalsTexture;
     Material depthNormalsMaterial;
 
     public override void Create()

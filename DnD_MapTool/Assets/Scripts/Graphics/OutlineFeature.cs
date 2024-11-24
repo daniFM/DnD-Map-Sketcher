@@ -1,6 +1,7 @@
 // Copyright (c) 2022 Daniel Fernández Marqués
 // Licensed under the GNU General Public License (GPL) version 3. See the LICENSE file for more details.
 
+using System.CodeDom;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
@@ -10,11 +11,11 @@ public class OutlineFeature: ScriptableRendererFeature
     class OutlinePass: ScriptableRenderPass
     {
         private RenderTargetIdentifier source { get; set; }
-        private RenderTargetHandle destination { get; set; }
+        private RTHandle destination { get; set; }
         public Material outlineMaterial = null;
-        RenderTargetHandle temporaryColorTexture;
+        RTHandle temporaryColorTexture;
 
-        public void Setup(RenderTargetIdentifier source, RenderTargetHandle destination)
+        public void Setup(RenderTargetIdentifier source, RTHandle destination)
         {
             this.source = source;
             this.destination = destination;
@@ -48,15 +49,15 @@ public class OutlineFeature: ScriptableRendererFeature
             RenderTextureDescriptor opaqueDescriptor = renderingData.cameraData.cameraTargetDescriptor;
             opaqueDescriptor.depthBufferBits = 0;
 
-            if(destination == RenderTargetHandle.CameraTarget)
+            if(destination == RTHandle)
             {
-                cmd.GetTemporaryRT(temporaryColorTexture.id, opaqueDescriptor, FilterMode.Point);
-                Blit(cmd, source, temporaryColorTexture.Identifier(), outlineMaterial, 0);
-                Blit(cmd, temporaryColorTexture.Identifier(), source);
+                cmd.GetTemporaryRT(Shader.PropertyToID(temporaryColorTexture.name), opaqueDescriptor, FilterMode.Point);
+                cmd.Blit(source, temporaryColorTexture, outlineMaterial, 0);
+                cmd.Blit(temporaryColorTexture, source);
 
             }
             else
-                Blit(cmd, source, destination.Identifier(), outlineMaterial, 0);
+                cmd.Blit(source, destination, outlineMaterial, 0);
 
             context.ExecuteCommandBuffer(cmd);
             CommandBufferPool.Release(cmd);
@@ -66,7 +67,7 @@ public class OutlineFeature: ScriptableRendererFeature
         public override void FrameCleanup(CommandBuffer cmd)
         {
 
-            if(destination == RenderTargetHandle.CameraTarget)
+            if(destination == RTHandles.came)
                 cmd.ReleaseTemporaryRT(temporaryColorTexture.id);
         }
     }
@@ -79,13 +80,13 @@ public class OutlineFeature: ScriptableRendererFeature
 
     public OutlineSettings settings = new OutlineSettings();
     OutlinePass outlinePass;
-    RenderTargetHandle outlineTexture;
+    RTHandle outlineTexture;
 
     public override void Create()
     {
         outlinePass = new OutlinePass(settings.outlineMaterial);
         outlinePass.renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
-        outlineTexture.Init("_OutlineTexture");
+        outlineTexture = RTHandles.Alloc("_OutlineTexture");
     }
 
     // Here you can inject one or multiple render passes in the renderer.
@@ -97,7 +98,7 @@ public class OutlineFeature: ScriptableRendererFeature
             Debug.LogWarningFormat("Missing Outline Material");
             return;
         }
-        outlinePass.Setup(renderer.cameraColorTarget, RenderTargetHandle.CameraTarget);
+        outlinePass.Setup(renderer.cameraColorTarget, RTHandle.CameraTarget);
         renderer.EnqueuePass(outlinePass);
     }
 }
