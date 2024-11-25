@@ -13,7 +13,7 @@ public class OutlineFeature: ScriptableRendererFeature
         private RenderTargetIdentifier source { get; set; }
         private RTHandle destination { get; set; }
         public Material outlineMaterial = null;
-        RTHandle temporaryColorTexture;
+        public RTHandle temporaryColorTexture;
 
         public void Setup(RenderTargetIdentifier source, RTHandle destination)
         {
@@ -35,7 +35,14 @@ public class OutlineFeature: ScriptableRendererFeature
         // The render pipeline will ensure target setup and clearing happens in an performance manner.
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
         {
+            // Create Temp Texture to hold Camera Color
+            temporaryColorTexture = RTHandles.Alloc("_TemporaryColorTexture");
 
+            // (doesn't need depthBits so setting this to 0, so the RT might use less memory I guess?)
+            RenderTextureDescriptor tempRTD = cameraTextureDescriptor;
+            tempRTD.depthBufferBits = 0;
+
+            cmd.GetTemporaryRT(Shader.PropertyToID(temporaryColorTexture.name), tempRTD, FilterMode.Point);
         }
 
         // Here you can implement the rendering logic.
@@ -49,11 +56,11 @@ public class OutlineFeature: ScriptableRendererFeature
             RenderTextureDescriptor opaqueDescriptor = renderingData.cameraData.cameraTargetDescriptor;
             opaqueDescriptor.depthBufferBits = 0;
 
-            if(destination == RTHandle)
+            if(destination == ScriptableRenderPass.k_CameraTarget)
             {
                 cmd.GetTemporaryRT(Shader.PropertyToID(temporaryColorTexture.name), opaqueDescriptor, FilterMode.Point);
                 cmd.Blit(source, temporaryColorTexture, outlineMaterial, 0);
-                cmd.Blit(temporaryColorTexture, source);
+                // cmd.Blit(temporaryColorTexture, source);
 
             }
             else
@@ -67,8 +74,8 @@ public class OutlineFeature: ScriptableRendererFeature
         public override void FrameCleanup(CommandBuffer cmd)
         {
 
-            if(destination == RTHandles.came)
-                cmd.ReleaseTemporaryRT(temporaryColorTexture.id);
+            if(destination == ScriptableRenderPass.k_CameraTarget)
+                cmd.ReleaseTemporaryRT(Shader.PropertyToID(temporaryColorTexture.name));
         }
     }
 
@@ -98,7 +105,7 @@ public class OutlineFeature: ScriptableRendererFeature
             Debug.LogWarningFormat("Missing Outline Material");
             return;
         }
-        outlinePass.Setup(renderer.cameraColorTarget, RTHandle.CameraTarget);
+        outlinePass.Setup(renderer.cameraColorTargetHandle, ScriptableRenderPass.k_CameraTarget);
         renderer.EnqueuePass(outlinePass);
     }
 }

@@ -39,8 +39,8 @@ public class DepthNormalsFeature: ScriptableRendererFeature
         // The render pipeline will ensure target setup and clearing happens in an performance manner.
         public override void Configure(CommandBuffer cmd, RenderTextureDescriptor cameraTextureDescriptor)
         {
-            cmd.GetTemporaryRT(depthAttachmentHandle.id, descriptor, FilterMode.Point);
-            ConfigureTarget(depthAttachmentHandle.Identifier());
+            cmd.GetTemporaryRT(Shader.PropertyToID(depthAttachmentHandle.name), descriptor, FilterMode.Point);
+            ConfigureTarget(depthAttachmentHandle);
             ConfigureClear(ClearFlag.All, Color.black);
         }
 
@@ -66,8 +66,8 @@ public class DepthNormalsFeature: ScriptableRendererFeature
 
                 ref CameraData cameraData = ref renderingData.cameraData;
                 Camera camera = cameraData.camera;
-                if(cameraData.isStereoEnabled)
-                    context.StartMultiEye(camera);
+                // if(cameraData.isStereoEnabled)
+                //     context.StartMultiEye(camera);
 
 
                 drawSettings.overrideMaterial = depthNormalsMaterial;
@@ -76,7 +76,7 @@ public class DepthNormalsFeature: ScriptableRendererFeature
                 context.DrawRenderers(renderingData.cullResults, ref drawSettings,
                     ref m_FilteringSettings);
 
-                cmd.SetGlobalTexture("_CameraDepthNormalsTexture", depthAttachmentHandle.id);
+                cmd.SetGlobalTexture("_CameraDepthNormalsTexture", Shader.PropertyToID(depthAttachmentHandle.name));
             }
 
             context.ExecuteCommandBuffer(cmd);
@@ -86,10 +86,10 @@ public class DepthNormalsFeature: ScriptableRendererFeature
         /// Cleanup any allocated resources that were created during the execution of this render pass.
         public override void FrameCleanup(CommandBuffer cmd)
         {
-            if(depthAttachmentHandle != RTHandle.CameraTarget)
+            if(depthAttachmentHandle != k_CameraTarget)
             {
-                cmd.ReleaseTemporaryRT(depthAttachmentHandle.id);
-                depthAttachmentHandle = RTHandle.CameraTarget;
+                cmd.ReleaseTemporaryRT(Shader.PropertyToID(depthAttachmentHandle.name));
+                depthAttachmentHandle = k_CameraTarget;
             }
         }
     }
@@ -103,7 +103,7 @@ public class DepthNormalsFeature: ScriptableRendererFeature
         depthNormalsMaterial = CoreUtils.CreateEngineMaterial("Hidden/Internal-DepthNormalsTexture");
         depthNormalsPass = new DepthNormalsPass(RenderQueueRange.opaque, -1, depthNormalsMaterial);
         depthNormalsPass.renderPassEvent = RenderPassEvent.AfterRenderingPrePasses;
-        depthNormalsTexture.Init("_CameraDepthNormalsTexture");
+        depthNormalsTexture = RTHandles.Alloc("_CameraDepthNormalsTexture");
     }
 
     // Here you can inject one or multiple render passes in the renderer.
