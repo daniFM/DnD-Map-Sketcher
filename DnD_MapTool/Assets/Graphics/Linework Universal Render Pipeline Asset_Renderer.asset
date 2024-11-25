@@ -68,10 +68,10 @@ MonoBehaviour:
   m_Name: EdgeDetectionNormals
   m_EditorClassIdentifier: 
   m_Active: 1
-  settings: {fileID: 0}
+  settings: {fileID: 11400000, guid: de5865ff14106a248bf81b5cb293ac4c, type: 2}
   shaders:
-    section: {fileID: 0}
-    outline: {fileID: 0}
+    section: {fileID: 4800000, guid: 555b69c4bab64af2aab316a4335ad6be, type: 3}
+    outline: {fileID: 4800000, guid: 0049e25744c864ee4916fc340cf7957f, type: 3}
 --- !u!114 &7357344981012849137
 MonoBehaviour:
   m_ObjectHideFlags: 0
