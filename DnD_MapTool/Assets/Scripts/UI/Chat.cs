@@ -10,7 +10,7 @@ using Photon.Pun;
 
 public class Chat : MonoBehaviourPun
 {
-    [SerializeField] private Text chatMessageTextPrefab;
+    [SerializeField] private GameObject chatMessageTextPrefab;
     [SerializeField] private Transform chatMessagesContainer;
     [SerializeField] private Dropdown diceNumber;
     [SerializeField] private Dropdown diceType;
@@ -53,7 +53,7 @@ public class Chat : MonoBehaviourPun
 
         if(!string.IsNullOrEmpty(message))
         {
-            Text messageText = Instantiate(chatMessageTextPrefab, chatMessagesContainer).GetComponent<Text>();
+            Text messageText = Instantiate(chatMessageTextPrefab, chatMessagesContainer).GetComponentInChildren<Text>();
 
             //messageText.text = "<color=" + GameController.instance.GetPlayerColor() + ">" + GameManager.instance.playerName + "</color>: " + message;
 
