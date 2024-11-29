@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a56e5fe9f439a694fa0fc93f3199dcf1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cameraCorrection: 0.55
+  cameraCorrection: 0
   edgeDetectionSettingsDepth: {fileID: 11400000, guid: e8d7d5e1f19659044be9752602f1522c,
     type: 2}
   edgeDetectionSettingsNormals: {fileID: 11400000, guid: de5865ff14106a248bf81b5cb293ac4c,
