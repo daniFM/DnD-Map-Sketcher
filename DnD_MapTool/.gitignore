@@ -61,4 +61,4 @@ crashlytics-build.properties
 # CUSTOM
 /.vscode
 /UserSettings
-
+*/dev.ameye.linework
