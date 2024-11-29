@@ -273,7 +273,7 @@ public class TileController : MonoBehaviour
             tileSnapshots[snapshotIndex].Clear();
         }
 
-        foreach(Tile t in FindObjectsOfType<Tile>())
+        foreach(Tile t in FindObjectsByType<Tile>(FindObjectsSortMode.None))
         {
             tileSnapshots[snapshotIndex].Add(t.type, t.transform.position, t.transform.rotation);
         }
@@ -283,7 +283,7 @@ public class TileController : MonoBehaviour
 
     public void LoadSnapshot(TileData snapshot, bool takeSnapshot = false)
     {
-        foreach(Tile t in FindObjectsOfType<Tile>())
+        foreach(Tile t in FindObjectsByType<Tile>(FindObjectsSortMode.None))
         {
             t.DestroyByAnybody();
         }
