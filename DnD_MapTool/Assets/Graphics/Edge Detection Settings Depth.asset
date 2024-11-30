@@ -17,7 +17,7 @@ MonoBehaviour:
   debugView: 0
   discontinuityInput: 1
   depthSensitivity: 1
-  depthDistanceModulation: 0.012
+  depthDistanceModulation: 0.03
   grazingAngleMaskPower: 0
   grazingAngleMaskHardness: 1
   normalSensitivity: 0.3
