@@ -79,7 +79,7 @@ public class Dice : MonoBehaviourPun
 
         //transform.position = position;
         transform.localScale = Vector3.one;
-        rb.velocity = Vector3.zero;
+        rb.linearVelocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         //transform.Translate(0, 10, 0, Space.World);
         rb.AddTorque(spinForce.GetRandom(), spinForce.GetRandom(), spinForce.GetRandom(), ForceMode.Impulse);

@@ -22,12 +22,13 @@ namespace MyUtilities
 
         public Path(string path)
         {
+            path = path.Replace('/', '\\');
             this.path = path;
             int b = path.LastIndexOf('\\');
             int p = path.LastIndexOf('.');
             folder = path.Substring(0, b);
             name = path.Substring(b + 1, p - b - 1);
-            extension = path.Substring(p);
+            extension = path.Substring(p + 1);
         }
 
         public override string ToString()
@@ -43,7 +44,7 @@ public class Explorer : MonoBehaviour
 {
     public GameObject browserPanel;
 
-    private string name;
+    private string fileName;
     private string extension;
 
     private ExplorerMode mode;
@@ -121,7 +122,7 @@ public class Explorer : MonoBehaviour
     /// </summary>
     public void GetPath(string name, string extension, ExplorerMode mode)
     {
-        this.name = name;
+        this.fileName = name;
         this.extension = extension;
         this.mode = mode;
 
@@ -148,7 +149,7 @@ public class Explorer : MonoBehaviour
                 pathstr = StandaloneFileBrowser.SaveFilePanel(
                     "Save Map",
                     JSONSaver.defaultPath + "/" + JSONSaver.defaultFolder,
-                    name,
+                    fileName,
                     extension);
 
                 break;
